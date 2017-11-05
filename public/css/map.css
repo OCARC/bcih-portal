@@ -1,0 +1,73 @@
+.input, .pac-container {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.map_container {
+    width:100%;
+    height:800px;
+    max-height:90vh;
+    padding: 0 0 10px 0;
+    clear:both;
+}
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+}
+
+#search, #fullscreen {
+    width: 85px;
+    z-index: 101;
+    margin: 5px;
+    cursor: pointer;
+    text-align: left;
+    z-index: 0;
+}
+
+.dropDownControl{
+    direction: ltr;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    text-align: left;
+    position: relative;
+    font-family: Arial, sans-serif;
+    -webkit-user-select: none;
+    font-size: 13px;
+    padding-top: 1px;
+    padding-right: 6px;
+    padding-bottom: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: rgb(113, 123, 135);
+    border-right-color: rgb(113, 123, 135);
+    border-bottom-color: rgb(113, 123, 135);
+    border-left-color: rgb(113, 123, 135);
+    border-image: initial;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+    box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+    color: rgb(0, 0, 0);
+    padding-left: 6px;
+    font-weight: bold;
+    background-image: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: rgb(255, 255, 255);
+    background-position: initial initial;
+    background-repeat: initial initial;
+    z-index: 102;
+}
+
+.gm-style-iw h3 {
+    margin-top: 0;
+}
