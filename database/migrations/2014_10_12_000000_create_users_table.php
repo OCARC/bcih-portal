@@ -25,13 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-//        $user = new \App\User();
-//        $user->setAttribute('id', 1);
-//        $user->setAttribute('name', 'Stephen');
-//        $user->setAttribute('email', 'stephen@compucomp.net');
-//        $user->setAttribute('password', '$2y$10$9hvaEvRTtTm1MbhOci21jeCEy3z9xZcSW288h6fByN0Swk78rzZXC');
-//
-//        $user->save();
+
     }
 
     /**
