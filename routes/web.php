@@ -72,6 +72,8 @@ Route::post('keys', 'EquipmentController@store');
 
 Route::get('keys/{key}', 'RsaKeyController@show');
 
+Route::get('status.json', 'StatusController@index');
+
 
 //
 //

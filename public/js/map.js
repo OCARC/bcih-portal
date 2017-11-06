@@ -558,30 +558,59 @@ function initialize() {
                         infowindow.open(map, this);
                     });
 
+
                     // Add client links to map
                     if (client.STRENGTH) {
                         var linkpolyline = new google.maps.Polyline({
                             path: [site.position, client.position],
                             strokeColor: linkColor(client),
                             strokeOpacity: linkOpacity(),
-                            strokeWeight: linkWidth(client)
                         });
+
+
                         linkpolyline.setMap(map);
                     }
                 }
 
                 // Add PtP links to map
                 for (var linkid in site.LINKS) {
-                    var link = site.LINKS[linkid]
-                    // only plot each link once (ignore reciprocal links)
-                    if (siteid == link.SITE1_ID) {
-                        var linkpolyline = new google.maps.Polyline({
-                            path: [site.position, sites[link.SITE2_ID].position],
-                            strokeColor: linkColor(link),
-                            strokeOpacity: linkOpacity(),
-                            strokeWeight: linkWidth(link)
-                        });
-                        linkpolyline.setMap(map);
+                    var link = site.LINKS[linkid];
+
+
+                    if ( link.LINESTYLE == 'dotted') {
+                        var lineSymbol = {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            fillOpacity: 1,
+                            scale: 2,
+                            fillColor: linkColor(link),
+                            fillOpacity: linkOpacity(),
+                            strokeWeight: linkWidth(link),
+                        };
+                        // only plot each link once (ignore reciprocal links)
+                        if (siteid == link.SITE1_ID) {
+                            var linkpolyline = new google.maps.Polyline({
+                                path: [site.position, sites[link.SITE2_ID].position],
+                                strokeColor: linkColor(link),
+                                strokeOpacity: 0,
+                                strokeWeight: 0,
+                                icons: [{
+                                    icon: lineSymbol,
+                                    offset: '0',
+                                    repeat: '10px'
+                                }],
+                            });
+                            linkpolyline.setMap(map);
+                        }
+                    } else {
+                        if (siteid == link.SITE1_ID) {
+                            var linkpolyline = new google.maps.Polyline({
+                                path: [site.position, sites[link.SITE2_ID].position],
+                                strokeColor: linkColor(link),
+                                strokeOpacity: linkOpacity(),
+                                strokeWeight: linkWidth(link),
+                            });
+                            linkpolyline.setMap(map);
+                        }
                     }
                     // Add link data to comment of both associated sites
                     sitemarker.comment += "<h3>" + link.NAME + " link</h3><ul><li>distance: " + distHaversine(sites[link.SITE1_ID].position, sites[link.SITE2_ID].position) + " miles </li><li>signal strength: " + link.STRENGTH + " dBm</li>" + "<li>speed: " + link.SPEED/1000/1000 + " Mbps</li></ul><p>" + link.COMMENT + "</p>"

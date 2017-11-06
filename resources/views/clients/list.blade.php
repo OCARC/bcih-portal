@@ -1,4 +1,5 @@
 <style>
+    .bg-strength { background-color: rgba(0,0,0,1.0); color: white; }
 
 .bg-strength-56 { background-color: rgba(034, 255, 000,1.0); color: black; }
 .bg-strength-57 { background-color: rgba(034, 255, 000,1.0); color: black; }
@@ -35,6 +36,8 @@
 .bg-strength-88 { background-color: rgba(255, 000, 000,1.0); color: black; }
 .bg-strength-89 { background-color: rgba(255, 000, 000,1.0); color: black; }
 .bg-strength-90 { background-color: rgba(255, 000, 000,1.0); color: black; }
+
+
 
 
 </style>
@@ -83,7 +86,7 @@
             <td><a href="{{url("sites/" . $row->site_id )}}">{{ $row->site->name }}</a><br>
 <a href="{{url("infrastructure/" . $row->equipment_id )}}">{{ $row->equipment->hostname }}</a> @if($row->distanceToAP())({{$row->distanceToAP()}} km)@endif</td>
             <td style="vertical-align: middle; font-size: 16px;" class="text-right">
-                <span class="label bg-strength{{ $row->snmp_strength }}">{{ $row->snmp_strength }} dBm</span></td>
+                <span class="label bg-strength bg-strength{{ $row->snmp_strength }}">{{ $row->snmp_strength }} dBm</span></td>
 
             <td style="vertical-align: middle; font-size: 16px;" class="text-right">{{ $row->snmp_signal_to_noise }} dB</td>
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\Object_;
 
 use \App\DhcpLease;
+use \App\PtpLink;
 use Nelisys\Snmp;
 
 
@@ -20,6 +21,57 @@ class Client extends Model
 
     protected $guarded = [];
     use \App\Traits\SSHConnection;
+
+    
+    public function strengthColor() {
+if( $this->snmp_strength == -56 ) { return "rgba(034, 255, 000,1.0)"; }
+if( $this->snmp_strength == -57 ) { return "rgba(034, 255, 000,1.0)"; }
+if( $this->snmp_strength == -58 ) { return "rgba(056, 255, 000,1.0)"; }
+if( $this->snmp_strength == -59 ) { return "rgba(056, 255, 000,1.0)"; }
+if( $this->snmp_strength == -60 ) { return "rgba(090, 255, 000,1.0)"; }
+if( $this->snmp_strength == -61 ) { return "rgba(090, 255, 000,1.0)"; }
+if( $this->snmp_strength == -62 ) { return "rgba(124, 255, 000,1.0)"; }
+if( $this->snmp_strength == -63 ) { return "rgba(124, 255, 000,1.0)"; }
+if( $this->snmp_strength == -64 ) { return "rgba(158, 255, 000,1.0)"; }
+if( $this->snmp_strength == -65 ) { return "rgba(158, 255, 000,1.0)"; }
+if( $this->snmp_strength == -66 ) { return "rgba(192, 255, 000,1.0)"; }
+if( $this->snmp_strength == -67 ) { return "rgba(192, 255, 000,1.0)"; }
+if( $this->snmp_strength == -68 ) { return "rgba(226, 255, 000,1.0)"; }
+if( $this->snmp_strength == -69 ) { return "rgba(226, 255, 000,1.0)"; }
+if( $this->snmp_strength == -70 ) { return "rgba(255, 226, 000,1.0)"; }
+if( $this->snmp_strength == -71 ) { return "rgba(255, 226, 000,1.0)"; }
+if( $this->snmp_strength == -72 ) { return "rgba(255, 192, 000,1.0)"; }
+if( $this->snmp_strength == -73 ) { return "rgba(255, 192, 000,1.0)"; }
+if( $this->snmp_strength == -74 ) { return "rgba(255, 158, 000,1.0)"; }
+if( $this->snmp_strength == -75 ) { return "rgba(255, 158, 000,1.0)"; }
+if( $this->snmp_strength == -76 ) { return "rgba(255, 124, 000,1.0)"; }
+if( $this->snmp_strength == -77 ) { return "rgba(255, 124, 000,1.0)"; }
+if( $this->snmp_strength == -78 ) { return "rgba(255, 090, 000,1.0)"; }
+if( $this->snmp_strength == -79 ) { return "rgba(255, 090, 000,1.0)"; }
+if( $this->snmp_strength == -80 ) { return "rgba(255, 056, 000,1.0)"; }
+if( $this->snmp_strength == -81 ) { return "rgba(255, 056, 000,1.0)"; }
+if( $this->snmp_strength == -82 ) { return "rgba(255, 034, 000,1.0)"; }
+if( $this->snmp_strength == -83 ) { return "rgba(255, 034, 000,1.0)"; }
+if( $this->snmp_strength == -84 ) { return "rgba(255, 000, 000,1.0)"; }
+if( $this->snmp_strength == -85 ) { return "rgba(255, 000, 000,1.0)"; }
+if( $this->snmp_strength == -86 ) { return "rgba(255, 000, 000,1.0)"; }
+if( $this->snmp_strength == -87 ) { return "rgba(255, 000, 000,1.0)"; }
+if( $this->snmp_strength == -88 ) { return "rgba(255, 000, 000,1.0)"; }
+if( $this->snmp_strength == -89 ) { return "rgba(255, 000, 000,1.0)"; }
+if( $this->snmp_strength == -90 ) { return "rgba(255, 000, 000,1.0)"; }
+    }
+
+
+    public function sshQuickScan() {
+
+        // Load management Key
+        $key = \App\User::where('id',0)->first()->rsa_keys->where('publish',1)->first();
+
+
+        $result = $this->executeSSH( 'manage', $key, "/interface wireless scan 0 duration=5") ;
+        return $result;
+
+    }
 
     public function sshFetchConfig() {
 
@@ -39,6 +91,17 @@ class Client extends Model
 
     }
 
+    public function ptp_link() {
+        $ptp = $this->hasOne(PtpLink::class,'ap_client_id')->first();
+        if ( $ptp ) {
+            return $ptp;
+        }
+
+        $ptp = $this->hasOne(PtpLink::class,'cl_client_id')->first();
+        if ( $ptp ) {
+            return $ptp;
+        }
+    }
     public function site() {
         return $this->belongsTo(Site::class);
     }

@@ -37,7 +37,9 @@ class ClientController extends Controller
         if ($method == "fetchConfig") {
             $r = $client->sshFetchConfig();
         }
-
+        if ($method == "quickScan") {
+            $r = $client->sshQuickScan();
+        }
 
         if ($r) {
             $result['data'] = $r['data'];

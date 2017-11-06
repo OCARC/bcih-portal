@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\PtpLink;
 use Illuminate\Http\Request;
 
 class StatusController extends Controller {
@@ -15,6 +16,71 @@ class StatusController extends Controller {
     public function index()
     {
         //
+
+        $result = array(
+            "SITES" => array()
+        );
+
+        header("Access-Control-Allow-Origin: *");
+        $sites = \App\Site::all();
+        foreach( $sites as $site ) {
+
+            $result['SITES'][ $site->id ] = array(
+                "NAME" => $site->name,
+                "LATITUDE" => $site->latitude,
+                "LONGITUDE" => $site->longitude,
+                "ICON" => url($site->map_icon),
+                "COMMENT" => $site->comment,
+                "STATUS_COLOR" => "#00ff00",
+                "CLIENTS" => array(),
+                "LINKS" => array()
+            );
+
+
+
+
+            foreach( $site->clients as $client ) {
+
+                if ( $client->latitude == 0) {
+                    continue;
+                }
+                if ( $client->longitude == 0) {
+                    continue;
+                }
+                if ( $client->type == "link" ) {
+                    $link = $client->ptp_link();
+                    if ($link) {
+                        $result['SITES'][$site->id]['LINKS'][$client->id] = array(
+                            "NAME" => $link->name,
+                            "SITE1_ID" => $link->ap_client->site_id,
+                            "SITE2_ID" => $link->cl_client->site_id,
+                            "SPEED" => $client->snmp_rx_rate,
+                            "STRENGTH" => $client->snmp_strength,
+                            "LINK_COLOR" => $link->link_color,
+                            "COMMENT" => $link->comments,
+                            "LINESTYLE" => $link->line_style
+                        );
+                    }
+                    continue;
+                }
+                $result['SITES'][ $site->id ]['CLIENTS'][ $client->id ] = array(
+                    "NAME" => ($client->dhcp_lease) ? $client->dhcp_lease->hostname : $client->snmp_sysName,
+                    "LATITUDE" => $client->latitude,
+                    "LONGITUDE" => $client->longitude,
+                    "COMMENT" => $client->snmp_sysDesc,
+                    "TYPE" => $client->type,
+                    "SPEED" => $client->snmp_rx_rate,
+                    "STRENGTH" => $client->snmp_strength,
+                    "LINK_COLOR" => "#0086DB",
+                );
+            }
+
+        }
+
+
+
+
+            return $result;
     }
 
     /**

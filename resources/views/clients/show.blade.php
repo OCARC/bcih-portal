@@ -83,7 +83,16 @@
                     <div class="ajaxResult"></div>
                     <button class="btn btn-default" onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/fetchConfig")}}')">Fetch Configuration</button>
                 </div>
-                </div>
+            <h2>Perform Quick Scan</h2>
+            <span class="text-danger"><strong>CAUTION:</strong> This action will cause the client to disconnect from the network. If it does not reconnect quickly enough you might not get a result.</span>
+
+            <div class="ajaxAction">
+                <div class="ajaxResult"></div>
+                <button class="btn btn-default" onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/quickScan")}}')">Run Quick Scan</button>
+            </div>
+            </div>
+
+        </div>
 
         </div>
 

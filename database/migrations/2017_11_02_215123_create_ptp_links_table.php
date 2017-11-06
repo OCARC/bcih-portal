@@ -16,6 +16,7 @@ class CreatePtpLinksTable extends Migration
         Schema::create('ptp_links', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('line_style')->default('solid');
             $table->integer('owner_id');
             $table->integer('ap_client_id');
             $table->integer('cl_client_id');

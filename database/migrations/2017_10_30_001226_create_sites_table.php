@@ -17,6 +17,8 @@ class CreateSitesTable extends Migration
         {
             $table->increments('id');
             $table->string("name")->default("New Site");
+            $table->string("map_icon")->default("");
+            $table->text("comments");
             $table->string("sitecode",3);
             $table->float("latitude",9,6);
             $table->float("longitude",9,6);
