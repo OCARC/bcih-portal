@@ -43,7 +43,7 @@
 </style>
 <div class="table-responsive">
 
-<table class="table table-responsive table-condensed table-striped ">
+<table class="table table-responsive table-condensed table-striped table-bordered">
 
     <thead>
     <tr>
@@ -115,13 +115,5 @@
         </tr>
     @endforeach
     </tbody>
-    <tfoot>
-    <tr>
-        <td colspan="3">
-            <a href="{{ url("/clients/create") }}">create new clients</a> |
-            <a href="{{ url("/clients/refresh") }}">poll clients</a> |
-        </td>
-    </tr>
-    </tfoot>
 </table>
     </div>

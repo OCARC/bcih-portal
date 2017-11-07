@@ -73,6 +73,16 @@ if( $this->snmp_strength == -90 ) { return "rgba(255, 000, 000,1.0)"; }
 
     }
 
+    public function sshQuickMonitor() {
+            // Load management Key
+        $key = \App\User::where('id',0)->first()->rsa_keys->where('publish',1)->first();
+
+
+
+        $result = $this->executeSSH( 'manage', $key, "/interface wireless monitor numbers=wlan1 once") ;
+        return $result;
+    }
+
     public function sshFetchConfig() {
 
 

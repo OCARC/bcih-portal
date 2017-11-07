@@ -28,6 +28,7 @@ class EquipmentController extends Controller
             $i->discoverClients();
         }
         //return redirect('equipment');
+        return redirect("/equipment");
 
 
     }
@@ -39,6 +40,8 @@ class EquipmentController extends Controller
      */
     public function create()
     {
+        return view('equipment.create', ['equipment' => new \App\Equipment() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
+
         //
     }
 
@@ -50,7 +53,19 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // TODO: Permission Checking
+
+       if ($request['id'] ) {
+           $equipment = \App\Equipment::find($request['id']);
+           $equipment->update($request->all());
+       } else {
+           $equipment = \App\Equipment::create(
+               $request->all()
+           );
+       }
+
+        return redirect("/equipment/" . $equipment->id);
+
     }
 
     /**
@@ -101,7 +116,7 @@ class EquipmentController extends Controller
     public function edit(Equipment $equipment)
     {
         //
-        return view('equipment.edit', compact('equipment'));
+        return view('equipment.edit', ['equipment' => $equipment , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
 
     }
 
@@ -126,5 +141,7 @@ class EquipmentController extends Controller
     public function destroy(Equipment $equipment)
     {
         //
+        $equipment->delete();
+        return redirect("/equipment");
     }
 }

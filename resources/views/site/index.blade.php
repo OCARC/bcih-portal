@@ -22,8 +22,8 @@ Sites
                             <tr>
                                 <td><a href="{{ url("site/" . $site->id ) }}">{{ $site->name }}</td>
                                 <td>{{ $site->sitecode }}</td>
-                                <td>{{ $site->latitude }}, {{ $site->longitude }}</td>
-                                <td>{{ $site->altitude }}</td>
+                                <td><a href="http://www.google.com/maps/?q={{ $site->latitude }},{{ $site->longitude }}">{{ $site->latitude }}, {{ $site->longitude }}</a></td>
+                                <td class="text-right">{{ $site->altitude }} meters</td>
                             </tr>
                             @endforeach
                             </tbody>

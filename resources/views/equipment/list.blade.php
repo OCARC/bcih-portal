@@ -1,6 +1,6 @@
 <div class="table-responsive">
 
-<table class="table table-responsive table-condensed table-striped">
+<table class="table table-responsive table-condensed table-striped table-bordered">
 
     <thead>
     <tr>
@@ -28,13 +28,6 @@
         </tr>
     @endforeach
     </tbody>
-    <tfoot>
-    <tr>
-        <td colspan="3">
-            <a href="{{ url("/equipment/create") }}">create new equipment</a> |
-            <a href="{{ url("/equipment/refresh") }}">poll equipment</a> |
-        </td>
-    </tr>
-    </tfoot>
+
 </table>
     </div>

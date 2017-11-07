@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use League\Flysystem\Exception;
 use Nelisys\Snmp;
 use App\Client;
+use App\Site;
 use \phpseclib\Crypt\RSA;
 use \phpseclib\File\ANSI;
 use \phpseclib\Net\SSH2;
@@ -44,6 +45,15 @@ class Equipment extends Model
     protected $guarded = [];
     use \App\Traits\SSHConnection;
 
+    public function graphs() {
+        $graphs = $this->hasMany(\App\CactiGraph::class,"host_id","cacti_id");
+        if ( $graphs ) {
+            return $graphs;
+        } else {
+            return new \App\CactiGraph();
+        }
+    }
+
     public function getHealthColor() {
 
         if ( $this::getHealthStatus() == "Error" ) {
@@ -68,8 +78,16 @@ class Equipment extends Model
         return $this->belongsTo(User::class);
 
     }
+
     public function site() {
-        return $this->belongsTo(Site::class);
+        $site = $this->belongsTo(Site::class);
+        if ( $site ) {
+            return $site;
+        } else {
+            return new \App\Site();
+        }
+
+
 
     }
 

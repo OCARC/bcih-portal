@@ -27,9 +27,11 @@ Route::get('site/{site}', 'SiteController@show');
 Route::delete('site/{site}/delete', 'SiteController@delete');
 //
 //
-Route::post('equipment', 'EquipmentController@store');
+Route::post('equipment', 'EquipmentController@store')->middleware('auth');
+Route::delete('equipment/{equipment}', 'EquipmentController@destroy')->middleware('auth');
 Route::get('equipment', 'EquipmentController@index');
-Route::get('equipment/refresh', 'EquipmentController@refresh');
+Route::get('equipment/refresh', 'EquipmentController@refresh')->middleware('auth');;
+Route::get('equipment/create', 'EquipmentController@create')->middleware('auth');;
 Route::get('equipment/{equipment}', 'EquipmentController@show');
 Route::get('equipment/{equipment}/edit', 'EquipmentController@edit')->middleware('auth');;
 

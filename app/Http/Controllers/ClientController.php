@@ -40,7 +40,9 @@ class ClientController extends Controller
         if ($method == "quickScan") {
             $r = $client->sshQuickScan();
         }
-
+        if ($method == "quickMonitor") {
+            $r = $client->sshQuickMonitor();
+        }
         if ($r) {
             $result['data'] = $r['data'];
             $result['status'] = $r['status'];

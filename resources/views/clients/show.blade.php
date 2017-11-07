@@ -90,6 +90,12 @@
                 <div class="ajaxResult"></div>
                 <button class="btn btn-default" onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/quickScan")}}')">Run Quick Scan</button>
             </div>
+                <h2>Retrieve Wireless Stats</h2>
+
+                <div class="ajaxAction">
+                    <div class="ajaxResult"></div>
+                    <button class="btn btn-default" onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/quickMonitor")}}')">Retrieve Wireless Stats</button>
+                </div>
             </div>
 
         </div>
