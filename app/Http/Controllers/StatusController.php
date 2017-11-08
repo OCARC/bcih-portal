@@ -36,7 +36,22 @@ class StatusController extends Controller {
                 "LINKS" => array()
             );
 
-
+//            if ( $site->id == 5 ) {
+//
+//                if (($handle = fopen("local.csv", "r")) !== FALSE) {
+//                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+//
+//                        $result['SITES'][$site->id]['CLIENTS'][$data[0]] = array(
+//                            "NAME" => $data[0],
+//                            "LATITUDE" => $data[1],
+//                            "LONGITUDE" => $data[2],
+//                            "COMMENT" => $data[3],
+//                        );
+//
+//                    }
+//                    fclose($handle);
+//                }
+//            }
 
 
             foreach( $site->clients as $client ) {

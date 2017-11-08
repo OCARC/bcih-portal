@@ -315,16 +315,15 @@ function linkWidth(link) {
     return Math.sqrt((link.SPEED || 1000000) / 10000000) + 2
 }
 
-function initialize() {
+var coverageOverlays = [];
+function updateOverlays() {
     var coverage = [];
-
-    var sites = {};
-
     $.each( $("input[name='showSites[]']:checked"), function() {
         var v = $(this).val();
         var site = v.split('|')[0];
         var sector = v.split('|')[1];
         c = jQuery.extend({}, globalCoverages[site]);
+        c['id'] = site + "|" + sector;
         c['site'] = site;
         c['sector'] = sector;
         c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png';
@@ -332,6 +331,46 @@ function initialize() {
             c
         );
     });
+
+    // Hide
+    for (var id in coverageOverlays) {
+        coverageOverlays[ id ].setMap(null);
+    }
+
+
+    // Add coverage maps
+    for (var i in coverage) {
+        var overlay = coverage[i];
+        var overlaybounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng( overlay.s, overlay.w),
+            new google.maps.LatLng( overlay.n, overlay.e));
+        if ( !             coverageOverlays[ overlay['id']] ) {
+
+        coverageOverlays[ overlay['id']] = new google.maps.GroundOverlay(overlay.src,
+            overlaybounds, {opacity:0.5});
+        }
+        coverageOverlays[ overlay['id']].setMap(map);
+    }
+}
+
+var map;
+function initialize() {
+    //var coverage = [];
+
+    var sites = {};
+
+    // $.each( $("input[name='showSites[]']:checked"), function() {
+    //     var v = $(this).val();
+    //     var site = v.split('|')[0];
+    //     var sector = v.split('|')[1];
+    //     c = jQuery.extend({}, globalCoverages[site]);
+    //     c['site'] = site;
+    //     c['sector'] = sector;
+    //     c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png';
+    //     coverage.push(
+    //         c
+    //     );
+    // });
 
     //     {
     //         NAME: 'BGM',
@@ -391,8 +430,8 @@ function initialize() {
     if ( typeof centerLat !== 'undefined' || typeof centerLon !== 'undefined' ) {
         mapOptions['center'] = new google.maps.LatLng( centerLat,centerLon); // Capitol Parkish;
     }
-    var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    updateOverlays();
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
         FullScreenControl(map, "Full Screen",
             "Exit Full Screen"));
@@ -452,16 +491,16 @@ function initialize() {
     //     infowindow.open(map, marker);
     // });
 
-    // Add coverage maps
-    for (var i in coverage) {
-        var overlay = coverage[i];
-        var overlaybounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng( overlay.s, overlay.w),
-            new google.maps.LatLng( overlay.n, overlay.e));
-        var coveragemap = new google.maps.GroundOverlay(overlay.src,
-            overlaybounds, {opacity:0.5});
-        coveragemap.setMap(map);
-    }
+    // // Add coverage maps
+    // for (var i in coverage) {
+    //     var overlay = coverage[i];
+    //     var overlaybounds = new google.maps.LatLngBounds(
+    //         new google.maps.LatLng( overlay.s, overlay.w),
+    //         new google.maps.LatLng( overlay.n, overlay.e));
+    //     var coveragemap = new google.maps.GroundOverlay(overlay.src,
+    //         overlaybounds, {opacity:0.5});
+    //     coveragemap.setMap(map);
+    // }
 
     // Get network status (site/clients/link data)
     $.getJSON( statusSourceURL, function(data) {

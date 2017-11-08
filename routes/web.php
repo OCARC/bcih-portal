@@ -19,12 +19,17 @@ Route::get('/', 'HomeController@index');
 //
 Route::post('site', 'SiteController@store');
 
-Route::get('site', 'SiteController@index');
 
+
+
+Route::post('site', 'SiteController@store')->middleware('auth');
+Route::delete('site/{site}', 'SiteController@destroy')->middleware('auth');
+Route::get('site', 'SiteController@index');
+//Route::get('equipment/refresh', 'EquipmentController@refresh')->middleware('auth');;
 Route::get('site/create', 'SiteController@create');
 Route::get('site/{site}', 'SiteController@show');
+Route::get('site/{site}/edit', 'SiteController@edit')->middleware('auth');;
 
-Route::delete('site/{site}/delete', 'SiteController@delete');
 //
 //
 Route::post('equipment', 'EquipmentController@store')->middleware('auth');

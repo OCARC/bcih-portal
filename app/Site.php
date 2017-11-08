@@ -17,5 +17,6 @@ class Site extends Model
         return $this->hasMany(Equipment::class);
     }
 
+
     //
 }

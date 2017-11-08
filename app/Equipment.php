@@ -45,6 +45,10 @@ class Equipment extends Model
     protected $guarded = [];
     use \App\Traits\SSHConnection;
 
+    protected $hidden = [
+        'snmp_community'
+    ];
+
     public function graphs() {
         $graphs = $this->hasMany(\App\CactiGraph::class,"host_id","cacti_id");
         if ( $graphs ) {

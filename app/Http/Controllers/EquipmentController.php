@@ -17,7 +17,11 @@ class EquipmentController extends Controller
         //
         //
         $equipment = Equipment::all();
-        return view('equipment.index', compact('equipment'));
+        if ( request('json') ) {
+            return $equipment;
+        } else {
+            return view('equipment.index', compact('equipment'));
+        }
     }
 
 
@@ -56,13 +60,13 @@ class EquipmentController extends Controller
         // TODO: Permission Checking
 
        if ($request['id'] ) {
-           $equipment = \App\Equipment::find($request['id']);
-           $equipment->update($request->all());
-       } else {
-           $equipment = \App\Equipment::create(
-               $request->all()
-           );
-       }
+        $equipment = \App\Equipment::find($request['id']);
+        $equipment->update($request->all());
+    } else {
+        $equipment = \App\Equipment::create(
+            $request->all()
+        );
+    }
 
         return redirect("/equipment/" . $equipment->id);
 

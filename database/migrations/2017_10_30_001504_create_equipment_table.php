@@ -25,6 +25,7 @@ class CreateEquipmentTable extends Migration
             $table->integer('ant_height')->nullable(true);
             $table->integer('ant_azimuth')->nullable(true);
             $table->integer('ant_tilt')->nullable(true);
+            $table->string('ant_model')->nullable(true);
 
 
             $table->string('snmp_community')->default("hamwan");

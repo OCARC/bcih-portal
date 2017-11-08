@@ -77,10 +77,10 @@
         </div>
     </div>
 
-    {{--<div class="form-group">--}}
-        {{--<lable for="name">Antenna Model</lable>--}}
-        {{--<input type="text" name="ant_model" class="form-control" value="{{ $equipment->ant_model }}">--}}
-    {{--</div>--}}
+    <div class="form-group">
+        <lable for="name">Antenna Model</lable>
+        <input type="text" name="ant_model" class="form-control" value="{{ $equipment->ant_model }}">
+    </div>
     <button type="submit" class="btn btn-success">@if( $equipment->id ) Save Equipment @else Create Equipment @endif</button>
     <button type="cancel" class="btn btn-danger"> Cancel </button>
 </form>

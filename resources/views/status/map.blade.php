@@ -119,9 +119,9 @@
     $(document).ready( function() {
         $.getJSON( "http://portal.hamwan.ca/bcih-portal/public/coverages", function(data) {
             for( k in data ) {
-                $('#siteSelect000').append(" &nbsp;<label><input name='showSites[]' onChange='initialize();' value='"+k+"|000' type='checkbox'> " + k + "000</label>");
-                $('#siteSelect120').append(" &nbsp;<label><input name='showSites[]' onChange='initialize();' value='"+k+"|120' type='checkbox'> " + k + "120</label>");
-                $('#siteSelect240').append(" &nbsp;<label><input name='showSites[]' onChange='initialize();' value='"+k+"|240' type='checkbox'> " + k + "240</label>");
+                $('#siteSelect000').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|000' type='checkbox'> " + k + " 000&deg;</label>");
+                $('#siteSelect120').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|120' type='checkbox'> " + k + " 120&deg;</label>");
+                $('#siteSelect240').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|240' type='checkbox'> " + k + " 240&deg;</label>");
 
             }
         });

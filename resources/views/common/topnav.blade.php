@@ -23,7 +23,7 @@
                 @if (! Auth::guest())<li><a href="{{ url('/site') }}">Sites</a></li>@endif
                 @if (! Auth::guest())<li><a href="{{ url('/users') }}">Users</a></li>@endif
                 @if (! Auth::guest())<li><a href="{{ url('/equipment') }}">Equipment</a></li>@endif
-                @if (! Auth::guest())<li><a href="{{ url('/clients') }}">Clients</a></li>@endif
+                <li><a href="{{ url('/clients') }}">Clients</a></li>
                 @if (! Auth::guest())<li><a href="{{ url('/keys') }}">Keys</a></li>@endif
                 @if (! Auth::guest())<li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">IPs <span class="caret"></span></a>

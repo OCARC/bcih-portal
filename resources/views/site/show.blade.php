@@ -18,21 +18,45 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="siteInfo">
-                <form class="" method="POST" action="/sites">
 
+                <Table class="table table-responsive table-condensed table-striped table-bordered">
+                    <tr>
+                        <th>Site Name</th>
+                        <td>{{$site->name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Site Code</th>
+                        <td>{{$site->sitecode}}</td>
+                    </tr>
+                    <tr>
+                        <th>Latitude</th>
+                        <td>{{$site->latitude}}</td>
+                    </tr>
+                    <tr>
+                        <th>Longitude</th>
+                        <td>{{$site->longitude}}</td>
+                    </tr>
+                    <tr>
+                        <th>Altitude</th>
+                        <td>{{$site->altitude}}m</td>
+                    </tr>
+                    <tr>
+                        <th>Owner</th>
+                        <td>{{$site->owner_id}}</td>
+                    </tr>
+                    <tr>
+                        <th>Comment</th>
+                        <td>{{$site->comment}}</td>
+                    </tr>
+                </table>
+
+                <form method="POST" action="{{ url("/site/" . $site->id . "") }}" accept-charset="UTF-8">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div class="form-group">
-                        <lable for="name">Site Name</lable>
-                        <input type="text" name="name" class="form-control" value="{{ $site->name }}">
-                    </div>
-                    <div class="form-group">
-                        <lable for="name">Site Code</lable>
-                        <input type="text" name="sitecode" maxlength="3" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-success">Create</button>
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <a href="{{ url("/site/" . $site->id . "/edit") }}"><button type="button" class="btn btn-sm btn-success">Edit Site</button></a>
+
+                    <button type="submit" class="btn btn-sm btn-danger" disabled="true">Delete Site</button>
                 </form>
-
-
             </div>
             <div role="tabpanel" class="tab-pane" id="equipment">
 

@@ -33,7 +33,7 @@ class SiteController extends Controller
     {
 
         //
-        return view('sites.create');
+        return view('site.create', ['site' => new \App\Site() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
 
     }
 
@@ -46,13 +46,18 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         //
-        $site = new \App\Site;
+        // TODO: Permission Checking
 
-        $site->name = $request->name;
+        if ($request['id'] ) {
+            $site = \App\Site::find($request['id']);
+            $site->update($request->all());
+        } else {
+            $site = \App\Site::create(
+                $request->all()
+            );
+        }
 
-        $site->save();
-
-        return redirect('sites/' . $site->id);
+        return redirect("/site/" . $site->id);
 
     }
 
@@ -75,7 +80,7 @@ class SiteController extends Controller
      */
     public function edit(Site $site)
     {
-        //
+        return view('site.create', ['site' => $site , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
     }
 
     /**
