@@ -5,6 +5,7 @@ use \phpseclib\File\ANSI;
 use \phpseclib\Net\SSH2;
 trait SSHConnection
 {
+
     public function executeSSH($user, $key, $command, $stripANSI = false)
     {
         $rsa = new RSA();

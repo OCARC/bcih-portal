@@ -84,7 +84,9 @@
                     <span style="font-family: 'Courier New'">{{ chop(chunk_split($row->mac_address,2,":"),":") }}@if ($row->type == 'link')</span> <span class="label label-info">{{ $row->type }}</span>@endif
             </td>
             <td><a href="{{url("sites/" . $row->site_id )}}">{{ $row->site->name }}</a><br>
+                @if ( $row->equipment )
 <a href="{{url("infrastructure/" . $row->equipment_id )}}">{{ $row->equipment->hostname }}</a> @if($row->distanceToAP())({{$row->distanceToAP()}} km)@endif</td>
+            @endif
             <td style="vertical-align: middle; font-size: 16px;" class="text-right">
                 <span class="label bg-strength bg-strength{{ $row->snmp_strength }}">{{ $row->snmp_strength }} dBm</span></td>
 

@@ -31,11 +31,16 @@ class HamWanUserProvider extends EloquentUserProvider
             return false;
         }
 
-        foreach ($user->rsa_keys as $key) {
-            $rsa->loadKey($key->public_key);
-            $status = $rsa->verify(\Session::token(), hex2bin($signature));
-            if ($status == true) {
-                return $status;
+
+        if ( strlen($signature) & 1 ) {
+
+        } else {
+            foreach ($user->rsa_keys as $key) {
+                $rsa->loadKey($key->public_key);
+                $status = $rsa->verify(\Session::token(), hex2bin($signature));
+                if ($status == true) {
+                    return $status;
+                }
             }
         }
 

@@ -322,51 +322,15 @@ function initialize() {
 
     $.each( $("input[name='showSites[]']:checked"), function() {
         var v = $(this).val();
-        if (  v == 'BGM' ) {
-            c = globalCoverages[v];
-            c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + v + '-' + $('#showSectors').val() + '-' + $('#clientGain').val() + '.png';
-            coverage.push(
-                c
-            );
-        }
-        if (  v == 'BKM' ) {
-            c = globalCoverages[v];
-            c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + v + '-' + $('#showSectors').val() + '-' + $('#clientGain').val() + '.png';
-            coverage.push(
-                c
-            );
-        }
-        if (  v == 'LMK' ) {
-            c = globalCoverages[v];
-            c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + v + '-' + $('#showSectors').val() + '-' + $('#clientGain').val() + '.png';
-            coverage.push(
-                c
-            );
-        }
-
-        if (  v == 'KUI' ) {
-            c = globalCoverages[v];
-            c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + v + '-' + $('#showSectors').val() + '-' + $('#clientGain').val() + '.png';
-            coverage.push(
-                c
-            );
-        }
-
-        if (  v == 'OKM' ) {
-            c = globalCoverages[v];
-            c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + v + '-' + $('#showSectors').val() + '-' + $('#clientGain').val() + '.png';
-            coverage.push(
-                c
-            );
-        }
-
-        if (  v == 'APX' ) {
-            c = globalCoverages[v];
-            c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + v + '-' + $('#showSectors').val() + '-' + $('#clientGain').val() + '.png';
-            coverage.push(
-                c
-            );
-        }
+        var site = v.split('|')[0];
+        var sector = v.split('|')[1];
+        c = jQuery.extend({}, globalCoverages[site]);
+        c['site'] = site;
+        c['sector'] = sector;
+        c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png';
+        coverage.push(
+            c
+        );
     });
 
     //     {

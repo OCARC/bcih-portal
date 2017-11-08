@@ -65,11 +65,11 @@ class CoverageController extends Controller
         foreach ($directions as $dir) {
             if ( file_exists(realpath("projections/$site/$site-$dir-$clientGain.png") ) ) {
                 $cacheID .=  realpath("projections/$site/$site-$dir-$clientGain.png") . "-";
-                $cacheID .=  filemtime(realpath("projections/$site/$site-$dir-$clientGain.png")) . "-";
+                //$cacheID .=  filemtime(realpath("projections/$site/$site-$dir-$clientGain.png")) . "-";
             }
         }
 
-        if ( file_exists(realpath("projections/CachedProjections/$site-" . md5($cacheID) . "-nq8.png")) ) {
+        if ( file_exists(realpath("projections/CachedProjections/$site-" . md5($cacheID) . "-nq8.png")) && !request('refresh') ) {
             header('Cache-Control: max-age=3600');
             header('Content-Type: image/png');
 

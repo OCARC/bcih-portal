@@ -60,43 +60,48 @@
 </select>
         </div>
 
-    <div class="form-group">
-        <label for="exampleInputName2">Client Gain</label>
-        <select class="form-control" id="showSectors" onChange="initialize();">
-            <option value="ALL">All</option>
-            <option value="000">000&deg;</option>
-            <option value="120">120&deg;</option>
-            <option value="240">240&deg;</option>
+    {{--<div class="form-group">--}}
+        {{--<label for="exampleInputName2">Sectors</label>--}}
+        {{--<select class="form-control" id="showSectors" onChange="initialize();">--}}
+            {{--<option value="ALL">All</option>--}}
+            {{--<option value="000">000&deg;</option>--}}
+            {{--<option value="120">120&deg;</option>--}}
+            {{--<option value="240">240&deg;</option>--}}
 
-            <option value="000.120">000&deg; and 120&deg;</option>
-            <option value="000.240">000&deg; and 240&deg;</option>
+            {{--<option value="000.120">000&deg; and 120&deg;</option>--}}
+            {{--<option value="000.240">000&deg; and 240&deg;</option>--}}
 
-            <option value="120.240">120&deg; and 240&deg;</option>
+            {{--<option value="120.240">120&deg; and 240&deg;</option>--}}
 
-        </select>
-            </div>
-    <div class="checkbox">
-        <label>
-            <input name="showSites[]"  onChange="initialize();" value="BGM" type="checkbox"> BGM
-        </label>
-        <label>
-            <input name="showSites[]" checked="true" onChange="initialize();" value="LMK" type="checkbox"> LMK
-        </label>
-        <label>
-            <input name="showSites[]"  onChange="initialize();" value="BKM" type="checkbox"> BKM
-        </label>
-        <label>
-            <input name="showSites[]" onChange="initialize();" value="KUI" type="checkbox"> KUI
-        </label>
-
-        <label>
-            <input name="showSites[]"  onChange="initialize();" value="APX" type="checkbox"> APX
-        </label>
-
-        <label>
-            <input name="showSites[]"  onChange="initialize();" value="OKM" type="checkbox"> OKM
-        </label>
+        {{--</select>--}}
+            {{--</div>--}}
+    <div id="siteSelect" style="display: inline-block; font-family: courier">
+    <div id="siteSelect000"></div>
+    <div id="siteSelect120"></div>
+    <div id="siteSelect240"></div>
     </div>
+    {{--<div class="checkbox">--}}
+        {{--<label>--}}
+            {{--<input name="showSites[]"  onChange="initialize();" value="BGM" type="checkbox"> BGM--}}
+        {{--</label>--}}
+        {{--<label>--}}
+            {{--<input name="showSites[]" checked="true" onChange="initialize();" value="LMK" type="checkbox"> LMK--}}
+        {{--</label>--}}
+        {{--<label>--}}
+            {{--<input name="showSites[]"  onChange="initialize();" value="BKM" type="checkbox"> BKM--}}
+        {{--</label>--}}
+        {{--<label>--}}
+            {{--<input name="showSites[]" onChange="initialize();" value="KUI" type="checkbox"> KUI--}}
+        {{--</label>--}}
+
+        {{--<label>--}}
+            {{--<input name="showSites[]"  onChange="initialize();" value="APX" type="checkbox"> APX--}}
+        {{--</label>--}}
+
+        {{--<label>--}}
+            {{--<input name="showSites[]"  onChange="initialize();" value="OKM" type="checkbox"> OKM--}}
+        {{--</label>--}}
+    {{--</div>--}}
     (Slow to Update Be Patient)
         </form>
 
@@ -108,8 +113,20 @@
     <div id="map_canvas" style="width:100%;height:100%;">
     </div>
 </div>
-
+@endsection
+@section('scripts')
 <script>
+    $(document).ready( function() {
+        $.getJSON( "http://portal.hamwan.ca/bcih-portal/public/coverages", function(data) {
+            for( k in data ) {
+                $('#siteSelect000').append(" &nbsp;<label><input name='showSites[]' onChange='initialize();' value='"+k+"|000' type='checkbox'> " + k + "000</label>");
+                $('#siteSelect120').append(" &nbsp;<label><input name='showSites[]' onChange='initialize();' value='"+k+"|120' type='checkbox'> " + k + "120</label>");
+                $('#siteSelect240').append(" &nbsp;<label><input name='showSites[]' onChange='initialize();' value='"+k+"|240' type='checkbox'> " + k + "240</label>");
+
+            }
+        });
+
+    });
     // Save with and height for full screen mode
     var googleMapWidth = $("#map_container").css('width');
     var googleMapHeight = $("#map_container").css('height');

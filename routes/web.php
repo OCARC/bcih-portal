@@ -76,6 +76,7 @@ Route::get('keys/{key}', 'RsaKeyController@show');
 
 Route::get('status.json', 'StatusController@index');
 
+Route::get('utilities/recache-coverages', 'UtilitiesController@recacheCoverages');
 
 //
 //

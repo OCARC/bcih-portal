@@ -43,6 +43,9 @@ class ClientController extends Controller
         if ($method == "quickMonitor") {
             $r = $client->sshQuickMonitor();
         }
+        if ($method == "fetchSpectralHistory") {
+            $r = $client->sshFetchSpectralHistory();
+        }
         if ($r) {
             $result['data'] = $r['data'];
             $result['status'] = $r['status'];

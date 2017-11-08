@@ -73,6 +73,24 @@ if( $this->snmp_strength == -90 ) { return "rgba(255, 000, 000,1.0)"; }
 
     }
 
+    public function sshFetchSpectralHistory(){
+
+
+    // Load management Key
+    $key = \App\User::where('id',0)->first()->rsa_keys->where('publish',1)->first();
+
+    $result = $this->executeSSH( 'manage', $key, "/interface wireless spectral-history range=5850-5950 duration=15 number=wlan1 buckets=100") ;
+
+    $result['data'] = str_replace("#" ,"<span style='background-color: #9b0000'>#</span>", $result['data']);
+
+    $result['data'] = str_replace("." ,"<span style='background-color: #00009b'>#</span>", $result['data']);
+    $result['data'] = str_replace("+" ,"<span style='background-color: #009b00'>#</span>", $result['data']);
+    $result['data'] = str_replace("*" ,"<span style='background-color: #9b9b00'>#</span>", $result['data']);
+    $result['data'] = str_replace("%" ,"<span style='background-color: #9b9b9b'>#</span>", $result['data']);
+    return $result;
+
+}
+
     public function sshQuickMonitor() {
             // Load management Key
         $key = \App\User::where('id',0)->first()->rsa_keys->where('publish',1)->first();
