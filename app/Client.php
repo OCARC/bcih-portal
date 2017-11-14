@@ -24,41 +24,47 @@ class Client extends Model
 
     
     public function strengthColor() {
-if( $this->snmp_strength == -56 ) { return "rgba(034, 255, 000,1.0)"; }
-if( $this->snmp_strength == -57 ) { return "rgba(034, 255, 000,1.0)"; }
-if( $this->snmp_strength == -58 ) { return "rgba(056, 255, 000,1.0)"; }
-if( $this->snmp_strength == -59 ) { return "rgba(056, 255, 000,1.0)"; }
-if( $this->snmp_strength == -60 ) { return "rgba(090, 255, 000,1.0)"; }
-if( $this->snmp_strength == -61 ) { return "rgba(090, 255, 000,1.0)"; }
-if( $this->snmp_strength == -62 ) { return "rgba(124, 255, 000,1.0)"; }
-if( $this->snmp_strength == -63 ) { return "rgba(124, 255, 000,1.0)"; }
-if( $this->snmp_strength == -64 ) { return "rgba(158, 255, 000,1.0)"; }
-if( $this->snmp_strength == -65 ) { return "rgba(158, 255, 000,1.0)"; }
-if( $this->snmp_strength == -66 ) { return "rgba(192, 255, 000,1.0)"; }
-if( $this->snmp_strength == -67 ) { return "rgba(192, 255, 000,1.0)"; }
-if( $this->snmp_strength == -68 ) { return "rgba(226, 255, 000,1.0)"; }
-if( $this->snmp_strength == -69 ) { return "rgba(226, 255, 000,1.0)"; }
-if( $this->snmp_strength == -70 ) { return "rgba(255, 226, 000,1.0)"; }
-if( $this->snmp_strength == -71 ) { return "rgba(255, 226, 000,1.0)"; }
-if( $this->snmp_strength == -72 ) { return "rgba(255, 192, 000,1.0)"; }
-if( $this->snmp_strength == -73 ) { return "rgba(255, 192, 000,1.0)"; }
-if( $this->snmp_strength == -74 ) { return "rgba(255, 158, 000,1.0)"; }
-if( $this->snmp_strength == -75 ) { return "rgba(255, 158, 000,1.0)"; }
-if( $this->snmp_strength == -76 ) { return "rgba(255, 124, 000,1.0)"; }
-if( $this->snmp_strength == -77 ) { return "rgba(255, 124, 000,1.0)"; }
-if( $this->snmp_strength == -78 ) { return "rgba(255, 090, 000,1.0)"; }
-if( $this->snmp_strength == -79 ) { return "rgba(255, 090, 000,1.0)"; }
-if( $this->snmp_strength == -80 ) { return "rgba(255, 056, 000,1.0)"; }
-if( $this->snmp_strength == -81 ) { return "rgba(255, 056, 000,1.0)"; }
-if( $this->snmp_strength == -82 ) { return "rgba(255, 034, 000,1.0)"; }
-if( $this->snmp_strength == -83 ) { return "rgba(255, 034, 000,1.0)"; }
-if( $this->snmp_strength == -84 ) { return "rgba(255, 000, 000,1.0)"; }
-if( $this->snmp_strength == -85 ) { return "rgba(255, 000, 000,1.0)"; }
-if( $this->snmp_strength == -86 ) { return "rgba(255, 000, 000,1.0)"; }
-if( $this->snmp_strength == -87 ) { return "rgba(255, 000, 000,1.0)"; }
-if( $this->snmp_strength == -88 ) { return "rgba(255, 000, 000,1.0)"; }
-if( $this->snmp_strength == -89 ) { return "rgba(255, 000, 000,1.0)"; }
-if( $this->snmp_strength == -90 ) { return "rgba(255, 000, 000,1.0)"; }
+	if ( $this->snmp_strength == -50 ) { return "rgba( 000, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -51 ) { return "rgba( 000, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -52 ) { return "rgba( 001, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -53 ) { return "rgba( 002, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -54 ) { return "rgba( 004, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -55 ) { return "rgba( 008, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -56 ) { return "rgba( 014, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -57 ) { return "rgba( 022, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -58 ) { return "rgba( 032, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -59 ) { return "rgba( 046, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -60 ) { return "rgba( 063, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -61 ) { return "rgba( 084, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -62 ) { return "rgba( 108, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -63 ) { return "rgba( 133, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -64 ) { return "rgba( 159, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -65 ) { return "rgba( 183, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -66 ) { return "rgba( 206, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -67 ) { return "rgba( 226, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -68 ) { return "rgba( 242, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -69 ) { return "rgba( 252, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -70 ) { return "rgba( 255, 255, 000, 1.0)"; }
+	if ( $this->snmp_strength == -71 ) { return "rgba( 255, 252, 000, 1.0)"; }
+	if ( $this->snmp_strength == -72 ) { return "rgba( 255, 242, 000, 1.0)"; }
+	if ( $this->snmp_strength == -73 ) { return "rgba( 255, 226, 000, 1.0)"; }
+	if ( $this->snmp_strength == -74 ) { return "rgba( 255, 206, 000, 1.0)"; }
+	if ( $this->snmp_strength == -75 ) { return "rgba( 255, 183, 000, 1.0)"; }
+	if ( $this->snmp_strength == -76 ) { return "rgba( 255, 159, 000, 1.0)"; }
+	if ( $this->snmp_strength == -77 ) { return "rgba( 255, 133, 000, 1.0)"; }
+	if ( $this->snmp_strength == -78 ) { return "rgba( 255, 108, 000, 1.0)"; }
+	if ( $this->snmp_strength == -79 ) { return "rgba( 255, 084, 000, 1.0)"; }
+	if ( $this->snmp_strength == -80 ) { return "rgba( 255, 063, 000, 1.0)"; }
+	if ( $this->snmp_strength == -81 ) { return "rgba( 255, 046, 000, 1.0)"; }
+	if ( $this->snmp_strength == -82 ) { return "rgba( 255, 032, 000, 1.0)"; }
+	if ( $this->snmp_strength == -83 ) { return "rgba( 255, 014, 000, 1.0)"; }
+	if ( $this->snmp_strength == -84 ) { return "rgba( 255, 008, 000, 1.0)"; }
+	if ( $this->snmp_strength == -85 ) { return "rgba( 255, 004, 000, 1.0)"; }
+	if ( $this->snmp_strength == -86 ) { return "rgba( 255, 003, 000, 1.0)"; }
+	if ( $this->snmp_strength == -87 ) { return "rgba( 255, 002, 000, 1.0)"; }
+	if ( $this->snmp_strength == -88 ) { return "rgba( 255, 001, 000, 1.0)"; }
+	if ( $this->snmp_strength == -89 ) { return "rgba( 255, 001, 000, 1.0)"; }
+	if ( $this->snmp_strength == -90 ) { return "rgba( 255, 001, 000, 1.0)"; }
     }
 
 
