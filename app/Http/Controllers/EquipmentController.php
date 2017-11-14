@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Response;
 
 use App\Equipment;
 use Illuminate\Http\Request;
@@ -147,5 +148,13 @@ class EquipmentController extends Controller
         //
         $equipment->delete();
         return redirect("/equipment");
+    }
+
+
+    public function graph(Equipment $equipment, $type)
+    {
+
+        return (new Response($equipment->getGraphs($type), 200))
+            ->header('Content-Type','image/png');
     }
 }

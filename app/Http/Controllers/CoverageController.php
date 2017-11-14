@@ -46,8 +46,9 @@ class CoverageController extends Controller
     public function getImage( $site = 'BGM', $direction = '120', $clientGain = '010') {
 
 
-
-
+        $speed = request('speed');
+        if (! $speed ) { $speed = 1;
+        }
         $cacheName = "$site-$direction-$clientGain.png";
  //TODO: Add caching
         //print "projections/$site/$site-$direction-$clientGain.png";
@@ -69,11 +70,11 @@ class CoverageController extends Controller
             }
         }
 
-        if ( file_exists(realpath("projections/CachedProjections/$site-" . md5($cacheID) . "-nq8.png")) && !request('refresh') ) {
+        if ( file_exists(realpath("projections/CachedProjections/$speed$site-" . md5($cacheID) . "-nq8.png")) && !request('refresh') ) {
             header('Cache-Control: max-age=3600');
             header('Content-Type: image/png');
 
-            print file_get_contents(realpath("projections/CachedProjections/$site-" . md5($cacheID) . "-nq8.png"));
+            print file_get_contents(realpath("projections/CachedProjections/$speed$site-" . md5($cacheID) . "-nq8.png"));
             return ;
         }
 
@@ -116,17 +117,19 @@ class CoverageController extends Controller
         $output->setImageFormat("PNG");
         //$output->setImageDepth(8);
         $output->stripImage();
-        $output->scaleImage(5035, 3238);
+
+        $output->scaleImage(5035/$speed, 3238/$speed);
+
         //$output->setCompressionQuality("90");
         //$output->scaleImage(500,500,true);
-        $output->writeImage( ("projections/CachedProjections/$site-" . md5($cacheID) . ".png") );
+        $output->writeImage( ("projections/CachedProjections/$speed$site-" . md5($cacheID) . ".png") );
         //print $output->getImageBlob();
 
-        shell_exec("/usr/bin/pngnq -n 24 -f  " . realpath("projections/CachedProjections/$site-" . md5($cacheID) . ".png") );
-        unlink(realpath("projections/CachedProjections/$site-" . md5($cacheID) . ".png"));
+        shell_exec("/usr/bin/pngnq -n 24 -f  " . realpath("projections/CachedProjections/$speed$site-" . md5($cacheID) . ".png") );
+        unlink(realpath("projections/CachedProjections/$speed$site-" . md5($cacheID) . ".png"));
         header('Cache-Control: max-age=3600');
         header('Content-Type: image/png');
-        print file_get_contents(realpath("projections/CachedProjections/$site-" . md5($cacheID) . "-nq8.png"));
+        print file_get_contents(realpath("projections/CachedProjections/$speed$site-" . md5($cacheID) . "-nq8.png"));
         //return false;
     }
     /**

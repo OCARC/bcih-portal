@@ -20,9 +20,9 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="{{ url('/') }}">Home</a></li>
-                @if (! Auth::guest())<li><a href="{{ url('/site') }}">Sites</a></li>@endif
+                <li><a href="{{ url('/site') }}">Sites</a></li>
                 @if (! Auth::guest())<li><a href="{{ url('/users') }}">Users</a></li>@endif
-                @if (! Auth::guest())<li><a href="{{ url('/equipment') }}">Equipment</a></li>@endif
+                <li><a href="{{ url('/equipment') }}">Equipment</a></li>
                 <li><a href="{{ url('/clients') }}">Clients</a></li>
                 @if (! Auth::guest())<li><a href="{{ url('/keys') }}">Keys</a></li>@endif
                 @if (! Auth::guest())<li class="dropdown">

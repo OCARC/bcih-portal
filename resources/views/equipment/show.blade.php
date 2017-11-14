@@ -88,7 +88,12 @@
 
             </div>
             <div role="tabpanel" class="tab-pane text-center" id="graphs">
-                @foreach( $equipment->graphs as $graph )
+
+
+                <img src="{{url('/equipment/' . $equipment->id . "/graph/temperature")}}" style="width: 100%; min-width: 300px;">
+                <img src="{{url('/equipment/' . $equipment->id . "/graph/voltage")}}" style="width: 100%; min-width: 300px;">
+
+            @foreach( $equipment->graphs as $graph )
                     <img src="{{$graph->url(2)}}" style="width: 48%; min-width: 300px;">
                 @endforeach
             </div>

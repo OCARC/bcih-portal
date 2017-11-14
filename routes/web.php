@@ -28,6 +28,7 @@ Route::get('site', 'SiteController@index');
 //Route::get('equipment/refresh', 'EquipmentController@refresh')->middleware('auth');;
 Route::get('site/create', 'SiteController@create');
 Route::get('site/{site}', 'SiteController@show');
+
 Route::get('site/{site}/edit', 'SiteController@edit')->middleware('auth');;
 
 //
@@ -42,6 +43,8 @@ Route::get('equipment/{equipment}/edit', 'EquipmentController@edit')->middleware
 
 Route::get('equipment/{equipment}/{method}', 'EquipmentController@showAjax')->middleware('auth');
 //
+
+Route::get('equipment/{equipment}/graph/{type}', 'EquipmentController@graph');
 Route::get('users', 'UserController@index');
 Route::get('users/keys/sshkey-{callsign}.pub', 'UserController@get_pub_sshkey');
 

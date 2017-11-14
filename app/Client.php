@@ -170,16 +170,23 @@ if( $this->snmp_strength == -90 ) { return "rgba(255, 000, 000,1.0)"; }
 
     public function dhcp_lease() {
 
-       return $this::hasOne(DhcpLease::class,'mac_address','mac_address');
-//        $lease = DhcpLease::where('mac_address', $this->mac_address )->first();
+        //return $this->hasMany(Equipment::class);
+
 //
-        if ( $lease == null) {
-            return new DhcpLease();
-        } else {
+//
+//        $lease = \App\DhcpLease::where('mac_address',$this->mac_address)->first();
+//        return $lease;
+//
+
+
+        $lease = $this->hasOne(\App\DhcpLease::class,'mac_address','mac_address');
+        if ( $lease ) {
             return $lease;
+        } else {
+            return new \App\DhcpLease();
         }
-////        dd($lease);
-        return new \stdClass();
+
+
     }
 
     public function getSNMP( $community = 'hamwan') {
@@ -205,7 +212,6 @@ if( $this->snmp_strength == -90 ) { return "rgba(255, 000, 000,1.0)"; }
 
         if ( ! $this->management_ip ) {
             $dhcp = $this->dhcp_lease();
-
             if (!$dhcp) {
                 return "";
             }

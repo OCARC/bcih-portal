@@ -1,5 +1,15 @@
 /// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/google.maps.d.ts" />
+var globalCoverages = [];
+$(document).ready( function() {
+    $.getJSON( "/coverages", function(data) {
+        globalCoverages = data;
+        //google.maps.event.addDomListener(window, 'load', initialize);
+        initialize();
+    });
+
+});
+
 function googleMapButton(text, className) {
     "use strict";
     var controlDiv = document.createElement("div");
@@ -323,10 +333,10 @@ function updateOverlays() {
         var site = v.split('|')[0];
         var sector = v.split('|')[1];
         c = jQuery.extend({}, globalCoverages[site]);
-        c['id'] = site + "|" + sector;
+        c['id'] = site + "|" + sector + "|" + $('#clientGain').val() + "|" + $('#quality').val();
         c['site'] = site;
         c['sector'] = sector;
-        c['src'] = 'http://portal.hamwan.ca/bcih-portal/public/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png';
+        c['src'] = 'coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png?speed=' + $('#quality').val();
         coverage.push(
             c
         );
@@ -638,8 +648,4 @@ function initialize() {
     map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById('fullscreen'));
 
 }
-var globalCoverages = [];
-$.getJSON( "http://portal.hamwan.ca/bcih-portal/public/coverages", function(data) {
-    globalCoverages = data;
-    google.maps.event.addDomListener(window, 'load', initialize);
-});
+

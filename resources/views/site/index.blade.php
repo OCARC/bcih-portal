@@ -22,8 +22,12 @@ Sites
                             <tr>
                                 <td><a href="{{ url("site/" . $site->id ) }}">{{ $site->name }}</td>
                                 <td>{{ $site->sitecode }}</td>
+                                @if (! Auth::guest())
                                 <td><a href="http://www.google.com/maps/?q={{ $site->latitude }},{{ $site->longitude }}">{{ $site->latitude }}, {{ $site->longitude }}</a></td>
-                                <td class="text-right">{{ $site->altitude }} meters</td>
+                                        @else
+                                    <td>n/a</td>
+@endif
+                                    <td class="text-right">{{ $site->altitude }} meters</td>
                             </tr>
                             @endforeach
                             </tbody>

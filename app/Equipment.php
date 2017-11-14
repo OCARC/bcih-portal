@@ -44,12 +44,14 @@ class Equipment extends Model
 
     protected $guarded = [];
     use \App\Traits\SSHConnection;
+    use \App\Traits\LibreNMS;
 
     protected $hidden = [
         'snmp_community'
     ];
 
-    public function graphs() {
+    public function graphs(  ) {
+
         $graphs = $this->hasMany(\App\CactiGraph::class,"host_id","cacti_id");
         if ( $graphs ) {
             return $graphs;
@@ -140,7 +142,9 @@ class Equipment extends Model
         }
 
         foreach( $clients as $key => $client ) {
-
+            if ( strlen(str_replace(":", "", $key)) != 12) {
+                continue;
+            }
             $c = Client::where('mac_address', str_replace(":", "", $key))->first();
 
             if ($c) {

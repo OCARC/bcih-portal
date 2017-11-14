@@ -17,6 +17,9 @@
 
 @section('scripts')
     <script>
+        var speeds = [
+                '1','3','6','10'
+        ]
 var az = [
         'ALL',
         '000','120','240',
@@ -61,14 +64,17 @@ var queue = [];
         $(document).ready(function() {
             jQuery.getJSON("{{url("/coverages")}}", function(data) {
 
+                speeds.forEach( function(s) {
                 for (var k in data) {
-                    az.forEach( function(e) {
-                    dbs.forEach( function(db) {
-                        queue.push( k + '-' + e + "-" + db + ".png");
-                        //= "Updating " + k + " @ " + e + "&deg; - " + db + "dB Client Gain";
-                    });
-                    });
+                        az.forEach(function (e) {
+                            dbs.forEach(function (db) {
+                                queue.push(k + '-' + e + "-" + db + ".png?speed=" + s);
+                                //= "Updating " + k + " @ " + e + "&deg; - " + db + "dB Client Gain";
+                            });
+                        });
+
                 }
+                });
 dequeue();
 
             });

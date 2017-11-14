@@ -13,13 +13,12 @@
     var statusSourceURL = "{{url("/status.json")}}";
 
 </script>
-<script src="js/map.js"></script>
 
 
 <form class="form-inline">
     <div class="form-group">
         <label for="exampleInputName2">Client Gain</label>
-        <select class="form-control" id="clientGain" onChange="initialize();">
+        <select class="form-control" id="clientGain" onChange="updateOverlays();">
     <option value="001">1dB</option>
     <option value="002">2dB</option>
     <option value="003">3dB</option>
@@ -58,6 +57,15 @@
 
 
 </select>
+
+            <label for="exampleInputName2">Overlay Quality</label>
+            <select class="form-control" id="quality" onChange="updateOverlays();">
+                <option value="10">Fast</option>
+                <option value="6">Medium</option>
+                <option value="3">High</option>
+                <option value="1">Extreme</option>
+            </select>
+        </div>
         </div>
 
     {{--<div class="form-group">--}}
@@ -115,9 +123,11 @@
 </div>
 @endsection
 @section('scripts')
-<script>
+    <script src="js/map.js"></script>
+
+    <script>
     $(document).ready( function() {
-        $.getJSON( "http://portal.hamwan.ca/bcih-portal/public/coverages", function(data) {
+        $.getJSON( "{{ url('coverages') }}", function(data) {
             for( k in data ) {
                 $('#siteSelect000').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|000' type='checkbox'> " + k + " 000&deg;</label>");
                 $('#siteSelect120').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|120' type='checkbox'> " + k + " 120&deg;</label>");
