@@ -43,6 +43,17 @@ class CoverageController extends Controller
     }
 
 
+    public function getJSON( $site = 'BGM', $direction = '120', $clientGain = '010')
+    {
+        $file = "$site-$direction-$clientGain.json";
+        $data = file_get_contents(realpath("projections/$site/$site-$direction-$clientGain.json"));
+
+        header('Cache-Control: max-age=3600');
+        header('Content-Type: image/png');
+        header('Content-Encoding: gzip');
+
+        return gzencode( $data,9 );
+    }
     public function getImage( $site = 'BGM', $direction = '120', $clientGain = '010') {
 
 

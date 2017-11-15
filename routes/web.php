@@ -61,6 +61,7 @@ Route::get('clients/{client}/{method}', 'ClientController@showAjax')->middleware
 //
 //
 Route::get('map', 'StatusController@map');
+Route::get('map/embed', 'StatusController@mapEmbed');
 //
 //
 //
@@ -73,6 +74,7 @@ Route::get('static-ip/refresh', 'StaticLeaseController@refresh');
 //
 //
 Route::get('coverages/{site}-{direction}-{clientGain}.png', 'CoverageController@getImage');
+Route::get('coverages/{site}-{direction}-{clientGain}.json', 'CoverageController@getJSON');
 Route::get('coverages', 'CoverageController@index');
 
 

@@ -60,7 +60,8 @@
 
             <label for="exampleInputName2">Overlay Quality</label>
             <select class="form-control" id="quality" onChange="updateOverlays();">
-                <option value="10">Fast</option>
+                <option value="geo">GeoJSON</option>
+                <option selected=true value="10">Fast</option>
                 <option value="6">Medium</option>
                 <option value="3">High</option>
                 <option value="1">Extreme</option>

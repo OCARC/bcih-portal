@@ -170,4 +170,8 @@ class StatusController extends Controller {
         return view("status.map");
     }
 
+    public function mapEmbed() {
+        return view("status.mapEmbed");
+
+    }
 }

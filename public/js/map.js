@@ -336,7 +336,9 @@ function updateOverlays() {
         c['id'] = site + "|" + sector + "|" + $('#clientGain').val() + "|" + $('#quality').val();
         c['site'] = site;
         c['sector'] = sector;
-        c['src'] = 'coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png?speed=' + $('#quality').val();
+        c['quality'] = $('#quality').val();
+        c['json'] = '/projections/' + site + '/' + site +'-' + sector + '-' + $('#clientGain').val() + '.json';
+        c['src'] = '/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png?speed=' + $('#quality').val();
         coverage.push(
             c
         );
@@ -345,6 +347,7 @@ function updateOverlays() {
     // Hide
     for (var id in coverageOverlays) {
         coverageOverlays[ id ].setMap(null);
+        delete coverageOverlays[ id ];
     }
 
 
@@ -356,10 +359,32 @@ function updateOverlays() {
             new google.maps.LatLng( overlay.n, overlay.e));
         if ( !             coverageOverlays[ overlay['id']] ) {
 
-        coverageOverlays[ overlay['id']] = new google.maps.GroundOverlay(overlay.src,
-            overlaybounds, {opacity:0.5});
+            if (  overlay['quality'] == 'geo') {
+                coverageOverlays[ overlay['id']] = new google.maps.Data();
+
+
+                coverageOverlays[ overlay['id']].setStyle(function(feature) {
+
+                    var level = feature.getProperty('n');
+
+                    var l = level * 20;
+                    var color = 'rgb( ' + (255-l).toString() + ', ' + (l.toString())+ ', 000)';
+
+                    return {
+                        fillColor: color,
+                        strokeWeight: 1,
+                        strokeColor: color
+                    };
+                });
+                coverageOverlays[ overlay['id']].loadGeoJson( overlay['json'] );
+                coverageOverlays[ overlay['id']].setMap(map);
+
+            } else {
+                coverageOverlays[ overlay['id']] = new google.maps.GroundOverlay(overlay.src,
+                    overlaybounds, {opacity:0.5});
+                coverageOverlays[ overlay['id']].setMap(map);
+            }
         }
-        coverageOverlays[ overlay['id']].setMap(map);
     }
 }
 
@@ -427,11 +452,9 @@ function initialize() {
         zoom:  11,
 
         scrollwheel: true,
-        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        mapTypeId: google.maps.MapTypeId.HYBRID,
         mapTypeControl: true,
-        mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-        }
+
     };
 
     if (typeof zoom !== 'undefined') {
