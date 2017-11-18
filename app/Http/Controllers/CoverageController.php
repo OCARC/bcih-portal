@@ -18,18 +18,24 @@ class CoverageController extends Controller
 
         //
         $path = getcwd() . "/projections/";
-        $files =  scandir($path);
+        $files = scandir($path);
 
         $result = array();
-        foreach ( $files as $file ) {
-            if ( $file == "." ) { continue; }
-            if ( $file == ".." ) { continue; }
-            if ( $file == "CachedProjections" ) { continue; }
+        foreach ($files as $file) {
+            if ($file == ".") {
+                continue;
+            }
+            if ($file == "..") {
+                continue;
+            }
+            if ($file == "CachedProjections") {
+                continue;
+            }
 //
-            if ( is_dir( $path . $file ) ) {
+            if (is_dir($path . $file)) {
 ////print $path . $file . "/" . $file . "-000-000.extents";
 ////print file_get_contents( $path . $file . "/" . $file . "-000-000.extents");
-                list($x,$n,$e,$s,$w) = explode("|",file_get_contents( $path . $file . "/" . $file . "-000-000.extents"));
+                list($x, $n, $e, $s, $w) = explode("|", file_get_contents($path . $file . "/" . $file . "-000-000.extents"));
 ////
                 $result[$file] = array(
                     'NAME' => $file,
@@ -37,11 +43,15 @@ class CoverageController extends Controller
                 );
             }
 //
-       }
+        }
 
-       return $result;
+        return $result;
     }
 
+    public function getGEOJSON($site = 'BGM', $direction = '120', $clientGain = '010') {
+
+
+    }
 
     public function getJSON( $site = 'BGM', $direction = '120', $clientGain = '010')
     {

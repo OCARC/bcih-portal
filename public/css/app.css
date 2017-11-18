@@ -6231,3 +6231,10 @@ label,
 .checkbox label {
   font-weight: 300;
 }
+/* Sortable tables */
+table.sortable thead {
+  background-color:#eee;
+  color:#666666;
+  font-weight: bold;
+  cursor: default;
+}

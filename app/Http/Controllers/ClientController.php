@@ -46,6 +46,9 @@ class ClientController extends Controller
         if ($method == "fetchSpectralHistory") {
             $r = $client->sshFetchSpectralHistory();
         }
+        if ($method == "bwTest") {
+            $r = $client->sshBWTest();
+        }
         if ($r) {
             $result['data'] = $r['data'];
             $result['status'] = $r['status'];
@@ -57,7 +60,8 @@ class ClientController extends Controller
     public function refresh() {
         $clients = Client::all();
         foreach( $clients as $i) {
-            $i->pollSNMP();
+                $i->pollSNMP();
+
         }
         //return redirect('equipment');
 

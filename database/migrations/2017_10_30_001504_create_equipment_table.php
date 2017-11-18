@@ -23,10 +23,15 @@ class CreateEquipmentTable extends Migration
             $table->string('hostname');
             $table->string('management_ip');
             $table->integer('ant_height')->nullable(true);
-            $table->integer('ant_azimuth')->nullable(true);
-            $table->integer('ant_tilt')->nullable(true);
+            $table->float('ant_azimuth',6,2)->nullable(true);
+            $table->float('ant_tilt',6,2)->nullable(true);
+            $table->float('ant_gain',6,2)->nullable(true);
             $table->string('ant_model')->nullable(true);
-
+            $table->string("status")->nullable(true);
+            $table->string("type")->nullable(true);
+            $table->float("radio_power",6,2)->nullable(true);
+            $table->string("radio_model")->nullable(true);
+            $table->string("role")->nullable(true);
 
             $table->string('snmp_community')->default("hamwan");
             $table->timestamp('snmp_timestamp')->nullable( true);
@@ -34,6 +39,10 @@ class CreateEquipmentTable extends Migration
             $table->string('snmp_serial')->nullable( true);
             $table->string('snmp_voltage')->nullable( true);
             $table->string('snmp_temperature')->nullable( true);
+
+            $table->text('comments');
+            $table->text('description');
+
             $table->timestamps();
         });
 

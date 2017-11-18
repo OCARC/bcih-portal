@@ -103,8 +103,13 @@ class EquipmentController extends Controller
         if ($method == "fetchSpectralHistory") {
             $r =$equipment->sshFetchSpectralHistory();
         }
-
-        if ($r) {
+        if ($method == "fetchSpectralHistory") {
+            $r =$equipment->sshFetchSpectralHistory();
+        }
+        if ($method == "bwTest") {
+            $r =$equipment->SSHBWTest();
+        }
+        if ( isset($r)) {
             $result['data'] = $r['data'];
             $result['status'] = $r['status'];
             $result['reason'] = $r['reason'];

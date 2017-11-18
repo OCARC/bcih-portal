@@ -24,6 +24,17 @@ class SiteController extends Controller
         return view('site.index', compact('sites'));
     }
 
+    public function indexJSON() {
+
+        $sites = Site::all();
+
+        foreach( $sites as &$site) {
+            $site->equipment = $site->equipment;
+        }
+        return $sites;
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -70,6 +81,10 @@ class SiteController extends Controller
     public function show(Site $site)
     {
 	   return view('site.show')->with( 'site', $site);
+    }
+    public function showJSON(Site $site)
+    {
+        return $site->json();
     }
 
     /**

@@ -1,10 +1,10 @@
 @extends('common.master')
 @section('title')
-    Client: @if( $client->dhcp_lease ){{ $client->dhcp_lease->hostname }} @else Name Not Found @endif
+    Client: @if( $client->dhcp_lease() ){{ $client->dhcp_lease()->hostname }} @else Name Not Found @endif
 @endsection
 @section('content')
 
-    <h2>Client: @if( $client->dhcp_lease ){{ $client->dhcp_lease->hostname }} @else Name Not Found @endif</h2>
+    <h2><img src="{{ $client->icon() }}" style="height: 2em; margin-top: -1em"> Client: @if( $client->dhcp_lease() ){{ $client->dhcp_lease()->hostname }} @else Name Not Found @endif</h2>
 
     <div>
 
@@ -22,15 +22,15 @@
                 <Table class="table table-responsive table-condensed table-striped table-bordered">
                     <tr>
                         <th>Hostname</th>
-                        <td>{{$client->dhcp_lease->hostname or "No Lease Found" }}</td>
+                        <td>{{$client->dhcp_lease()->hostname or "No Lease Found" }}</td>
                     </tr>
                     <tr>
                         <th>DHCP IP</th>
-                        <td>{{$client->dhcp_lease->ip}}</td>
+                        <td>{{$client->dhcp_lease()->ip}}</td>
                     </tr>
                     <tr>
                         <th>Management IP</th>
-                        <td>{{$client->management_ip or $client->dhcp_lease->ip}}</td>
+                        <td>{{$client->management_ip or $client->dhcp_lease()->ip}}</td>
                     </tr>
 
                     <tr>
@@ -85,7 +85,7 @@
 
 
             <div role="tabpanel" class="tab-pane" id="tools">
-                <h2>Get Configuration</h2>
+                <h3>Get Configuration</h3>
                 <div class="ajaxAction">
                     <div class="ajaxResult"></div>
                     <button class="btn btn-default"
@@ -93,7 +93,7 @@
                         Configuration
                     </button>
                 </div>
-                <h2>Perform Quick Scan</h2>
+                <h3>Perform Quick Scan</h3>
                 <span class="text-danger"><strong>CAUTION:</strong> This action will cause the client to disconnect from the network. If it does not reconnect quickly enough you might not get a result.</span>
 
                 <div class="ajaxAction">
@@ -102,7 +102,7 @@
                             onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/quickScan")}}')">Run Quick Scan
                     </button>
                 </div>
-                <h2>Retrieve Wireless Stats</h2>
+                <h3>Retrieve Wireless Stats</h3>
 
                 <div class="ajaxAction">
                     <div class="ajaxResult"></div>
@@ -112,13 +112,46 @@
                     </button>
                 </div>
 
-                <h2>Get Spectral History</h2>
+                <h3>Get Spectral History</h3>
                 <span class="text-danger"><strong>CAUTION:</strong> This action will cause the client to disconnect from the network. If it does not reconnect quickly enough you might not get a result.</span>
                 <div class="ajaxAction">
                     <div class="ajaxResult"></div>
                     <button class="btn btn-default"
                             onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/fetchSpectralHistory")}}')">
                         Fetch Spectral History
+                    </button>
+                </div>
+
+                <h3>Perform Bandwidth Test</h3>
+                <span class="text-warning"><strong>Note:</strong> This can consume a lot of network link bandwidth. Please only test when needed.</span>
+                <div class="ajaxAction">
+                    <div class="ajaxResult"></div>
+                    Target : <select id="target">
+                        <option value="44.135.217.21">HEX1.LMK</option>
+                        <option value="44.135.217.22">HEX1.BKM</option>
+                        <option value="44.135.217.23">HEX1.KUI</option>
+                        <option value="44.135.217.24">HEX1.BGM</option>
+                    </select>
+
+                    Duration :
+                    <select id="duration">
+                        <option value="1">1 Seconds</option>
+                        <option value="5">5 Seconds</option>
+                        <option value="10" selected="selected">10 Seconds</option>
+                        <option value="30">30 Seconds</option>
+                        <option value="45">45 Seconds</option>
+                        <option value="60">60 Seconds</option>
+                    </select>
+
+                    Direction :
+                    <select id="direction">
+                        <option value="both">Both</option>
+                        <option value="transmit">Send</option>
+                        <option value="receive" selected="selected">Receive</option>
+                    </select>
+                    <button class="btn btn-default"
+                            onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/bwTest")}}?target=' + $('#target').val() + '&duration=' + $('#duration').val() + '&direction=' + $('#direction').val() + '')">
+                        Perform Bandwidth Test
                     </button>
                 </div>
             </div>

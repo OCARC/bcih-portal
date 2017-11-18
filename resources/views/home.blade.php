@@ -21,7 +21,12 @@ Overview
 						<tr>
 						<td><a href="/site/{{ $site->id }}">{{$site->name}}</a></td>
 							@foreach ($site->equipment as $equipment)
-								<td class="text-center" style="background-color: {{ $equipment->getHealthColor() }}"><a href="{{ url( "/equipment/" . $equipment->id ) }}">{{$equipment->hostname}}</a><br>{{ $equipment->getHealthStatus() }}</td>
+								<td class="text-center" style="background-color: {{ $equipment->getHealthColor() }}">
+									<a href="{{ url( "/equipment/" . $equipment->id ) }}">
+
+									<img src="{{$equipment->icon() }}" style="width:64px; height: 64px;"><br>
+
+									{{$equipment->hostname}}</a><br>{{ $equipment->getHealthStatus() }}</td>
 							@endforeach
 
 						</tr>

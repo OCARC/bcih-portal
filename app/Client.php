@@ -21,7 +21,7 @@ class Client extends Model
 
     protected $guarded = [];
     use \App\Traits\SSHConnection;
-
+    use \App\Traits\DeviceIcon;
     
     public function strengthColor() {
 	if ( $this->snmp_strength == -50 ) { return "rgba( 000, 255, 000, 1.0)"; }
@@ -75,6 +75,22 @@ class Client extends Model
 
 
         $result = $this->executeSSH( 'manage', $key, "/interface wireless scan 0 duration=5") ;
+        return $result;
+
+    }
+
+    public function sshBWTest() {
+        $target = escapeshellcmd($_GET['target']);
+        $duration = escapeshellcmd($_GET['duration']);
+        $direction = escapeshellcmd($_GET['direction']);
+
+        // Load management Key
+        $key = \App\User::where('id',0)->first()->rsa_keys->where('publish',1)->first();
+
+        $result = $this->executeSSH( 'manage', $key, "/tool bandwidth-test address=" . $target . " direction=" . $direction . " duration=" .$duration, true) ;
+
+        $result['data'] = explode("\r\n\r\n", $result['data']);
+        $result['data'] = "<pre width=\"200\" style=\"color: white; background: black\">" . $result['data'][ count($result['data'] )-1 ] . "</pre>";
         return $result;
 
     }
@@ -187,9 +203,11 @@ class Client extends Model
 
         $lease = $this->hasOne(\App\DhcpLease::class,'mac_address','mac_address');
         if ( $lease ) {
-            return $lease;
+            return $lease->first();
         } else {
-            return new \App\DhcpLease();
+            $fake = new \App\DhcpLease();
+
+            return $fake;
         }
 
 

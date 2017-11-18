@@ -18,12 +18,17 @@ class CreateSitesTable extends Migration
             $table->increments('id');
             $table->string("name")->default("New Site");
             $table->string("map_icon")->default("");
+            $table->string("status")->nullable(true);
+            $table->text("description");
             $table->text("comments");
             $table->string("sitecode",3);
             $table->float("latitude",9,6);
             $table->float("longitude",9,6);
             $table->integer("altitude");
             $table->integer("owner")->default(0);
+
+            $table->string("status")->nullable(true);
+
             $table->timestamps();
         });
 

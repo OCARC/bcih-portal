@@ -21,7 +21,6 @@ function ajaxAction( target, url ) {
         }
 
         $(target).show();
-        $(target).html('Refresh');
 
     });
 }

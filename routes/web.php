@@ -27,6 +27,9 @@ Route::delete('site/{site}', 'SiteController@destroy')->middleware('auth');
 Route::get('site', 'SiteController@index');
 //Route::get('equipment/refresh', 'EquipmentController@refresh')->middleware('auth');;
 Route::get('site/create', 'SiteController@create');
+Route::get('sites.json', 'SiteController@indexJSON');
+
+Route::get('site/{site}.json', 'SiteController@showJSON');
 Route::get('site/{site}', 'SiteController@show');
 
 Route::get('site/{site}/edit', 'SiteController@edit')->middleware('auth');;

@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 
-    <h2>Equipment: {{ $equipment->hostname }}</h2>
+    <h2><img src="{{ $equipment->icon() }}" style="height: 2em; margin-top: -1em"> Equipment: {{ $equipment->hostname }}</h2>
 
     <div>
 
@@ -27,19 +27,35 @@
                     <tr>
                         <th>Hostname</th>
                         <td>{{$equipment->hostname}}</td>
-                    </tr>
-                    <tr>
                         <th>Management IP</th>
                         <td>{{$equipment->management_ip}}</td>
                     </tr>
                     <tr>
                         <th>Operating System</th>
                         <td>{{$equipment->os or "unset"}}</td>
+                        <th>Cacti Mapping</th>
+                        <td>{{$equipment->cacti_id or "unset"}}</td>
                     </tr>
                     <tr>
                         <th>Site</th>
                         <td><a href="{{url("/site/" . $equipment->site_id ) }}">{{$equipment->site['name'] }}
                                 ({{$equipment->site['sitecode'] }})</a></td>
+                        <th>Status</th>
+                        @if ($equipment->status == "Potential")
+                            <td style="vertical-align:middle;background-color: #e1e1e1">{{ $equipment->status }}</td>
+                        @elseif( $equipment->status == "Planning")
+                            <td style="vertical-align:middle;background-color: #fff6a6">{{ $equipment->status }}</td>
+                        @elseif( $equipment->status == "Installed")
+                            <td style="vertical-align:middle;background-color: #aaffaa">{{ $equipment->status }}</td>
+                        @elseif( $equipment->status == "Equip Failed")
+                            <td style="vertical-align:middle;background-color: #ff6666">{{ $equipment->status }}</td>
+                        @elseif( $equipment->status == "Problems")
+                            <td style="vertical-align:middle;background-color: #ffd355">{{ $equipment->status }}</td>
+                        @elseif( $equipment->status == "No Install")
+                            <td style="vertical-align:middle;background-color: #979797">{{ $equipment->status }}</td>
+                        @else
+                            <td style="vertical-align:middle;">{{ $equipment->status }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <th>Owner</th>
@@ -51,24 +67,47 @@
                         <th>Site Altitude</th>
                         <td>{{$equipment->site->altitude or "?" }} meters</td>
                     </tr>
+
+
+
+                    <tr>
+                        <th>Antenna Model</th>
+                        <td>{{$equipment->ant_model or ""}}</td>
+                        <th>Equipment Model</th>
+                        <td>{{$equipment->radio_model or ""}}</td>
+                    </tr>
+                    <tr>
+                        <th>Antenna Gain</th>
+                        <td>@if( $equipment->ant_gain ){{$equipment->ant_gain }} dBi @endif</td>
+                        <th>Radio Power</th>
+                        <td>@if( $equipment->radio_power ){{$equipment->radio_power }} dBm @endif</td>
+                    </tr>
+
                     <tr>
                         <th>Antenna Height</th>
                         <td>{{$equipment->ant_height or "?"}} meters</td>
+                        <th>EIRP</th>
+                        <td>@if( $equipment->eirp() ){{$equipment->eirp() }} W @endif</td>
                     </tr>
 
                     <tr>
                         <th>Antenna Azimuth</th>
-                        <td>{{$equipment->ant_azimuth or "?"}}&deg;</td>
+                        <td>{{$equipment->ant_azimuth or "?"}}&deg; True</td>
                     </tr>
                     <tr>
                         <th>Antenna Tilt</th>
                         <td>{{$equipment->ant_tilt or "?"}}&deg;</td>
                     </tr>
+
                     <tr>
-                        <th>Antenna Model</th>
-                        <td>{{$equipment->ant_model or "?"}}</td>
+                        <th>Comment</th>
+                        <td colspan="3">{{$equipment->comments}}</td>
                     </tr>
 
+                    <tr>
+                        <th>Description</th>
+                        <td colspan="3">{{$equipment->description}}</td>
+                    </tr>
                 </Table>
 
 
@@ -90,8 +129,8 @@
             <div role="tabpanel" class="tab-pane text-center" id="graphs">
 
 
-                <img src="{{url('/equipment/' . $equipment->id . "/graph/temperature")}}" style="width: 100%; min-width: 300px;">
-                <img src="{{url('/equipment/' . $equipment->id . "/graph/voltage")}}" style="width: 100%; min-width: 300px;">
+                {{--<img src="{{url('/equipment/' . $equipment->id . "/graph/temperature")}}" style="width: 100%; min-width: 300px;">--}}
+                {{--<img src="{{url('/equipment/' . $equipment->id . "/graph/voltage")}}" style="width: 100%; min-width: 300px;">--}}
 
             @foreach( $equipment->graphs as $graph )
                     <img src="{{$graph->url(2)}}" style="width: 48%; min-width: 300px;">
@@ -100,7 +139,7 @@
             <div role="tabpanel" class="tab-pane" id="tools">
 
                 @if ($equipment->os == 'RouterOS')
-                    <h2>Get Configuration</h2>
+                    <h3>Get Configuration</h3>
                     <div class="ajaxAction">
                         <div class="ajaxResult"></div>
                         <button class="btn btn-default"
@@ -109,7 +148,7 @@
                         </button>
                     </div>
 
-                    <h2>Get POE Status</h2>
+                    <h3>Get POE Status</h3>
                     <div class="ajaxAction">
                         <div class="ajaxResult"></div>
                         <button class="btn btn-default"
@@ -118,13 +157,46 @@
                         </button>
                     </div>
 
-                    <h2>Get Spectral History</h2>
+                    <h3>Get Spectral History</h3>
                     <span class="text-warning"><strong>CAUTION:</strong> This will disconnect clients, be careful using on link radios.</span>
                     <div class="ajaxAction">
                         <div class="ajaxResult"></div>
                         <button class="btn btn-default"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $equipment->id . "/fetchSpectralHistory")}}')">
                             Fetch Spectral History
+                        </button>
+                    </div>
+
+                    <h3>Perform Bandwidth Test</h3>
+                    <span class="text-warning"><strong>Note:</strong> This can consume a lot of network link bandwidth. Please only test when needed.</span>
+                    <div class="ajaxAction">
+                        <div class="ajaxResult"></div>
+                        Target : <select id="target">
+                            <option value="44.135.217.21">HEX1.LMK</option>
+                            <option value="44.135.217.22">HEX1.BKM</option>
+                            <option value="44.135.217.23">HEX1.KUI</option>
+                            <option value="44.135.217.24">HEX1.BGM</option>
+                        </select>
+
+                        Duration :
+                        <select id="duration">
+                            <option value="1">1 Seconds</option>
+                            <option value="5">5 Seconds</option>
+                            <option value="10" selected="selected">10 Seconds</option>
+                            <option value="30">30 Seconds</option>
+                            <option value="45">45 Seconds</option>
+                            <option value="60">60 Seconds</option>
+                        </select>
+
+                        Direction :
+                        <select id="direction">
+                            <option value="both">Both</option>
+                            <option value="transmit">Send</option>
+                            <option value="receive" selected="selected">Receive</option>
+                        </select>
+                        <button class="btn btn-default"
+                                onClick="ajaxAction(this,'{{url('equipment/' . $equipment->id . "/bwTest")}}?target=' + $('#target').val() + '&duration=' + $('#duration').val() + '&direction=' + $('#direction').val() + '')">
+                            Perform Bandwidth Test
                         </button>
                     </div>
                 @endif

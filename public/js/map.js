@@ -337,7 +337,7 @@ function updateOverlays() {
         c['site'] = site;
         c['sector'] = sector;
         c['quality'] = $('#quality').val();
-        c['json'] = '/projections/' + site + '/' + site +'-' + sector + '-' + $('#clientGain').val() + '.json';
+        c['json'] = '/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.json';
         c['src'] = '/coverages/' + site + '-' + sector + '-' + $('#clientGain').val() + '.png?speed=' + $('#quality').val();
         coverage.push(
             c
@@ -452,9 +452,14 @@ function initialize() {
         zoom:  11,
 
         scrollwheel: true,
-        mapTypeId: google.maps.MapTypeId.HYBRID,
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
         mapTypeControl: true,
+        scaleControl: true,
 
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        },
+        fullscreenControl: true
     };
 
     if (typeof zoom !== 'undefined') {
@@ -465,9 +470,7 @@ function initialize() {
     }
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     updateOverlays();
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
-        FullScreenControl(map, "Full Screen",
-            "Exit Full Screen"));
+
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
         NightModeControl(map, "Dark View",
             "Light View"));

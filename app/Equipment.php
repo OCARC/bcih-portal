@@ -23,6 +23,7 @@ class Equipment extends Model
     CONST OID_REG_TABLE_SIGNAL_TO_NOISE = ".1.3.6.1.4.1.14988.1.1.1.2.1.12";
     CONST OID_LOCATION = ".1.3.6.1.2.1.1.6.0";
     CONST OID_SERIAL = ".1.3.6.1.4.1.14988.1.1.7.3.0";
+    const OID_SYSDESC = ".1.3.6.1.2.1.1.1.0";
 
     CONST OID_SNR = ".1.3.6.1.4.1.14988.1.1.1.2.1.12";
     CONST OID_TEMPERATURE = ".1.3.6.1.4.1.14988.1.1.3.10.0";
@@ -45,6 +46,7 @@ class Equipment extends Model
     protected $guarded = [];
     use \App\Traits\SSHConnection;
     use \App\Traits\LibreNMS;
+    use \App\Traits\DeviceIcon;
 
     protected $hidden = [
         'snmp_community'
@@ -62,6 +64,10 @@ class Equipment extends Model
 
     public function getHealthColor() {
 
+        if ( $this->status == "Planning" || $this->status == "Potential" || $this->status == "No Install") {
+            return "inherit";
+        }
+
         if ( $this::getHealthStatus() == "Error" ) {
             return '#ffad2f'; // Error
         } else if ( $this::getHealthStatus() == "High Temp" ) {
@@ -77,6 +83,14 @@ class Equipment extends Model
 
     }
 
+
+
+    public function eirp() {
+if ( ! $this->ant_gain && ! $this->radio_power ) { return null;}
+        $p = $this->ant_gain + $this->radio_power;
+        return number_format( pow(10,( $p /10))/1000, 2);
+
+    }
     public function clients() {
        return $this->hasMany(Client::class) ;
     }
@@ -98,7 +112,9 @@ class Equipment extends Model
     }
 
     public function getHealthStatus() {
-
+        if ( $this->status == "Planning" || $this->status == "Potential" || $this->status == "No Install") {
+            return "-";
+        }
         $status = "OK";
 
         if ( $this->snmp_temperature >= 60 ) {
@@ -197,7 +213,21 @@ class Equipment extends Model
 
        // print_r( $results );
     }
+    public function sshBWTest() {
+        $target = escapeshellcmd($_GET['target']);
+        $duration = escapeshellcmd($_GET['duration']);
+        $direction = escapeshellcmd($_GET['direction']);
 
+        // Load management Key
+        $key = \App\User::where('id',0)->first()->rsa_keys->where('publish',1)->first();
+
+        $result = $this->executeSSH( 'manage', $key, "/tool bandwidth-test address=" . $target . " direction=" . $direction . " duration=" .$duration, true) ;
+
+        $result['data'] = explode("\r\n\r\n", $result['data']);
+        $result['data'] = "<pre width=\"200\" style=\"color: white; background: black\">" . $result['data'][ count($result['data'] )-1 ] . "</pre>";
+        return $result;
+
+    }
     public function sshFetchSpectralHistory(){
         if ( $this->os != 'RouterOS' ) {
             return array('status' => 'fail', 'reason' => 'command not supported for os type', 'data' => null);
@@ -264,14 +294,26 @@ class Equipment extends Model
                 $this::OID_BAND,
                 $this::OID_SERIAL,
                 $this::OID_SSID,
-                $this::OID_SNR
+                $this::OID_SNR,
+                $this::OID_SERIAL,
+                $this::OID_SYSDESC
             )
         );
         if ( isset($r[$this::OID_VOLTAGE]) ) {
             $this->snmp_voltage = (int)$r[$this::OID_VOLTAGE]/10;
         }
+        if ( isset($r[$this::OID_SYSDESC]) ) {
+        if ( $r[$this::OID_SYSDESC] != "" ) {
+            $this->radio_model = str_replace("RouterOS ", "", $r[$this::OID_SYSDESC]);
+        }
+        }
         if ( isset($r[$this::OID_TEMPERATURE]) ) {
             $this->snmp_temperature = (int)$r[$this::OID_TEMPERATURE]/10;
+        }
+        if ( isset($r[$this::OID_SERIAL]) ) {
+            if ( $r[$this::OID_SERIAL] != "" ) {
+                $this->snmp_serial = $r[$this::OID_SERIAL];
+            }
         }
         if ( isset($r[$this::OID_TEMPERATURE]) ) {
             $this->snmp_uptime = $r[$this::OID_UPTIME];

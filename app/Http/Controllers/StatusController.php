@@ -15,6 +15,7 @@ class StatusController extends Controller {
      */
     public function index()
     {
+
         //
 
         $result = array(
@@ -30,7 +31,8 @@ class StatusController extends Controller {
                 "LATITUDE" => $site->latitude,
                 "LONGITUDE" => $site->longitude,
                 "ICON" => url($site->map_icon),
-                "COMMENT" => $site->comment,
+                "COMMENT" => $site->description,
+                "STATUS" => $site->status,
                 "STATUS_COLOR" => "#00ff00",
                 "CLIENTS" => array(),
                 "LINKS" => array()
