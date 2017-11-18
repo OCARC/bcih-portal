@@ -81,7 +81,7 @@ class StatusController extends Controller {
                     continue;
                 }
                 $result['SITES'][ $site->id ]['CLIENTS'][ $client->id ] = array(
-                    "NAME" => ($client->dhcp_lease) ? $client->dhcp_lease->hostname : $client->snmp_sysName,
+                    "NAME" => ($client->dhcp_lease()) ? $client->dhcp_lease()->hostname : $client->snmp_sysName,
                     "LATITUDE" => $client->latitude,
                     "LONGITUDE" => $client->longitude,
                     "COMMENT" => $client->snmp_sysDesc,
