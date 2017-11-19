@@ -39,6 +39,10 @@ class CreateEquipmentTable extends Migration
             $table->string('snmp_serial')->nullable( true);
             $table->string('snmp_voltage')->nullable( true);
             $table->string('snmp_temperature')->nullable( true);
+            $table->string('snmp_frequency')->nullable( true);
+            $table->string('snmp_ssid')->nullable( true);
+            $table->string('snmp_band')->nullable( true);
+            $table->string('snmp_snr')->nullable( true);
 
             $table->text('comments');
             $table->text('description');

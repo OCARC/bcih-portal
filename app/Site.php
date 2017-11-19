@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Site extends Model
 {
     protected $guarded = [];
-
+    protected $hidden = [
+        'comments'
+    ];
     public function clients() {
-        return $this->hasMany(Client::class);
+        return $this->hasMany(Client::class)->orderBy('radio_name');
     }
 
 
     public function equipment() {
-        return $this->hasMany(Equipment::class);
+        return $this->hasMany(Equipment::class)->orderBy('hostname');
     }
 
 

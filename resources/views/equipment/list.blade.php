@@ -10,10 +10,11 @@
         <th>Status</th>
         <th>Equipment / Radio</th>
         <th>Power</th>
-        <th>Antenna</th>
         <th>Gain</th>
         <th>EIRP</th>
-        <th>HAT</th>
+        <th>Band</th>
+        <th>SSID</th>
+
         <th>Volt</th>
         <th>Temp</th>
         {{--<th>Uptime</th>--}}
@@ -49,10 +50,10 @@
             @endif
             <td>{{ $row->radio_model }}@if ($row->snmp_serial)<br><span style="font-family: courier; font-size: 12px;">S/N {{ $row->snmp_serial }} </span>@endif</td>
             <td class="text-right">@if ($row->radio_power){{ $row->radio_power }}&nbsp;dBm @endif</td>
-            <td>{{ $row->ant_model }}</td>
             <td class="text-right">@if ($row->ant_gain){{ $row->ant_gain }}&nbsp;dBi @endif</td>
             <td class="text-right">@if ($row->eirp() ){{ $row->eirp() }}&nbsp;W @endif</td>
-            <td class="text-right">@if ($row->ant_height ){{ $row->ant_height }}&nbsp;m @endif</td>
+            <td class="">{{$row->snmp_band}}</td>
+            <td class="">{{$row->snmp_ssid}}</td>
             <td class="text-right">@if ($row->snmp_voltage){{ number_format($row->snmp_voltage,1) }}&nbsp;V @else - @endif</td>
             <td class="text-right">@if ($row->snmp_temperature){{ $row->snmp_temperature }}&nbsp;&deg;C @else - @endif</td>
             {{--<td class="text-right">@if ($row->snmp_uptime){{ $row->snmp_uptime }}@else <span class=" text-danger">error</span> @endif</td>--}}

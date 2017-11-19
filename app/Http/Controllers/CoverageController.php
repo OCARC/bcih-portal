@@ -39,8 +39,26 @@ class CoverageController extends Controller
 ////
                 $result[$file] = array(
                     'NAME' => $file,
-                    'n' => $n, 'e' => $e, 's' => $s, 'w' => $w
+                    'n' => $n, 'e' => $e, 's' => $s, 'w' => $w,
+                    'SECTORS' => array()
                 );
+
+                $site = \App\Site::query()->where('sitecode', $file)->first();
+                if ($site) {
+                    foreach ($site->equipment as $e) {
+                        if ($e->hostname == 'RADIO0.' . $site->sitecode) {
+                            $result[$site->sitecode]['SECTORS']['0'] = $e;
+                        }
+                        if ($e->hostname == 'RADIO120.' . $site->sitecode) {
+                            $result[$site->sitecode]['SECTORS']['120'] = $e;
+                        }
+                        if ($e->hostname == 'RADIO240.' . $site->sitecode) {
+                            $result[$site->sitecode]['SECTORS']['240'] = $e;
+                        }
+                    }
+                }
+
+
             }
 //
         }

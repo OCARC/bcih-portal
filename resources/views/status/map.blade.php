@@ -130,9 +130,40 @@
     $(document).ready( function() {
         $.getJSON( "{{ url('coverages') }}", function(data) {
             for( k in data ) {
-                $('#siteSelect000').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|000' type='checkbox'> " + k + " 000&deg;</label>");
-                $('#siteSelect120').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|120' type='checkbox'> " + k + " 120&deg;</label>");
-                $('#siteSelect240').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='"+k+"|240' type='checkbox'> " + k + " 240&deg;</label>");
+
+
+                for (sk in data[k].SECTORS) {
+                    sk.padStart(3,'0');
+
+                    if ( $('#siteSelect .' +k).length == 0 ) {
+                        $('#siteSelect').append('<div style="display: inline-block;" class="' + k + '"></div>');
+                    }
+
+                    style=' opacity: 0.5; ';
+                    if ( data[k].SECTORS[sk].status == 'Installed' ) {
+                        style=' opacity: 1; background-color: #aaffaa;';
+
+                    }
+                    if ( data[k].SECTORS[sk].status == 'Problems' ) {
+                        style=' opacity: 1; background-color: #ffd355;';
+
+                    }
+                    if ( data[k].SECTORS[sk].status == 'Planning' ) {
+                        style=' opacity: 1; background-color: #fff6a6;';
+
+                    }
+                    if ( data[k].SECTORS[sk].status == 'Potential' ) {
+                        style=' opacity: 1; background-color: #e1e1e1;';
+                    }
+                    $('#siteSelect .' + k).append(" &nbsp;<label style='" + style + "margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='" + k + "|" + sk + "' type='checkbox'> " + k + " " + sk + "&deg;</label><br>");
+
+                }
+
+
+//                        $('#siteSelect120').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='" + k + "|120' type='checkbox'> " + k + " 120&deg;</label>");
+//
+//
+//                        $('#siteSelect240').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='" + k + "|240' type='checkbox'> " + k + " 240&deg;</label>");
 
             }
         });

@@ -49,7 +49,8 @@ class Equipment extends Model
     use \App\Traits\DeviceIcon;
 
     protected $hidden = [
-        'snmp_community'
+        'snmp_community',
+        'comments'
     ];
 
     public function graphs(  ) {
@@ -296,12 +297,33 @@ if ( ! $this->ant_gain && ! $this->radio_power ) { return null;}
                 $this::OID_SSID,
                 $this::OID_SNR,
                 $this::OID_SERIAL,
-                $this::OID_SYSDESC
+                $this::OID_SYSDESC,
+                $this::OID_FREQUENCY,
+                $this::OID_SSID,
+                $this::OID_BAND,
+                $this::OID_SNR,
+
             )
         );
+
+        if ( isset($r[$this::OID_FREQUENCY]) ) {
+            $this->snmp_frequency = $r[$this::OID_FREQUENCY];
+        }
+        if ( isset($r[$this::OID_SSID]) ) {
+            $this->snmp_ssid = $r[$this::OID_SSID];
+        }
+        if ( isset($r[$this::OID_BAND]) ) {
+            $this->snmp_band = $r[$this::OID_BAND];
+        }
+        if ( isset($r[$this::OID_SNR]) ) {
+            $this->snmp_snr = $r[$this::OID_SNR];
+        }
+
         if ( isset($r[$this::OID_VOLTAGE]) ) {
             $this->snmp_voltage = (int)$r[$this::OID_VOLTAGE]/10;
         }
+
+
         if ( isset($r[$this::OID_SYSDESC]) ) {
         if ( $r[$this::OID_SYSDESC] != "" ) {
             $this->radio_model = str_replace("RouterOS ", "", $r[$this::OID_SYSDESC]);

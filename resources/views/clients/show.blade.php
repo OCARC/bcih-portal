@@ -4,7 +4,13 @@
 @endsection
 @section('content')
 
-    <h2><img src="{{ $client->icon() }}" style="height: 2em; margin-top: -1em"> Client: @if( $client->dhcp_lease() ){{ $client->dhcp_lease()->hostname }} @else Name Not Found @endif</h2>
+    <h2><img src="{{ $client->icon() }}" style="height: 2em; margin-top: -1em"> Client: @if ( $client->snmp_sysName )
+            {{ $client->snmp_sysName}}
+        @elseif( $client->dhcp_lease() )
+            {{ $client->dhcp_lease()->hostname }}
+        @else
+            Name Not Found
+        @endif</h2>
 
     <div>
 
@@ -26,7 +32,7 @@
                     </tr>
                     <tr>
                         <th>DHCP IP</th>
-                        <td>{{$client->dhcp_lease()->ip}}</td>
+                        <td>@if($client->dhcp_lease()){{$client->dhcp_lease()->ip}}@else DHCP Lease Not Found @endif</td>
                     </tr>
                     <tr>
                         <th>Management IP</th>

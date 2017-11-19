@@ -18,7 +18,7 @@ trait SSHConnection
             if ( $this->management_ip ) {
                 $ssh = new SSH2($this->management_ip);
             } else {
-                $ssh = new SSH2($this->dhcp_lease->ip);
+                $ssh = new SSH2($this->dhcp_lease()->ip);
             }
             $ssh->setTimeout(30);
 

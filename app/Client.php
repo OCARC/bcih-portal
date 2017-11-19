@@ -260,6 +260,8 @@ class Client extends Model
             )
         );
 
+
+
         if ( isset($r[$this::OID_SYSLOCATION]) ) {
             $this->snmp_sysLocation = $r[$this::OID_SYSLOCATION];
 
