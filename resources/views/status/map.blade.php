@@ -8,7 +8,7 @@
 
 </style>
 <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDYYYa-Ux3bra8o_52tzUXd2rd_Bvlz4cQ&v=3.exp&libraries=places"></script>
+<script src="http://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&v=3.exp&libraries=places"></script>
 <script>
     var statusSourceURL = "{{url("/status.json")}}";
 

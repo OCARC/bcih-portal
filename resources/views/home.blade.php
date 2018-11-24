@@ -66,12 +66,12 @@ Overview
 					@foreach ($site->equipment as $equipment)
 						@if ( substr($equipment->hostname,0,4) == 'HEX1' )
 							<div class="equipment-graph">
-					<img style="width: 100%; height: 100px" src="http://portal.hamwan.ca/librenms/graph.php?height=88&width=280&device={{ $equipment->librenms_mapping }}&type=device_bits&from=-7D&legend=no&popup_title=&bg=FFFFFF00">
+					<img style="width: 100%; height: 100px" src="{{ env('LIBRENMS_URL') }}//graph.php?height=88&width=280&device={{ $equipment->librenms_mapping }}&type=device_bits&from=-7D&legend=no&popup_title=&bg=FFFFFF00">
 							</div>
 						@endif
 							@if ( substr($equipment->hostname,0,6) == 'ROUTER' )
 								<div class="equipment-graph">
-									<img style="width: 100%; height: 100px" src="http://portal.hamwan.ca/librenms/graph.php?height=88&width=280&device={{ $equipment->librenms_mapping }}&type=device_bits&from=-7D&legend=no&popup_title=&bg=FFFFFF00">
+									<img style="width: 100%; height: 100px" src="{{ env('LIBRENMS_URL') }}//graph.php?height=88&width=280&device={{ $equipment->librenms_mapping }}&type=device_bits&from=-7D&legend=no&popup_title=&bg=FFFFFF00">
 								</div>
 							@endif
 						@endforeach

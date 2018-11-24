@@ -8,11 +8,20 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">HamWAN Portal  <br>
-                @if (explode( "." , $_SERVER['REMOTE_ADDR'])[0] == '44')
-                <span style="font-size: 12px; margin-top: -4px; display: block; color: #00CC00">44Net : {{ ( $_SERVER['HTTP_X_FORWARDED_FOR'] )  ?  $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] }}</span>
-                @else
-                <span style="font-size: 12px; margin-top: -4px; display: block; color: #cc0000">WAN : {{ ( $_SERVER['HTTP_X_FORWARDED_FOR'] )  ?  $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] }}</span>
+                @if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR']) )
+                    @if (explode( "." , $_SERVER['REMOTE_ADDR'])[0] == '44')
+                    <span style="font-size: 12px; margin-top: -4px; display: block; color: #00CC00">44Net : {{ ( $_SERVER['HTTP_X_FORWARDED_FOR'] )  ?  $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] }}</span>
+                    @else
+                    <span style="font-size: 12px; margin-top: -4px; display: block; color: #cc0000">WAN : {{ ( $_SERVER['HTTP_X_FORWARDED_FOR'] )  ?  $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] }}</span>
                     @endif
+
+                @else
+                    @if (explode( "." , $_SERVER['REMOTE_ADDR'])[0] == '44')
+                        <span style="font-size: 12px; margin-top: -4px; display: block; color: #00CC00">44Net : {{ $_SERVER['REMOTE_ADDR'] }}</span>
+                    @else
+                        <span style="font-size: 12px; margin-top: -4px; display: block; color: #cc0000">WAN : {{  $_SERVER['REMOTE_ADDR'] }}</span>
+                    @endif
+                @endif
 
             </a>
         </div>
@@ -85,9 +94,9 @@
 
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ route('my-account') }}">
-                                    My Account
-                                </a>
+                                {{--<a href="{{ route('my-account') }}">--}}
+                                    {{--My Account--}}
+                                {{--</a>--}}
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}

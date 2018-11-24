@@ -91,6 +91,7 @@ Route::get('equipment/{equipment}/{method}', 'EquipmentController@showAjax')->mi
 //
 
 Route::get('users', 'UserController@index');
+
 Route::get('users/{user}', 'UserController@show');
 
 Route::post('users/{user}/perms', 'UserController@update_perms')->middleware('permission:permissions.user_change');

@@ -8,8 +8,9 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#siteInfo" aria-controls="siteInfo" role="tab" data-toggle="tab">Site Info</a></li>
+            <li role="presentation" class="active"><a href="#roleInfo" aria-controls="roleInfo" role="tab" data-toggle="tab">Role Info</a></li>
             <li role="presentation"><a href="#ips" aria-controls="ips" role="tab" data-toggle="tab">IPs</a></li>
+            <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">Users</a></li>
             <li role="presentation"><a href="#equipment" aria-controls="equipment" role="tab" data-toggle="tab">Equipment</a></li>
             <li role="presentation"><a href="#clients" aria-controls="clients" role="tab" data-toggle="tab">Clients</a></li>
             <li role="presentation"><a href="#sites" aria-controls="sites" role="tab" data-toggle="tab">Sites</a></li>
@@ -18,8 +19,8 @@
         </ul>
 
         {{--<!-- Tab panes -->--}}
-        {{--<div class="tab-content">--}}
-            {{--<div role="tabpanel" class="tab-pane active" id="siteInfo">--}}
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="roleInfo">
 
                 {{--<Table class="table table-responsive table-condensed table-striped table-bordered">--}}
                     {{--<tr>--}}
@@ -44,7 +45,7 @@
 
                     {{--<button type="submit" class="btn btn-sm btn-danger" disabled="true">Delete Site</button>--}}
                 {{--</form>--}}
-            {{--</div>--}}
+            </div>
             {{--<div role="tabpanel" class="tab-pane " id="ips">--}}
 
             {{--</div>--}}
@@ -54,7 +55,7 @@
             </div>
             {{--<div role="tabpanel" class="tab-pane" id="equipment">--}}
 
-                {{--@include('equipment.list', ['equipment' => $user->equipment ])--}}
+                {{--@include('equipment.list', ['equipment' => $role->equipment ])--}}
 
             {{--</div>--}}
 
@@ -64,11 +65,14 @@
 
             {{--</div>--}}
             {{--<div role="tabpanel" class="tab-pane" id="sites">--}}
-
-                {{--@include('site.list', ['sites' => $user->sites ])--}}
+{{--@php( dd($role) )--}}
+                {{--@include('site.list', ['sites' => $role->sites ])--}}
 
             {{--</div>--}}
+        <div role="tabpanel" class="tab-pane" id="users">
+            @include('users.list', ['users' => $role->users ])
 
+        </div>
             {{--<div role="tabpanel" class="tab-pane" id="graphs">--}}
             {{--@foreach( $user->equipment as $equipment )--}}
             {{--<h3>{{$equipment->hostname}} Graphs</h3>--}}
@@ -82,7 +86,7 @@
 
             {{--@include('users.tabKeys')--}}
 
-        {{--</div>--}}
+        </div>
 
     </div>
 

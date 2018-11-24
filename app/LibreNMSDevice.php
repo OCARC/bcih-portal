@@ -26,7 +26,7 @@ class LibreNMSDevice extends LibreNMSModel
 
     private function api_call($path ) {
 
-        $url = env('LIBRENMS_URL');
+        $url = env('LIBRENMS_URL') . "/api/v0/";
         $token = env('LIBRENMS_TOKEN');
 
         // create curl resource
