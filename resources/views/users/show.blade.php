@@ -10,13 +10,14 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#siteInfo" aria-controls="siteInfo" role="tab" data-toggle="tab">Site Info</a></li>
+            <li role="presentation" class="active"><a href="#siteInfo" aria-controls="siteInfo" role="tab" data-toggle="tab">User Info</a></li>
+            <li role="presentation"><a href="#authentication" aria-controls="perms" role="tab" data-toggle="tab">Authentication</a></li>
+            <li role="presentation"><a href="#perms" aria-controls="perms" role="tab" data-toggle="tab">Permissions</a></li>
+
             <li role="presentation"><a href="#ips" aria-controls="ips" role="tab" data-toggle="tab">IPs</a></li>
             <li role="presentation"><a href="#equipment" aria-controls="equipment" role="tab" data-toggle="tab">Equipment</a></li>
             <li role="presentation"><a href="#clients" aria-controls="clients" role="tab" data-toggle="tab">Clients</a></li>
             <li role="presentation"><a href="#sites" aria-controls="sites" role="tab" data-toggle="tab">Sites</a></li>
-            <li role="presentation"><a href="#perms" aria-controls="perms" role="tab" data-toggle="tab">Permissions</a></li>
-            <li role="presentation"><a href="#keys" aria-controls="perms" role="tab" data-toggle="tab">Keys</a></li>
 
         </ul>
 
@@ -43,12 +44,13 @@
                 <form method="POST" action="{{ url("/site/" . $user->id . "") }}" accept-charset="UTF-8">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="_method" value="DELETE"/>
-                    <a href="{{ url("/site/" . $user->id . "/edit") }}"><button type="button" class="btn btn-sm btn-success">Edit Site</button></a>
+                    <a href="{{ url("/user/" . $user->id . "/edit") }}"><button type="button" class="btn btn-sm btn-success">Edit User</button></a>
 
-                    <button type="submit" class="btn btn-sm btn-danger" disabled="true">Delete Site</button>
+                    <button type="submit" class="btn btn-sm btn-danger" disabled="true">Delete User</button>
                 </form>
             </div>
             <div role="tabpanel" class="tab-pane " id="ips">
+                @include('ip.list', ['ips' => $user->ips ])
 
                 </div>
             <div role="tabpanel" class="tab-pane" id="perms">
@@ -83,7 +85,7 @@
 
             <div role="tabpanel" class="tab-pane" id="tools">...</div>
 
-            @include('users.tabKeys')
+            @include('users.tabAuthentication')
 
         </div>
 
