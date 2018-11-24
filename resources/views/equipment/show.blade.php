@@ -40,7 +40,7 @@
             @if( $equipment->librenms_mapping)
                 <li role="presentation" style="float:right">
                     <a target="_blank"
-                       href="http://portal.hamwan.ca/librenms/device/device={{$equipment->librenms_mapping}}">
+                       href="{{ env('LIBRENMS_URL') }}/device/device={{$equipment->librenms_mapping}}">
                         LibreNMS</a></li>
             @endif
         </ul>
