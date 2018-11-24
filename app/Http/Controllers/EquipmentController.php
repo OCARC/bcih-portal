@@ -5,6 +5,7 @@ use Illuminate\Http\Response;
 
 use App\Equipment;
 use Illuminate\Http\Request;
+use App\Role;
 
 class EquipmentController extends Controller
 {
@@ -13,8 +14,17 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:network_operator'])->except('index', 'show', 'getGraph','doDenkoviCurrentState');
+
+    }
+
+
     public function index()
     {
+
         //
         //
         $equipment = Equipment::all();
@@ -45,7 +55,7 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        return view('equipment.create', ['equipment' => new \App\Equipment() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
+        return view('equipment.create', ['equipment' => new \App\Equipment() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'roles' => Role::all()  ]);
 
         //
     }
@@ -60,13 +70,18 @@ class EquipmentController extends Controller
     {
         // TODO: Permission Checking
 
+        $roles = $request->roles;
+        unset($request['roles']);
+
        if ($request['id'] ) {
         $equipment = \App\Equipment::find($request['id']);
+        $equipment->syncRoles( $roles );
         $equipment->update($request->all());
     } else {
         $equipment = \App\Equipment::create(
             $request->all()
         );
+        $equipment->syncRoles( $roles );
     }
 
         return redirect("/equipment/" . $equipment->id);
@@ -82,9 +97,32 @@ class EquipmentController extends Controller
     public function show(Equipment $equipment)
     {
         //
-        return view('equipment.show', compact('equipment'));
+
+        return view('equipment.show', ['equipment' =>$equipment , 'bwtest_servers' => \App\Equipment::all()->where('bwtest_server','!=','')]);
 
     }
+
+//    public function libreGetGraph(Equipment $equipment, $type)
+//    {
+//        return $equipment->libreGetGraph($type);
+////        return view('equipment.show', compact('equipment'));
+////
+////        print "ddd";
+////        return true;
+////        $ch = curl_init("www.example.com/curl.php?option=test");
+////        curl_setopt($ch, CURLOPT_HEADER, 0);
+////        curl_setopt($ch, CURLOPT_POST, 1);
+////        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+////        $output = curl_exec($ch);
+////        curl_close($ch);
+////        echo $output;
+////
+////        return "dd";
+////        //
+//
+////        /return view('equipment.show', compact('equipment'));
+//
+//    }
     public function showAjax(Equipment $equipment, $method)
     {
 
@@ -94,6 +132,7 @@ class EquipmentController extends Controller
             'status' => 'fail'
         );
 
+        //SSH
         if ($method == "fetchConfig") {
             $r = $equipment->sshFetchConfig();
         }
@@ -106,9 +145,45 @@ class EquipmentController extends Controller
         if ($method == "fetchSpectralHistory") {
             $r =$equipment->sshFetchSpectralHistory();
         }
+        if ($method == "fetchOSPFRoutes") {
+            $r =$equipment->sshFetchOSPFRoutes();
+        }
         if ($method == "bwTest") {
             $r =$equipment->SSHBWTest();
         }
+        if ($method == "checkForUpdates") {
+            $r =$equipment->sshCheckForUpdates();
+        }
+        if ($method == "downloadUpdates") {
+            $r =$equipment->sshDownloadUpdates();
+        }
+        if ($method == "installUpdates") {
+            $r =$equipment->sshInstallUpdates();
+        }
+        if ($method == "querySerialStatus") {
+            $r =$equipment->sshQuerySerialStatus();
+        }
+        if ($method == "resetSerialAuthorizations") {
+            $r =$equipment->sshResetSerialAuthentication();
+        }
+        if ($method == "authorizeSerialIP") {
+            $r =$equipment->sshAuthorizeSerialIP();
+        }
+
+        // SNMP
+        if ($method == "discoverClients") {
+            $r =$equipment->discoverClients();
+        }
+
+        if ($method == "pollSNMP") {
+            $r =$equipment->pollSNMP();
+            $r =  array('status' => 'complete', 'method'=> 'pollSNMP', 'reason' => '', 'data' => $r);
+            if( $r['data'] == array() ) {
+                $r['status'] = 'failed';
+            }
+
+        }
+
         if ( isset($r)) {
             $result['data'] = $r['data'];
             $result['status'] = $r['status'];
@@ -117,6 +192,11 @@ class EquipmentController extends Controller
         return $result ;
 
     }
+    public function doDenkoviCurrentState( Equipment $equipment ) {
+
+        return $equipment->doDenkoviCurrentState();
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -126,7 +206,8 @@ class EquipmentController extends Controller
     public function edit(Equipment $equipment)
     {
         //
-        return view('equipment.edit', ['equipment' => $equipment , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
+
+        return view('equipment.edit', ['equipment' => $equipment , 'sites' => \App\Site::all(), 'users' => \App\User::all(),  'roles' => Role::all()  ]);
 
     }
 
@@ -156,10 +237,28 @@ class EquipmentController extends Controller
     }
 
 
-    public function graph(Equipment $equipment, $type)
+    public function libreGetGraph(Equipment $equipment, $type)
     {
-
-        return (new Response($equipment->getGraphs($type), 200))
+        return (new Response($equipment->libreGetGraph($type), 200));
+        return (new Response($equipment->libreGetGraph($type), 200))
             ->header('Content-Type','image/png');
+    }
+
+    public function getGraph(Equipment $equipment, $type = 'libre', $url = '') {
+//
+        if ( $type == 'libre') {
+//print "devices/" . $equipment->librenms_mapping . "/" . $url . "?" . $_SERVER['QUERY_STRING']
+//
+
+            return $equipment->libre_query( "devices/" . $equipment->librenms_mapping . "/" . $url . "?" . $_SERVER['QUERY_STRING'], true );
+        }
+
+
+
+        //print_r( $equipment->libre_api( "devices/hex1.kui.if.hamwan.ca/") );
+
+        //return response('Not Implemented', 501);
+
+
     }
 }

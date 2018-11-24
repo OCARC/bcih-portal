@@ -48,6 +48,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+            session()->flash('msg', 'You are not authorized to perform that function - ' . $exception->getMessage() );
+            return back()->withInput();
+
+        }
         return parent::render($request, $exception);
     }
 }

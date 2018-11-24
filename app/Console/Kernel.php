@@ -27,8 +27,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
 
-        $schedule->command('hamwan:pollDhcp')->everyFiveMinutes();
+        //$schedule->command('hamwan:pollDhcp')->everyFiveMinutes(); // Now Part of Poll Equipment
         $schedule->command('hamwan:pollEquipment')->everyFiveMinutes();
+        $schedule->command('hamwan:pollClients')->everyFiveMinutes();
     }
 
     /**

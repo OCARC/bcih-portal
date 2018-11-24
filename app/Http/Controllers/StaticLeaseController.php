@@ -105,8 +105,8 @@ class StaticLeaseController extends Controller
         foreach( $statics as $static ) {
             print "Generating record for " . $static->hostname . "...\n";
             $output .= "host " . $static->hostname . " {\n";
-            $output .= "\thardware ethernet " . $static->mac_address . " \n"; //TODO: format this correctly
-            $output .= "\tfixed-address " . $static->ip . " \n";
+            $output .= "\thardware ethernet " . implode(":",str_split(strtoupper($static->mac_address),2))  . ";\n"; //TODO: format this correctly
+            $output .= "\tfixed-address " . $static->ip . ";\n";
             $output .= "}\n\n";
         }
         //$rows = $db->getRows("SELECT * FROM dhcp_statics WHERE server = ?", array( "44.135.216.2" ));

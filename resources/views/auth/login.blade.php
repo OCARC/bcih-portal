@@ -116,11 +116,11 @@
 
 
 
-                                <a class="useKey btn btn-link" href="javascript:jQuery('.usePassword').show();jQuery('.useKey').hide();">
+                                <a class="useKey btn btn-link" href="#" onclick="jQuery('.usePassword').show();jQuery('.useKey').hide();">
                                     Use password to login
                                 </a>
 
-                                <a class="usePassword btn btn-link" href="javascript:jQuery('.usePassword').hide();jQuery('.useKey').show();" style="display: none">
+                                <a class="usePassword btn btn-link" href="#" onClick="jQuery('.usePassword').hide();jQuery('.useKey').show();" style="display: none">
                                     Use key to login
                                 </a>
 

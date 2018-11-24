@@ -12,10 +12,17 @@ class ClientController extends Controller
      *
      * @return Response
      */
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:network_operator'])->except('index', 'show');
+
+    }
+
     public function index()
     {
 
-        $clients = Client::all()->sortBy("site_id")->sortBy("type");
+        $clients = Client::all()->where("type", "client")->sortBy("site_id");
 //        if ( $request->json ) {
 //            return $users;
 //        } else {
@@ -37,6 +44,9 @@ class ClientController extends Controller
         if ($method == "fetchConfig") {
             $r = $client->sshFetchConfig();
         }
+        if ($method == "resetGain") {
+            $r = $client->sshResetGain();
+        }
         if ($method == "quickScan") {
             $r = $client->sshQuickScan();
         }
@@ -48,6 +58,18 @@ class ClientController extends Controller
         }
         if ($method == "bwTest") {
             $r = $client->sshBWTest();
+        }
+        if ($method == "checkForUpdates") {
+            $r =$client->sshCheckForUpdates();
+        }
+        if ($method == "downloadUpdates") {
+            $r =$client->sshDownloadUpdates();
+        }
+        if ($method == "installUpdates") {
+            $r =$client->sshInstallUpdates();
+        }
+        if ($method == "snmpPoll") {
+            return $client->pollSNMP();
         }
         if ($r) {
             $result['data'] = $r['data'];
@@ -63,6 +85,7 @@ class ClientController extends Controller
                 $i->pollSNMP();
 
         }
+        return $this->index();
         //return redirect('equipment');
 
 
@@ -82,9 +105,44 @@ class ClientController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
         //
+
+        // TODO: Permission Checking
+
+        $roles = $request->roles;
+        unset($request['roles']);
+
+        if ($request['id'] ) {
+            $client = \App\Client::find($request['id']);
+           // $client->syncRoles( $roles );
+
+            // Check location
+            $update_location = false;
+            if ( $request->coordinate_source == 'snmp' ) {
+                if ($request->longitude != $client->longitude || $request->latitude != $client->latitude) {
+                    $update_location = true;
+                }
+            }
+
+
+            $client->update($request->all());
+
+            //Update location
+            if( $update_location === true ) {
+                $client->sshSetLocation();
+            }
+
+        } else {
+            $client = \App\Client::create(
+                $request->all()
+            );
+            //$client->syncRoles( $roles );
+        }
+
+        return redirect("/clients/" . $client->id);
+
     }
 
     /**
@@ -96,7 +154,8 @@ class ClientController extends Controller
     public function show(Client $client)
     {
         //
-        return view('clients.show', compact('client'));
+        return view('clients.show', ['client' => $client, 'bwtest_servers' => \App\Equipment::all()->where('bwtest_server','!=','')]);
+     //   return view('equipment.create', ['equipment' => new \App\Equipment() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
 
     }
 
@@ -114,9 +173,11 @@ class ClientController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Client $client)
     {
         //
+        return view('clients.edit', ['client' => $client , 'sites' => \App\Site::all(), 'users' => \App\User::all() ]);
+
     }
 
     /**
@@ -139,4 +200,7 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //
-    }}
+    }
+
+
+}

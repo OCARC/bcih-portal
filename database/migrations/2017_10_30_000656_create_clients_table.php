@@ -17,14 +17,15 @@ class CreateClientsTable extends Migration
             $table->increments('id');
             $table->string('mac_address');
             $table->string('radio_name')->nullable( true);
-            $table->integer('owner')->nullable( true);
+            $table->integer('user_id')->nullable( true);
             $table->integer('site_id')->nullable( true);
             $table->integer('equipment_id')->nullable( true);
 
             $table->float('latitude',9,6)->nullable( true);
             $table->float('longitude',9,6)->nullable( true);
             $table->string('coordinate_source')->default( 'none');
-            $table->string('management_ip')->nulable(true);
+            $table->string('coordinate_privacy')->default( 'public');
+            $table->string('management_ip')->nullable(true);
 
             $table->string('type')->default( 'client');
 
@@ -34,6 +35,7 @@ class CreateClientsTable extends Migration
             $table->integer('snmp_rx_rate')->nullable( true);
 
             $table->string('snmp_router_os_version')->nullable( true);
+            $table->string('software_updates')->default( 'manual');
 
             $table->integer('snmp_uptime')->nullable( true);
 

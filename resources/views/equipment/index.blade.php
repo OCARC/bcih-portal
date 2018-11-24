@@ -9,8 +9,6 @@
 
               @include('equipment.list')
 
-    <a href="{{ url("/equipment/create") }}"><button type="button" class="btn btn-sm btn-success">Create Equipment</button></a>
-    <a href="{{ url("/equipment/refresh") }}"><button type="button" class="btn btn-sm btn-info">Poll Equipment</button></a>
 
 
 @endsection

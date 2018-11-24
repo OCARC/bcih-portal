@@ -17,8 +17,9 @@ class CreateEquipmentTable extends Migration
         {
             $table->increments('id');
             $table->integer('site_id');
-            $table->integer('owner_id')->nullable(true);;
-            $table->integer('cacti_id')->nullable(true);;
+            $table->integer('user_id')->nullable(true);;
+            $table->integer('cacti_id')->nullable(true);
+            $table->string('librenms_mapping')->nullable(true);
             $table->string('os')->nullable(true);
             $table->string('hostname');
             $table->string('management_ip');
@@ -44,54 +45,60 @@ class CreateEquipmentTable extends Migration
             $table->string('snmp_band')->nullable( true);
             $table->string('snmp_snr')->nullable( true);
 
-            $table->text('comments');
-            $table->text('description');
+            $table->text('comments')->nullable(true);
+            $table->text('description')->nullable(true);
+            $table->boolean('dhcp_server')->nullable(true);;
+            $table->boolean('discover_clients')->default(true);
+            $table->string('bwtest_server')->nullable( true);
+
+
+            $table->string('remote_serial_port')->nullable( true);
 
             $table->timestamps();
         });
 
         \App\Equipment::create([
             'site_id' => 1,
-            'owner_id' => 0,
+            
             'hostname' => 'HEX1.LMK',
             'management_ip' => '10.246.1.1'
         ]);
 
         \App\Equipment::create([
             'site_id' => 1,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO0.LMK',
-            'management_ip' => '10.246.1.2'
+            'management_ip' => 'radio0.lmk.if.hamwan.ca'
         ]);
         \App\Equipment::create([
             'site_id' => 1,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO120.LMK',
-            'management_ip' => '10.246.1.3'
+            'management_ip' => 'radio120.lmk.if.hamwan.ca'
         ]);
         \App\Equipment::create([
             'site_id' => 1,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO240.LMK',
-            'management_ip' => '10.246.1.4'
+            'management_ip' => 'radio240.lmk.if.hamwan.ca'
         ]);
         \App\Equipment::create([
             'site_id' => 1,
-            'owner_id' => 0,
+            
             'hostname' => 'LINK-KUI.LMK',
             'management_ip' => '10.246.1.5'
         ]);
 
         \App\Equipment::create([
             'site_id' => 1,
-            'owner_id' => 0,
+            
             'hostname' => 'LINK-BKM.LMK',
             'management_ip' => '10.246.1.6'
         ]);
 
         \App\Equipment::create([
             'site_id' => 2,
-            'owner_id' => 0,
+            
             'hostname' => 'HEX1.BKM',
             'management_ip' => '10.246.2.1'
         ]);
@@ -99,21 +106,21 @@ class CreateEquipmentTable extends Migration
 
         \App\Equipment::create([
             'site_id' => 2,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO0.BKM',
             'management_ip' => '10.246.2.2'
         ]);
 
         \App\Equipment::create([
             'site_id' => 2,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO240.BKM',
             'management_ip' => '10.246.2.4'
         ]);
 
         \App\Equipment::create([
             'site_id' => 3,
-            'owner_id' => 0,
+            
             'hostname' => 'HEX1.KUI',
             'management_ip' => '10.246.3.1'
         ]);
@@ -121,33 +128,33 @@ class CreateEquipmentTable extends Migration
 
         \App\Equipment::create([
             'site_id' => 3,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO0.KUI',
             'management_ip' => '10.246.3.2'
         ]);
         \App\Equipment::create([
             'site_id' => 3,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO120.KUI',
             'management_ip' => '10.246.3.3'
         ]);
         \App\Equipment::create([
             'site_id' => 3,
-            'owner_id' => 0,
+            
             'hostname' => 'RADIO240.KUI',
             'management_ip' => '10.246.3.4'
         ]);
 
         \App\Equipment::create([
             'site_id' => 3,
-            'owner_id' => 0,
+            
             'hostname' => 'LINK-LMK.KUI',
             'management_ip' => '10.246.3.5'
         ]);
 
         \App\Equipment::create([
             'site_id' => 3,
-            'owner_id' => 0,
+            
             'hostname' => 'LINK-BGM.KUI',
             'management_ip' => '10.246.3.7'
         ]);

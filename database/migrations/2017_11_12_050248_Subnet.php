@@ -16,15 +16,20 @@ class Subnet extends Migration
         Schema::create('subnets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('ip')->nullable(true);
+            $table->string('gateway')->nullable(true);
             $table->string('name')->nullable(true);
             $table->string('netmask')->nullable(true);
+            $table->string('category')->nullable(true);
             $table->string('src_router')->nullable(true);
             $table->string('dst_router')->nullable(true);
+            $table->string("status")->nullable(true);
 
             $table->integer('user_id')->nullable(true);
             $table->integer('site_id')->nullable(true);
 
             $table->text('description')->nullable(true);
+            $table->text('comment')->nullable(true);
+            $table->string('dhcp')->nullable(true);
 
 
             $table->timestamps();

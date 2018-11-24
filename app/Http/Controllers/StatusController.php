@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\PtpLink;
 use Illuminate\Http\Request;
+use Auth;
 
 class StatusController extends Controller {
 
@@ -25,7 +26,11 @@ class StatusController extends Controller {
         header("Access-Control-Allow-Origin: *");
         $sites = \App\Site::all();
         foreach( $sites as $site ) {
-
+            if ( $site->status == 'Potential'  ) {
+                if ( ! Auth::user() ) {
+                    continue;
+                }
+            }
             $result['SITES'][ $site->id ] = array(
                 "NAME" => $site->name,
                 "LATITUDE" => $site->latitude,
@@ -35,9 +40,32 @@ class StatusController extends Controller {
                 "STATUS" => $site->status,
                 "STATUS_COLOR" => "#00ff00",
                 "CLIENTS" => array(),
-                "LINKS" => array()
+                "LINKS" => array(),
+                "VISIBLE" => $site->map_visible
             );
 
+            // Lets grab links
+            foreach( $site->ptplinks as $link ) {
+                if ( $link->status != 'Installed') {
+                    if ( ! Auth::user() ) {
+                        continue;
+                    }
+                }
+                    $result['SITES'][$site->id]['LINKS'][$link->id] = array(
+                        "NAME" => $link->name,
+                        "SITE1_ID" => $link->ap_site_id,
+                        "SITE2_ID" => $link->cl_site_id,
+                        "SPEED" => ($link->tx_speed() + $link->rx_speed()) / 2,
+//                            "STRENGTH" => $client->snmp_strength,
+                        "LINK_COLOR" => $link->link_color,
+                        "COMMENT" => $link->comments,
+                        "LINESTYLE" => $link->line_style
+                    );
+                    if ($link->cl_site) {
+                        $result['SITES'][$site->id]['COMMENT'] .= "<br>Link to " . $link->cl_site->name;
+                    }
+
+            }
 //            if ( $site->id == 5 ) {
 //
 //                if (($handle = fopen("local.csv", "r")) !== FALSE) {
@@ -65,23 +93,23 @@ class StatusController extends Controller {
                     continue;
                 }
                 if ( $client->type == "link" ) {
-                    $link = $client->ptp_link();
-                    if ($link) {
-                        $result['SITES'][$site->id]['LINKS'][$client->id] = array(
-                            "NAME" => $link->name,
-                            "SITE1_ID" => $link->ap_client->site_id,
-                            "SITE2_ID" => $link->cl_client->site_id,
-                            "SPEED" => $client->snmp_rx_rate,
-                            "STRENGTH" => $client->snmp_strength,
-                            "LINK_COLOR" => $link->link_color,
-                            "COMMENT" => $link->comments,
-                            "LINESTYLE" => $link->line_style
-                        );
-                    }
+//                    $link = $client->ptp_link();
+//                    if ($link) {
+//                        $result['SITES'][$site->id]['LINKS'][$client->id] = array(
+//                            "NAME" => $link->name,
+//                            "SITE1_ID" => $link->ap_client->site_id,
+//                            "SITE2_ID" => $link->cl_client->site_id,
+//                            "SPEED" => $client->snmp_rx_rate,
+//                            "STRENGTH" => $client->snmp_strength,
+//                            "LINK_COLOR" => $link->link_color,
+//                            "COMMENT" => $link->comments,
+//                            "LINESTYLE" => $link->line_style
+//                        );
+//                    }
                     continue;
                 }
                 $result['SITES'][ $site->id ]['CLIENTS'][ $client->id ] = array(
-                    "NAME" => ($client->dhcp_lease()) ? $client->dhcp_lease()->hostname : $client->snmp_sysName,
+                    "NAME" => $client->snmp_sysName,
                     "LATITUDE" => $client->latitude,
                     "LONGITUDE" => $client->longitude,
                     "COMMENT" => $client->snmp_sysDesc,
@@ -89,6 +117,8 @@ class StatusController extends Controller {
                     "SPEED" => $client->snmp_rx_rate,
                     "STRENGTH" => $client->snmp_strength,
                     "LINK_COLOR" => "#0086DB",
+                    "UPDATED_AT" => $client->updated_at->timestamp,
+                    "AGE" => time() - $client->updated_at->timestamp
                 );
             }
 
@@ -175,5 +205,101 @@ class StatusController extends Controller {
     public function mapEmbed() {
         return view("status.mapEmbed");
 
+    }
+
+    public function icon( $type ) {
+
+        if ( $type == 'station') {
+            $icon = array();
+            if ( isset($_GET['clientID'])) {
+
+                $client = \App\Client::find( $_GET['clientID'] );
+
+                if($client) {
+                    if ( time() - $client->updated_at->timestamp >= 86400) {
+                        $icon['client']['fill'] = $client->strengthColor(0.5);
+
+                    } elseif ( time() - $client->updated_at->timestamp >= 86400 * 7 ) {
+                        $icon['client']['fill'] = $client->strengthColor(0);
+
+                    } else {
+                        $icon['client']['fill'] = $client->strengthColor(1);
+
+                    }
+                    $icon['client']['sysName'] = $client->snmp_sysName;
+                }
+            }
+
+            return response(view("svg.station", ['icon' => $icon])->render(), 200)
+                ->header('Content-Type', 'image/svg+xml')->header('Cache-Control','max-age=300');
+        }
+        if ( $type == 'site') {
+
+
+            $icon = array();
+            if ( isset($_GET['siteID'])) {
+
+                $site = \App\Site::find( $_GET['siteID'] );
+
+                if($site) {
+                    $icon['site']['fill'] = "rgba(255,255,255,1)";
+                    $icon['site']['code'] = $site->sitecode;
+
+                    $equip = $site->equipment();
+                    //foreach( array(0,120,240) as $az) {
+
+                        //$equip = \App\Equipment::where('site_id','=',$site->id)->where('ant_azimuth','=', $az)->all();
+                        $equipment = \App\Equipment::where('site_id','=',$site->id)->get();
+                        foreach( $equipment as $equip) {
+                        if ($equip) {
+//                            if ( strtoupper(substr($equip->hostname, 0, 4)) == 'HEX1') {
+//                                $icon['site']['fill'] = "rgba(255,255,255,1)";
+//
+//                            }
+                                if ($equip->ant_azimuth) {
+
+                                if ( strtoupper(substr($equip->hostname, 0, 4)) !== 'RADI' && isset($equip->ant_azimuth)) {
+                                    if ($equip->status == 'Installed' || $equip->status == 'Equip Failed' || $equip->status == 'Problems') {
+                                        $icon['links'][] = array(
+                                            'fill' => $equip->getHealthColor(0.5), //"rgba(0,0,0,0.5)";
+                                            'azimuth' => $equip->ant_azimuth
+                                        );
+                                    }
+                                    if ($equip->status == 'Planning') {
+                                        $icon['links'][] = array(
+                                            'fill' => 'white', //"rgba(0,0,0,0.5)";
+                                            'stroke-dasharray' => '5,5', //"rgba(0,0,0,0.5)";
+                                            'azimuth' => $equip->ant_azimuth
+                                        );
+                                    }
+
+                                }
+                                if ( strtoupper(substr($equip->hostname, 0, 5)) == 'RADIO') {
+
+                                    if ($equip->status == 'Installed' || $equip->status == 'Equip Failed' || $equip->status == 'Problems') {
+                                        $icon['sectors'][] = array(
+                                            'fill' => $equip->getHealthColor(0.5), //"rgba(0,0,0,0.5)";
+                                            'azimuth' => $equip->ant_azimuth
+                                        );
+                                    }
+                                    if ($equip->status == 'Planning') {
+                                        $icon['sectors'][] = array(
+                                            'fill' => 'white', //"rgba(0,0,0,0.5)";
+                                            'stroke-dasharray' => '5,5', //"rgba(0,0,0,0.5)";
+                                            'azimuth' => $equip->ant_azimuth
+                                        );
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            return response(view("svg.site", ['icon' => $icon])->render(), 200)
+                ->header('Content-Type', 'image/svg+xml')->header('Cache-Control','max-age=300');
+        }
     }
 }

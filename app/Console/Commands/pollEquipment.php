@@ -42,8 +42,29 @@ class pollEquipment extends Command
         //
         $equipment = Equipment::all();
         foreach( $equipment as $e) {
-            $e->pollSNMP();
-            $e->discoverClients();
+            print "Start Polling " . $e->hostname . " (" . $e->management_ip . ")\n";
+
+
+            print "\t Retrieving SNMP Data...\t";
+            $result =      $e->pollSNMP();
+            print $result['status'] . "\n";
+
+
+            if ($e->discover_clients ==1 && $e->os == 'RouterOS') {
+                print "\t Discovering Clients...\t";
+                $result = $e->discoverClients();
+                print $result['status'] . "\n";
+
+            }
+
+            if ($e->dhcp_server == 1 && $e->os == 'RouterOS') {
+                print "\t Polling DHCP Leases...\t";
+                $result = $e->pollDHCP();
+                print $result['status'] . "\n";
+
+            }
+
+            print "\n\n";
         }
 
     }

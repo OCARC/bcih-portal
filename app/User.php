@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable
 {
+    use HasRoles;
+
     use Notifiable;
 
     /**
@@ -33,6 +36,16 @@ class User extends Authenticatable
         return $this->hasMany('App\RsaKey');
     }
 
-
-
+    public function equipment() {
+        return $this->hasMany(Equipment::class)->orderBy('hostname');
+    }
+    public function clients() {
+        return $this->hasMany(Client::class)->orderBy('radio_name');
+    }
+    public function sites() {
+        return $this->hasMany(Site::class)->orderBy('name');
+    }
+    public function keys() {
+        return $this->hasMany(RsaKey::class);
+    }
 }

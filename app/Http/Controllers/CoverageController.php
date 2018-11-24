@@ -35,16 +35,24 @@ class CoverageController extends Controller
             if (is_dir($path . $file)) {
 ////print $path . $file . "/" . $file . "-000-000.extents";
 ////print file_get_contents( $path . $file . "/" . $file . "-000-000.extents");
-                list($x, $n, $e, $s, $w) = explode("|", file_get_contents($path . $file . "/" . $file . "-000-000.extents"));
+                if ( ! file_exists( $path . $file . "/" . $file . "-000-000.extents")) {
+                    $result[$file] = array(
+                        'NAME' => $file,
+                        'SECTORS' => array()
+                    );
+                } else {
+                    list($x, $n, $e, $s, $w) = explode("|", file_get_contents($path . $file . "/" . $file . "-000-000.extents"));
 ////
-                $result[$file] = array(
-                    'NAME' => $file,
-                    'n' => $n, 'e' => $e, 's' => $s, 'w' => $w,
-                    'SECTORS' => array()
-                );
-
+                    $result[$file] = array(
+                        'NAME' => $file,
+                        'n' => $n, 'e' => $e, 's' => $s, 'w' => $w,
+                        'SECTORS' => array()
+                    );
+                }
                 $site = \App\Site::query()->where('sitecode', $file)->first();
                 if ($site) {
+                    $result[$site->sitecode]['SITE'] = $site;
+
                     foreach ($site->equipment as $e) {
                         if ($e->hostname == 'RADIO0.' . $site->sitecode) {
                             $result[$site->sitecode]['SECTORS']['0'] = $e;
@@ -63,24 +71,41 @@ class CoverageController extends Controller
 //
         }
 
-        return $result;
-    }
-
-    public function getGEOJSON($site = 'BGM', $direction = '120', $clientGain = '010') {
+        return response($result, 200)
+            ->header('Access-Control-Allow-Origin', '*')->header('Cache-Control','max-age=300');    }
 
 
-    }
-
-    public function getJSON( $site = 'BGM', $direction = '120', $clientGain = '010')
+    public function getTopoJSON( $site = 'BGM', $direction = '120', $clientGain = '010')
     {
         $file = "$site-$direction-$clientGain.json";
-        $data = file_get_contents(realpath("projections/$site/$site-$direction-$clientGain.json"));
+        $data = file_get_contents(realpath("projections/$site/$site-$direction-$clientGain.topo.json"));
 
+        header('Access-Control-Allow-Origin: *');
         header('Cache-Control: max-age=3600');
-        header('Content-Type: image/png');
         header('Content-Encoding: gzip');
 
         return gzencode( $data,9 );
+    }
+    public function getGeoJSON( $site = 'BGM', $direction = '120', $clientGain = '010')
+    {
+        $file = "projections/$site/$site-$direction-$clientGain.json";
+
+
+        if ( file_exists( $file . ".gz") && filemtime($file . ".gz") >= filemtime($file ) ) {
+            $data = file_get_contents(realpath("projections/$site/$site-$direction-$clientGain.json.gz"));
+        } else {
+            $data = file_get_contents(realpath("projections/$site/$site-$direction-$clientGain.json"));
+            $data = gzencode( $data,9 );
+            file_put_contents("projections/$site/$site-$direction-$clientGain.json.gz", $data);
+        }
+
+
+        header('Access-Control-Allow-Origin: *');
+
+        header('Cache-Control: max-age=3600');
+        header('Content-Encoding: gzip');
+
+        return $data;
     }
     public function getImage( $site = 'BGM', $direction = '120', $clientGain = '010') {
 

@@ -17,11 +17,16 @@ class CreatePtpLinksTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('line_style')->default('solid');
-            $table->integer('owner_id');
-            $table->integer('ap_client_id');
-            $table->integer('cl_client_id');
-            $table->text('comments');
-            $table->string('link_color');
+            $table->integer('owner_id')->nullable(true);
+            $table->integer('ap_site_id')->nullable(true);
+            $table->integer('ap_client_id')->nullable(true);
+            $table->integer('ap_equipment_id')->nullable(true);
+            $table->integer('cl_site_id')->nullable(true);
+            $table->integer('cl_client_id')->nullable(true);
+            $table->integer('cl_equipment_id')->nullable(true);
+            $table->text('comments')->nullable(true);
+            $table->string('link_color')->nullable(true);
+            $table->string('status')->nullable(true);
             $table->timestamps();
         });
     }

@@ -1,0 +1,2 @@
+Script to ensure that nsupdate is installed (dns utils on debian)
+Script to ensure that keys are present

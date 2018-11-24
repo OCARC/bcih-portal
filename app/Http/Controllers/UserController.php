@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Permission;
+use App\Role;
 use App\RsaKey;
 use Illuminate\Http\Request;
 use \App\User;
 
 class UserController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +32,10 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Retrieve the SSH key this user has chosen to publish
+     * @param $callsign
+     */
     function get_pub_sshkey( $callsign ) {
         $user = User::where('callsign', $callsign)->first();
 
@@ -65,15 +73,37 @@ class UserController extends Controller
         //
     }
 
+    public function update_perms( User $user, Request $request)
+    {
+        //
+        $user->syncPermissions( $request->permissions );
+        return redirect("/users/" . $user->id . "#perms")->with('success', 'Permissions Modified Successfully');
+
+    }
+    public function update_roles( User $user, Request $request)
+    {
+        //
+
+        $user->syncRoles( $request->roles );
+
+        return redirect("/users/" . $user->id . "#perms")->with('success', 'Roles Modified Successfully');
+
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(User $user)
     {
+
         //
+
+        return view('users.show', array( 'user' => $user, 'permissions' => Permission::all(), 'roles' => Role::all() ));
+
+
     }
 
     /**

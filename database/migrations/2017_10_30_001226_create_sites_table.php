@@ -19,19 +19,20 @@ class CreateSitesTable extends Migration
             $table->string("name")->default("New Site");
             $table->string("map_icon")->default("");
             $table->string("status")->nullable(true);
-            $table->text("description");
-            $table->text("comments");
+            $table->text("description")->nullable(true);
+            $table->text("access_note")->nullable(true);
+            $table->text("comments")->nullable(true);
             $table->string("sitecode",3);
             $table->float("latitude",9,6);
             $table->float("longitude",9,6);
             $table->integer("altitude");
-            $table->integer("owner")->default(0);
+            $table->integer("user_id")->default(0);
 
-            $table->string("status")->nullable(true);
+
+            $table->string("map_visible")->default('yes');
 
             $table->timestamps();
         });
-
 
         \App\Site::create([
             'id' => 1,
@@ -40,7 +41,6 @@ class CreateSitesTable extends Migration
             'latitude' => 49.879452,
             'longitude' => -119.460495,
             'altitude' => -1,
-            'owner' => 0,
         ]);
 
         \App\Site::create([
@@ -50,7 +50,6 @@ class CreateSitesTable extends Migration
             'latitude' => 49.876682,
             'longitude' => 	-119.306618,
             'altitude' => 1281,
-            'owner' => 0,
         ]);
 
         \App\Site::create([
@@ -60,7 +59,6 @@ class CreateSitesTable extends Migration
             'latitude' => 	49.796680,
             'longitude' => -119.477493	,
             'altitude' => 652,
-            'owner' => 0,
         ]);
 
         \App\Site::create([
@@ -70,7 +68,6 @@ class CreateSitesTable extends Migration
             'latitude' => 	49.957092,
             'longitude' => -119.530533	,
             'altitude' => 1280,
-            'owner' => 0,
         ]);
     }
 

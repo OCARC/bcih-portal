@@ -1,0 +1,60 @@
+{
+  "site": {
+    "name": "Apex Mountain",
+    "code": "APX",
+    "description":"",
+    "comment":"",
+    "radio": {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.0000, 49.7000, 12]
+      },
+      "properties": {
+        "name": "RADIO1",
+        "description":
+        "Azmuth": 120,
+        "status": "planning",
+        "tilt": 5,
+        "antenna": "rf-elements/ncc-5_17",
+        "radiopower": 30,
+        "role": "multi-point"
+      }
+       "type": "Feature",
+       "geometry": {
+         "type": "Polygon",
+         "coordinates": [{-119.219426,49.809144},{-119.219426,48.909450},{-120.600684,48.909450},{-120.600684,49.809144}]
+       },
+         "properties": {
+           "name": "bbox"
+         }
+       }
+    }
+          "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.0000, 49.7000, 12]
+      },
+      "properties": {
+        "name": "RADIO0",
+        "description":
+        "Azmuth": 0,
+        "status": "planning",
+        "tilt": 5,
+        "antenna": "rf-elements/ncc-5_17",
+        "radiopower": 30,
+        "role": "multi-point"
+      }
+       "type": "Feature",
+       "geometry": {
+         "type": "Polygon",
+         "coordinates": [{-119.219426,49.809144},{-119.219426,48.909450},{-120.600684,48.909450},{-120.600684,49.809144}]
+       },
+         "properties": {
+           "name": "bbox"
+         }
+       }
+    }
+
+  }
+}

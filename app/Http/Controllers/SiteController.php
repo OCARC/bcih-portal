@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Site;
 use Illuminate\Http\Request;
+use Auth;
+use App\Role;
 
 class SiteController extends Controller
 {
 
-    public function __construct() {
-//        $this->middleware('auth', ['except' => 'index']);
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:network_operator'])->except('index','indexJSON', 'show');
 
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,11 +24,15 @@ class SiteController extends Controller
     public function index()
     {
         //
+
+
+
         $sites = Site::all();
         return view('site.index', compact('sites'));
     }
 
     public function indexJSON() {
+
 
         $sites = Site::all();
 
@@ -44,7 +52,7 @@ class SiteController extends Controller
     {
 
         //
-        return view('site.create', ['site' => new \App\Site() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
+        return view('site.create', ['site' => new \App\Site() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'roles' => Role::all()  ]);
 
     }
 
@@ -56,16 +64,35 @@ class SiteController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // TODO: Permission Checking
+        $authOK = false;
+        $site = \App\Site::find($request['id']);
+        $user = Auth::user();
+
+        if ( $user->can('view all sites') ) {
+            $authOK = true;
+        }elseif ( $user->can('view own sites') && $site->user_id == $user->id ) {
+            $authOK = true;
+        }
+
+        if ( $authOK ) {
+        } else {
+            return view('common.denied');
+        }
+
+        $roles = $request->roles;
+        unset($request['roles']);
 
         if ($request['id'] ) {
-            $site = \App\Site::find($request['id']);
+            $site->syncRoles( $roles );
+
             $site->update($request->all());
+
         } else {
             $site = \App\Site::create(
                 $request->all()
             );
+            $site->syncRoles( $roles );
+
         }
 
         return redirect("/site/" . $site->id);
@@ -80,7 +107,24 @@ class SiteController extends Controller
      */
     public function show(Site $site)
     {
-	   return view('site.show')->with( 'site', $site);
+//        $user = Auth::user();
+//        $authOK = false;
+//
+//        if ( $user->can('view all sites') ) {
+//            $authOK = true;
+//        }elseif ( $user->can('view own sites') && $site->user_id == $user->id ) {
+//            $authOK = true;
+//        }
+//
+//        if ( $authOK ) {
+//        } else {
+//            return view('common.denied');
+//        }
+
+
+//        return view('site.show', [ 'site' => $site, 'freq_track' => \App\FreqTrack::all()->where('site_code', $site->sitecode) ] );
+        return view('site.show', [ 'site' => $site ] );
+
     }
     public function showJSON(Site $site)
     {
@@ -94,8 +138,24 @@ class SiteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Site $site)
-    {
-        return view('site.create', ['site' => $site , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
+    {        $authOK = false;
+
+
+        $user = Auth::user();
+
+        if ( $user->can('edit all sites') ) {
+            $authOK = true;
+        }elseif ( $user->can('edit own sites') && $site->user_id == $user->id ) {
+            $authOK = true;
+        }
+
+        if ( $authOK ) {
+        } else {
+            return view('common.denied');
+        }
+
+
+        return view('site.edit', ['site' => $site , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'roles' => Role::all() ]);
     }
 
     /**

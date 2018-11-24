@@ -9,13 +9,13 @@ trait SSHConnection
     public function executeSSH($user, $key, $command, $stripANSI = false)
     {
         $rsa = new RSA();
-        $rsa->loadKey( $key->private_key );
+        $rsa->loadKey($key->private_key);
         $ansi = new ANSI();
-        $ansi->setDimensions(200,200);
+        $ansi->setDimensions(200, 200);
         // Open SSH
 
         try {
-            if ( $this->management_ip ) {
+            if ($this->management_ip) {
                 $ssh = new SSH2($this->management_ip);
             } else {
                 $ssh = new SSH2($this->dhcp_lease()->ip);
@@ -34,8 +34,8 @@ trait SSHConnection
 
                 $text = $ansi->getHistory();
 
-                if ( $stripANSI == true ) {
-                   $text = htmlspecialchars_decode(strip_tags($text));
+                if ($stripANSI == true) {
+                    $text = htmlspecialchars_decode(strip_tags($text));
                 }
                 return array('status' => 'complete', 'reason' => null, 'data' => $text);
             }
@@ -44,5 +44,8 @@ trait SSHConnection
 
         }
     }
+
+
+
 
 }

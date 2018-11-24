@@ -65,7 +65,7 @@
                 <option value="3">High</option>
                 <option value="1">Extreme</option>
             </select>
-
+        
         </div>
 
         <div id="siteSelect" style="display: inline-block; font-family: courier">

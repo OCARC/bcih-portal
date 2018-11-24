@@ -39,7 +39,9 @@ class pollDhcp extends Command
     public function handle()
     {
         //
-        $dhcp = new DhcpLeaseController();
-        $dhcp->refresh();
+        //$dhcp = new DhcpLeaseController();
+        //$dhcp->refresh();
+
+
     }
 }

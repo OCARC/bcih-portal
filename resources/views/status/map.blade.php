@@ -1,4 +1,4 @@
-@extends('common.wide')
+@extends('common.mapwide')
 @section('title')
     Coverage Map
 @endsection
@@ -13,162 +13,24 @@
     var statusSourceURL = "{{url("/status.json")}}";
 
 </script>
-
-
-<form class="form-inline">
-    <div class="form-group">
-        <label for="exampleInputName2">Client Gain</label>
-        <select class="form-control" id="clientGain" onChange="updateOverlays();">
-    <option value="001">1dB</option>
-    <option value="002">2dB</option>
-    <option value="003">3dB</option>
-    <option value="004">4dB</option>
-    <option value="005">5dB</option>
-
-    <option value="006">6dB</option>
-    <option value="007">7dB</option>
-    <option value="008">8dB</option>
-    <option value="009">9dB</option>
-    <option value="010">10dB</option>
-
-    <option value="010">10dB</option>
-    <option value="011">11dB</option>
-    <option value="012">12dB</option>
-    <option value="013">13dB</option>
-    <option value="014">14dB</option>
-    <option value="015"  selected="selected">15dB</option>
-    <option value="016">16dB</option>
-    <option value="017">17dB</option>
-    <option value="018">18dB</option>
-    <option value="019">19dB</option>
-    <option value="020">20dB</option>
-
-    <option value="020">20dB</option>
-    <option value="021">21dB</option>
-    <option value="022">22dB</option>
-    <option value="023">23dB</option>
-    <option value="024">24dB</option>
-    <option value="025">25dB</option>
-    <option value="026">26dB</option>
-    <option value="027">27dB</option>
-    <option value="028">28dB</option>
-    <option value="029">29dB</option>
-    <option value="030">30dB</option>
-
-
-</select>
-
-            <label for="exampleInputName2">Overlay Quality</label>
-            <select class="form-control" id="quality" onChange="updateOverlays();">
-                <option value="geo">GeoJSON</option>
-                <option selected=true value="10">Fast</option>
-                <option value="6">Medium</option>
-                <option value="3">High</option>
-                <option value="1">Extreme</option>
-            </select>
-        </div>
-        </div>
-
-    {{--<div class="form-group">--}}
-        {{--<label for="exampleInputName2">Sectors</label>--}}
-        {{--<select class="form-control" id="showSectors" onChange="initialize();">--}}
-            {{--<option value="ALL">All</option>--}}
-            {{--<option value="000">000&deg;</option>--}}
-            {{--<option value="120">120&deg;</option>--}}
-            {{--<option value="240">240&deg;</option>--}}
-
-            {{--<option value="000.120">000&deg; and 120&deg;</option>--}}
-            {{--<option value="000.240">000&deg; and 240&deg;</option>--}}
-
-            {{--<option value="120.240">120&deg; and 240&deg;</option>--}}
-
-        {{--</select>--}}
-            {{--</div>--}}
-    <div id="siteSelect" style="display: inline-block; font-family: courier">
-    <div id="siteSelect000"></div>
-    <div id="siteSelect120"></div>
-    <div id="siteSelect240"></div>
+<div id="map_container" class="map_container" style="position: absolute; top: 52px; bottom: 0px; right: 0px; left: 0px;">
+    <div id="map_status" style="position: absolute; top:0px; bottom: 0px; right: 0px; left:0px; line-height: 100%; z-index: 1;">
+        Loading...
     </div>
-    {{--<div class="checkbox">--}}
-        {{--<label>--}}
-            {{--<input name="showSites[]"  onChange="initialize();" value="BGM" type="checkbox"> BGM--}}
-        {{--</label>--}}
-        {{--<label>--}}
-            {{--<input name="showSites[]" checked="true" onChange="initialize();" value="LMK" type="checkbox"> LMK--}}
-        {{--</label>--}}
-        {{--<label>--}}
-            {{--<input name="showSites[]"  onChange="initialize();" value="BKM" type="checkbox"> BKM--}}
-        {{--</label>--}}
-        {{--<label>--}}
-            {{--<input name="showSites[]" onChange="initialize();" value="KUI" type="checkbox"> KUI--}}
-        {{--</label>--}}
-
-        {{--<label>--}}
-            {{--<input name="showSites[]"  onChange="initialize();" value="APX" type="checkbox"> APX--}}
-        {{--</label>--}}
-
-        {{--<label>--}}
-            {{--<input name="showSites[]"  onChange="initialize();" value="OKM" type="checkbox"> OKM--}}
-        {{--</label>--}}
-    {{--</div>--}}
-    (Slow to Update Be Patient)
-        </form>
-
-
-
-
-<div id="map_container" class="map_container">
-
     <div id="map_canvas" style="width:100%;height:100%;">
     </div>
 </div>
 @endsection
 @section('scripts')
-    <script src="js/map.js"></script>
+    {{--<script src="js/turf.min.js"></script>--}}
+
+<script src="js/map.js"></script>
 
     <script>
     $(document).ready( function() {
-        $.getJSON( "{{ url('coverages') }}", function(data) {
-            for( k in data ) {
-
-
-                for (sk in data[k].SECTORS) {
-                    sk.padStart(3,'0');
-
-                    if ( $('#siteSelect .' +k).length == 0 ) {
-                        $('#siteSelect').append('<div style="display: inline-block;" class="' + k + '"></div>');
-                    }
-
-                    style=' opacity: 0.5; ';
-                    if ( data[k].SECTORS[sk].status == 'Installed' ) {
-                        style=' opacity: 1; background-color: #aaffaa;';
-
-                    }
-                    if ( data[k].SECTORS[sk].status == 'Problems' ) {
-                        style=' opacity: 1; background-color: #ffd355;';
-
-                    }
-                    if ( data[k].SECTORS[sk].status == 'Planning' ) {
-                        style=' opacity: 1; background-color: #fff6a6;';
-
-                    }
-                    if ( data[k].SECTORS[sk].status == 'Potential' ) {
-                        style=' opacity: 1; background-color: #e1e1e1;';
-                    }
-                    $('#siteSelect .' + k).append(" &nbsp;<label style='" + style + "margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='" + k + "|" + sk + "' type='checkbox'> " + k + " " + sk + "&deg;</label><br>");
-
-                }
-
-
-//                        $('#siteSelect120').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='" + k + "|120' type='checkbox'> " + k + " 120&deg;</label>");
-//
-//
-//                        $('#siteSelect240').append(" &nbsp;<label style='margin-bottom: 0px;'><input name='showSites[]' onChange='updateOverlays();' value='" + k + "|240' type='checkbox'> " + k + " 240&deg;</label>");
-
-            }
-        });
 
     });
+
     // Save with and height for full screen mode
     var googleMapWidth = $("#map_container").css('width');
     var googleMapHeight = $("#map_container").css('height');
