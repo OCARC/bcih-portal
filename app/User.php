@@ -42,6 +42,9 @@ class User extends Authenticatable
     public function clients() {
         return $this->hasMany(Client::class)->orderBy('radio_name');
     }
+    public function ips() {
+        return $this->hasMany(IP::class);
+    }
     public function sites() {
         return $this->hasMany(Site::class)->orderBy('name');
     }

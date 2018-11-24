@@ -43,6 +43,22 @@ class Role extends baseRole
 //        return $this->hasMany(Client::class)->orderBy('radio_name');
 //    }
 //    public function sites() {
-//        return $this->hasMany(Site::class)->orderBy('name');
+//
+//        dd( $this  );
+//        return Site::HasRoles();
+//    }
+//
+//    /**
+//     * A role belongs to some users of the model associated with its guard.
+//     */
+//    public function equipment()
+//    {
+//
+//
+//        return Equipment::hasRole( $this );
+//    }
+
+//    public function users() {
+//
 //    }
 }
