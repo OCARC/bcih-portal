@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('callsign')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('realm')->default('local');
             $table->boolean('approved')->default(0);
             $table->boolean('allow_password')->default(1);
             $table->boolean('allow_advanced')->default(1);

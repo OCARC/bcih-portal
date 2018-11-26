@@ -39,6 +39,28 @@
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
+
+                        <div class="form-group{{ $errors->has('callsign') ? ' has-error' : '' }}">
+                            <label for="callsign" class="col-md-4 control-label">Realm</label>
+
+                            <div class="col-md-6">
+                                <select id="realm" type="text" class="form-control" name="realm" required>
+                                    @if( env('APP_LOCAL_AUTH_ENABLED','false') === true )
+                                    <option value="local">Local Authentication</option>
+                                    @endif
+                                    @if( env('APP_LDAP_AUTH_ENABLED','false') === true )
+                                    <option @if( env('APP_LDAP_DEFAULT_REALM',true) === true ) selected="yes" @endif value="ldap">LDAP Authentication</option>
+                                    @endif
+                                </select>
+
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('realm') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('callsign') ? ' has-error' : '' }}">
                             <label for="callsign" class="col-md-4 control-label">Callsign</label>
 

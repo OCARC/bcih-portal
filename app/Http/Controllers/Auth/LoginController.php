@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -41,5 +42,13 @@ class LoginController extends Controller
     {
         return 'callsign';
     }
+
+
+    protected function credentials(Request $request)
+    {
+        // Add the realm param here for LDAP
+        return $request->only($this->username(), 'password', 'realm');
+    }
+
 
 }

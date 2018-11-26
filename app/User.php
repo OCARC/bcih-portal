@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'callsign', 'email', 'password',
+        'name', 'callsign', 'email', 'password','realm'
     ];
 
     /**
@@ -30,7 +30,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
 
     public function rsa_keys() {
         return $this->hasMany('App\RsaKey');
