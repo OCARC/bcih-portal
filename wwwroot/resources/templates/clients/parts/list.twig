@@ -1,0 +1,59 @@
+<table class="table table-striped table-hover table-sm">
+
+    <thead>
+    <th></th>
+    <th>Radio Name</th>
+    <th>MAC</th>
+    <th>Connected To</th>
+    <th>Signal</th>
+    <th>SNR</th>
+    <th></th>
+    <th>CH 0</th>
+    <th>CH 1</th>
+    <th>Rates</th>
+    <th>Last Seen</th>
+    <th>Ping</th>
+
+    </thead>
+    <tbody>
+
+    {% for obj in clients %}
+        <tr class="{% if obj.getLastPing() == -1 %}table-danger{% endif %}">
+            <td style="width: 72px"><img src="{{ obj.getIcon() }}" style="width: 48px; height: 48px;"></td>
+
+            <td><a href="/clients/{{ obj.id }}">{{ obj.getRadioName() }}</a><br>
+                {{ obj.getManagementIp(true) }}
+            </td>
+            <td>{{ obj.getMacAddress(true) }}</td>
+            <td>{{ obj.getSite().getName() }}</td>
+            <td class="text-right">{{ obj.getSignalStrength(true) }}</td>
+            <td class="text-right">{{ obj.getSNR(true) }}</td>
+        <td>
+            <strong>RX</strong><br>
+            <strong>TX</strong>
+        </td>
+            <td>
+                {{ obj.getStrength(true,0,'Rx') }}<br>
+                {{ obj.getStrength(true,0,'Tx') }}
+
+            </td>
+            <td>
+
+                {{ obj.getStrength(true,1,'Rx') }}<br>
+                {{ obj.getStrength(true,1,'Tx') }}
+            </td>
+            <td>
+                {{ obj.getRate(true,'Rx') }}<br>
+                {{ obj.getRate(true,'Tx') }}
+            </td>
+            <td></td>
+            <td class="text-right">
+                {{ obj.getLastPing(true) }}<br>
+                {{ obj.getLastPingTimestamp()|time_diff }}
+            </td>
+
+        </td>
+    {% endfor %}
+
+    </tbody>
+</table>

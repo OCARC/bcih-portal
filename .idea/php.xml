@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/wwwroot/vendor/twig/extensions" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/persistence" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/css" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/js" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/orm" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/less" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/metadata" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/scss" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/sprites" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/webfonts" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/fontawesome-free/svgs" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/composer" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/polyfill-php73" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/bootstrap/js" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/bootstrap/scss" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/altorouter/altorouter" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/collections" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/common" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/wwwroot/vendor/geerlingguy/ping" />
+    </include_path>
+  </component>
+</project>

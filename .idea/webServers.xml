@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ed38a835-756b-4e4c-97d1-9d5d965892e0" name="portal-dev" url="http://portal-dev.if.hamwan.ca">
+        <fileTransfer rootFolder="/hamwan/portal" accessType="SFTP" host="44.135.217.151" port="22" sshConfigId="7e8f50b3-55e4-492f-a8d4-41a17fb889fd" sshConfig="va7stv@44.135.217.151:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

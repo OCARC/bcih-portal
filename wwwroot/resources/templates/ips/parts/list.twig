@@ -1,0 +1,37 @@
+<table class="table table-striped table-hover table-sm">
+
+    <thead>
+    <th>IP</th>
+    <th>Hostname</th>
+    <th>Ping</th>
+    <th>DNS</th>
+    <th>MAC</th>
+    <th>Description</th>
+    <th>Group</th>
+    <th>DHCP</th>
+    <th>Expires</th>
+
+    </thead>
+    <tbody>
+
+    {% for obj in ips %}
+
+            <td>{{ obj.getIpAddress() }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+            <td>{{ obj.getMacAddress(true) }}</td>
+            <td>{{ obj.getSite().getName() }}</td>
+
+            <td></td>
+
+            <td>{{ obj.getType() }}</td>
+            <td>{{ obj.getExpires()|time_diff }} </td>
+
+
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

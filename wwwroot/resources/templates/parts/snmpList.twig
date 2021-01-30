@@ -1,0 +1,24 @@
+<table class="table table-striped table-hover">
+
+    <thead>
+    <th>Name</th>
+    <th>OID</th>
+    <th>Value</th>
+    <th>Created</th>
+    <th>Updated</th>
+
+    </thead>
+    <tbody>
+
+    {% for obj in snmpValues %}
+        <tr class="">
+            <td>{{ obj.getKeyName() }}</td>
+            <td>{{ obj.getOID }}</td>
+            <td>{{ obj.getValue() }}</td>
+            <td>{{ obj.getCreatedAt()|date }}</td>
+            <td>{{ obj.getUpdatedAt()|date }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

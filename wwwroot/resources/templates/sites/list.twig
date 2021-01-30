@@ -1,0 +1,47 @@
+{% extends 'mainLayout.twig' %}
+
+{% block sidebar %}
+    {% include 'parts/sidebar.twig' %}
+
+{% endblock %}
+
+{% block topbar %}
+    {% include 'parts/topbar.twig' %}
+{% endblock %}
+
+{% block mainHeading %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Sites</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Create Site</a>
+    </div>
+
+{% endblock %}
+{% block mainContent %}
+
+    <table class="table table-striped table-hover table-sm">
+
+        <thead>
+            <th>Site Name</th>
+            <th>Code</th>
+            <th>Status</th>
+            <th>Comments</th>
+            <th>Location</th>
+            <th>Altitude</th>
+        </thead>
+        <tbody>
+
+        {% for obj in sites %}
+        <tr>
+            <td><a href="/sites/{{ obj.id }}">{{ obj.getName() }}</a></td>
+            <td>{{ obj.getShortName() }}</td>
+            <td>{{ obj.getStatus() }}</td>
+            <td>   </td>
+            <td>{{ obj.getLocation(true) }}</td>
+            <td class="text-right">{{ obj.getAltitude() }} m</td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

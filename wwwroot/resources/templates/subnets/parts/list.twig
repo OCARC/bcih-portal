@@ -1,0 +1,40 @@
+<table class="table table-striped table-hover table-sm">
+
+    <thead>
+    <th>IP</th>
+    <th>Allocated</th>
+    <th>Count</th>
+    <th>Status</th>
+    <th>Group</th>
+    <th>Gateway</th>
+    <th>DHCP</th>
+    <th>Site</th>
+    <th>User</th>
+    </thead>
+    <tbody>
+
+    {% for obj in subnets %}
+
+        <td><a href="/subnet/{{ obj.id }}">{{ obj.getIpAddress() }}/{{ obj.getCIDR() }}</a><br>
+        {{ obj.getName() }}
+        </td>
+        <td>{{ obj.getIPAddresses(true)|length }}</td>
+        <td>{{ obj.getEachIpInRange()|length }}</td>
+        <td></td>
+        <td></td>
+        <td>{{ obj.getGateway() }}</td>
+<td></td>
+        <td><a href="/sites/{{ obj.getSite().id }}">{{ obj.getSite().getShortName() }}</a></td>
+            <td>{{ obj.getUser().getUserame() }}</td>
+
+
+
+            <td class="text-right">
+
+            </td>
+
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

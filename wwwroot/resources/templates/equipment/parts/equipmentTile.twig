@@ -1,0 +1,16 @@
+<a href="/equipment/{{ equipment.id }}" class="card {% if equipment.getLastPing() == -1 %}border-danger{% else %}border-success{% endif %}" style="width: 14rem; margin: 1rem">
+
+    <div class="card-body">
+
+
+        <img class="card-img-top rounded mx-auto d-block" src="{{ equipment.getIcon() }}" alt="Card image cap" style="max-width: 8rem;">
+
+        <h5 class="card-title">{{ equipment.getHostname() }}</h5>
+        <p class="card-text" style="margin-top: -1rem">
+            <small class="text-muted float-left">{{ equipment.getOS() }}</small>
+            <small class="text-muted float-right">{{ equipment.getRadioModel() }}</small>
+            <span class="clearfix"></span>
+        </p>
+
+    </div>
+</a>

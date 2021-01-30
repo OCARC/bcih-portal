@@ -1,0 +1,31 @@
+{% if currentUser.checkPermission(nav.routeName) %}
+
+
+    {% if nav.group %}
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading">
+            {{ nav.text }}
+        </div>
+        {% include "parts/nav.twig" with {'onlyGroup' : nav.routeName } %}
+
+    {% else %}
+        {% if routeName == nav.routeName %}
+            <li class="nav-item active">
+
+                <a class="nav-link" href="{{ nav.link }}">
+                    <i class="fas fa-fw fa-{{ nav.icon }}"></i>
+                    <span>{{ nav.text }} <span class="sr-only">(current)</span></span>
+                </a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ nav.link }}">
+                    <i class="fas fa-fw fa-{{ nav.icon }}"></i>
+                    &nbsp;<span>{{ nav.text }}</span>
+                </a>
+            </li>
+        {% endif %}
+
+    {% endif %}
+{% endif %}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/altorouter/altorouter" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/bootstrap/js" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/bootstrap/scss" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/annotations" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/collections" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/common" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/dbal" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/event-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/inflector" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/lexer" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/orm" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/doctrine/persistence" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/css" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/js" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/less" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/metadata" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/scss" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/sprites" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/svgs" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/fontawesome-free/webfonts" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/geerlingguy/ping" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/psr/container" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/polyfill-intl-grapheme" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/polyfill-php73" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/polyfill-php80" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/string" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/symfony/yaml" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/twig/extensions" />
+      <excludeFolder url="file://$MODULE_DIR$/wwwroot/vendor/twig/twig" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

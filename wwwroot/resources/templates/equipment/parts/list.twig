@@ -1,0 +1,49 @@
+<table class="table table-striped table-hover table-sm">
+
+    <thead>
+    <th></th>
+    <th>Hostname</th>
+    <th>Platform</th>
+    <th>Site</th>
+    <th>Version</th>
+    <th>Volts</th>
+    <th>Temp</th>
+    <th>Freq</th>
+    <th>CCQ</th>
+    <th>Clients</th>
+    <th>SSID</th>
+    <th>Ping</th>
+
+    </thead>
+    <tbody>
+
+    {% for obj in equipment %}
+        <tr class="{% if obj.getLastPing() == -1 %}table-danger{% endif %}">
+            <td style="width: 72px"><img src="{{ obj.getIcon() }}" style="width: 48px; height: 48px;"></td>
+            <td>
+                <a href="/equipment/{{ obj.id }}">{{ obj.getHostname() }}</a><br>
+                {{ obj.getManagementIp() }}
+            </td>
+            <td>
+                {{ obj.getSNMPValues()['OID_SYSDESC'].getValue()|slice(0,32) }}<br>
+                S/N: {{ obj.getSNMPValues()['OID_SERIAL'].getValue() }}
+            </td>
+            <td>&nbsp;<a href="/sites/{{ obj.getSite().id }}">{{ obj.getSite().getShortName() }}</a></td>
+
+            <td>{{ obj.getSNMPValues()['OID_VERSION'].getValue() }}</td>
+
+            <td class="text-right">{{ obj.getSNMPValues()['OID_VOLTAGE'].getValue() }}</td>
+            <td class="text-right">{{ obj.getSNMPValues()['OID_TEMPERATURE'].getValue() }}</td>
+            <td class="text-right">{{ obj.getSNMPValues()['OID_FREQUENCY'].getValue() }}</td>
+            <td>{{ obj.getCCQ() }}</td>
+            <td class="text-right">{{ obj.getClients()|length }}</td>
+            <td>{{ obj.getSNMPValues()['OID_SSID'].getValue() }}</td>
+            <td class="text-right">
+                {{ obj.getLastPing(true) }}<br>
+                {{ obj.getLastPingTimestamp()|time_diff }}
+            </td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

@@ -1,0 +1,92 @@
+{% extends 'mainLayout.twig' %}
+
+{% block sidebar %}
+    {% include 'parts/sidebar.twig' %}
+
+{% endblock %}
+
+{% block topbar %}
+    {% include 'parts/topbar.twig' %}
+{% endblock %}
+
+{% block mainHeading %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ site.getName() }}</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Create Site</a>
+    </div>
+
+{% endblock %}
+{% block mainContent %}
+
+
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Site Info</a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="equipment-tab" data-toggle="tab" href="#equipment" role="tab" aria-controls="equipment" aria-selected="false">Equipment &nbsp;<span class="badge badge-pill badge-primary">{{ site.getEquipment()|length }}</span></a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="clients-tab" data-toggle="tab" href="#clients" role="tab" aria-controls="clients" aria-selected="false">Clients &nbsp;<span class="badge badge-pill badge-primary">{{ site.getClients()|length }}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="weathermap-tab" data-toggle="tab" href="#weathermap" role="tab" aria-controls="weathermap" aria-selected="false">Weathermap
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="map_container" style="height: 10rem; border: 1px solid grey">
+                    map goes here
+                </div>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Equipment</h1>
+                </div>
+                <div class="row">
+                    {% for equipment in site.getEquipment()  %}
+                        {% include "equipment/parts/equipmentTile.twig" %}
+                    {% endfor %}
+                </div>
+
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Clients</h1>
+                </div>
+                <div class="row">
+                    {% for client in site.getClients()  %}
+                        {% include "clients/parts/clientTile.twig" %}
+                    {% endfor %}
+                </div>
+
+
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Links</h1>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="equipment" role="tabpanel" aria-labelledby="equipment-tab">
+                {% include 'equipment/parts/list.twig' with { 'equipment' : site.getEquipment() } %}
+            </div>
+
+            <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="clients-tab">
+                {% include 'clients/parts/list.twig' with { 'clients' : site.getClients() } %}
+
+
+            </div>
+
+            <div class="tab-pane fade" id="weathermap" role="tabpanel" aria-labelledby="weathermap-tab">
+
+                    <iframe style="width: 100%; height: 1200px; border: none" src="http://nms.if.hamwan.ca/plugins/Weathermap/output/site-{{ site.getShortName()|lower }}.html"></iframe>
+
+            </div>
+        </div>
+
+
+{% endblock %}

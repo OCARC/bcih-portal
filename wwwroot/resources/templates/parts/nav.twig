@@ -1,0 +1,16 @@
+{% for nav in topNav %}
+    {% if onlyGroup %}
+        {% if  nav.parent %}
+            {% if  nav.parent == onlyGroup %}
+            {% include 'parts/navItem.twig' %}
+
+            {% endif %}
+        {% endif %}
+    {% else %}
+        {% if  nav.parent %}
+        {% else %}
+
+            {% include 'parts/navItem.twig' %}
+            {% endif %}
+    {% endif %}
+{% endfor %}
