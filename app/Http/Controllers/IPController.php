@@ -26,6 +26,30 @@ class IPController extends Controller
 //        }
     }
 
+    public function rebuildDNS()
+    {
+//
+        //
+        $ips = IP::all()->sortBy( function($IP) { return ip2long( $IP->ip); });
+        foreach( $ips as $ip ) {
+            if ( $ip->dns != "" ) {
+
+                $ip->removeDNS();
+                $ip->updateDNS();
+                print $ip->ip . "<br>";
+
+            }
+        }
+//        if ( request('json') ) {
+//            return $IP;
+//        } else {
+//        return view('ip.index', compact('ips'));
+//        }
+        print "complete";
+//        return redirect("/dns-zones/");
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -62,13 +86,14 @@ class IPController extends Controller
     {
         // TODO: Permission Checking
 
+
+        $request['mac_address'] = preg_replace("/[^a-f0-9A-F]+/", "", $request['mac_address']);
+
+
         if ($request['id'] ) {
             $IP = \App\IP::find($request['id']);
 
-            // Remove existing DNS
-            if ( $IP->dns != "" ) {
-                $IP->removeDNS();
-            }
+
 
             $IP->update($request->all());
 

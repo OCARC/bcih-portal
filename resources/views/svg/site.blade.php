@@ -10,7 +10,10 @@
         @if( isset($icon['sectors']))
         @foreach( $icon['sectors'] as $sector)
         <g id="svg_3" transform="rotate({{ $sector['azimuth'] }} 64,64) ">
-            <ellipse stroke-dasharray="{{ $sector['stroke-dasharray'] or ''}}" fill="{{ $sector['fill'] or '#00ff00'}}" stroke="#000" stroke-width="2" fill-opacity="null" cx="64" cy="32" id="svg_15" rx="42" ry="18"/>
+{{--            <ellipse stroke-dasharray="{{ $sector['stroke-dasharray'] or ''}}" fill="{{ $sector['fill'] or '#00ff00'}}" stroke="#000" stroke-width="2" fill-opacity="null" cx="64" cy="32" id="svg_15" rx="42" ry="18"/>--}}
+
+{{--            <path xmlns="http://www.w3.org/2000/svg" d="M32,32 a1,1 0 0,0 64,0" stroke="#000" stroke-width="2" fill="rgba(92, 184, 92,0.5)"/>--}}
+            <polygon xmlns="http://www.w3.org/2000/svg" points="16 36,112 36,64 60" stroke-dasharray="{{ $sector['stroke-dasharray'] or ''}}" fill="{{ $sector['fill'] or '#00ff00'}}" stroke="#000" stroke-width="2" fill-opacity="null"/>
         </g>
         @endforeach
         @endif
@@ -21,9 +24,11 @@
         @if( isset($icon['links']))
             @foreach( $icon['links'] as $link)
                 <g id="svg_3" transform="rotate({{ $link['azimuth'] }} 64,64) ">
-                    <ellipse stroke-dasharray="{{ $link['stroke-dasharray'] or ''}}" fill="{{ $link['fill'] or '#00ff00'}}" stroke="#000" stroke-width="2" fill-opacity="null" cx="64" cy="12" id="svg_15" rx="12" ry="12"/>
+{{--                    <ellipse stroke-dasharray="{{ $link['stroke-dasharray'] or ''}}" fill="{{ $link['fill'] or '#00ff00'}}" stroke="#000" stroke-width="2" fill-opacity="null" cx="64" cy="12" id="svg_15" rx="12" ry="12"/>--}}
+                    <path xmlns="http://www.w3.org/2000/svg" d="M52,6 a1,1 0 0,0 24,0" stroke-dasharray="{{ $link['stroke-dasharray'] or ''}}" stroke="#000" stroke-width="2" fill="rgba(92, 184, 92,0.5)"/>
                 </g>
-            @endforeach
+
+                @endforeach
         @endif
     </g>
     <g>

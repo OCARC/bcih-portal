@@ -1,11 +1,10 @@
 @php ( $librenms_mapping = $row->librenms_mapping )
 
 <tr class="{{ $row->last_heard_class() }}">
-    {{-- START LibreNMS Status --}}
-    <td class="status-col {{ $row->libre_status_class() }}">
+    <td class="ping-col text-right @if( $row->hc_ping_result >= 0)success @else danger @endif">
+        @if( $row->hc_ping_result >= 0){{ $row->hc_ping_result }}ms @else Offline @endif
 
     </td>
-    {{-- END LibreNMS Status --}}
 
     {{-- START Client Icon/Info --}}
     {{-- TODO: Merge these 2 coloums --}}

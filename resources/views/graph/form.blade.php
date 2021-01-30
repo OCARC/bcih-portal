@@ -164,6 +164,13 @@
                     <option @if( $ip->dns_zone == "cl.hamwan.ca.") selected="true" @endif value="cl.hamwan.ca." >
                         .cl.hamwan.ca.
                     </option>
+
+                    <option @if( $ip->dns_zone == "if.ocarc.ca.") selected="true" @endif value="if.ocarc.ca." >
+                        .if.ocarc.ca.
+                    </option>
+                    <option @if( $ip->dns_zone == "cl.ocarc.ca.") selected="true" @endif value="cl.ocarc.ca." >
+                        .cl.ocarc.ca.
+                    </option>
                 </select></div>
             </div>
 

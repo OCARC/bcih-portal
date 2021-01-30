@@ -70,6 +70,7 @@
         </div>
         <div class="col-lg-12">
             @foreach ($site->clients as $client)
+                @if ($client->type != 'link')
 
                  @if ( $client->updated_at->diffInMinutes(\Carbon\Carbon::now()) <= 30)
                 <div class="text-center equipment-block" style=" border-color: {{ $client->strengthColor() }}; @if ($client->type == 'link')border-style: dashed @endif">
@@ -78,11 +79,7 @@
                         <div class="tl-corner-badge" style=" border-color: {{ $client->strengthColor() }}">
                         {{$client->snmp_strength}}dBm
                         </div>
-                        @if ($client->type == 'link')
-                            <div class="tr-corner-badge" style=" border-color: {{ $client->strengthColor() }}">
-                                Link
-                            </div>
-                        @endif
+
                             {{--@if( $client->libre_wireless('clients')->sensor_current >= 1 )--}}
                             {{--<div class="tl-corner-badge" style=" border-color: {{ $client->getHealthColor() }}">--}}
                                 {{--{{$client->libre_wireless('clients')->sensor_current}}--}}
@@ -92,9 +89,46 @@
 
                         {{--{{ $client->getHealthStatus() }}</div>--}}
                         <img src="{{$client->icon() }}" style="width:64px; height: 64px;"><br>
-                        {{$client->snmp_sysName or $client->mac_address}}</a><br>
+                        {{ $client->getFriendlyName() }}</a><br>
 
                 </div>
+                @endif
+                @endif
+            @endforeach
+        </div>
+    </div>
+    <div id="equipment_container" class="row">
+        <div class="col-lg-12">
+            <h5>PTP Link Radios</h5>
+        </div>
+        <div class="col-lg-12">
+            @foreach ($site->clients as $client)
+                @if ($client->type == 'link')
+
+                @if ( $client->updated_at->diffInMinutes(\Carbon\Carbon::now()) <= 30)
+                    <div class="text-center equipment-block" style=" border-color: {{ $client->strengthColor() }};">
+
+                        <a href="{{ url( "/clients/" . $client->id ) }}" style="font-size: 11px;">
+                            <div class="tl-corner-badge" style=" border-color: {{ $client->strengthColor() }}">
+                                {{$client->snmp_strength}}dBm
+                            </div>
+                                <div class="tr-corner-badge" style=" border-color: {{ $client->strengthColor() }}">
+                                    Link
+                                </div>
+                            {{--@if( $client->libre_wireless('clients')->sensor_current >= 1 )--}}
+                            {{--<div class="tl-corner-badge" style=" border-color: {{ $client->getHealthColor() }}">--}}
+                            {{--{{$client->libre_wireless('clients')->sensor_current}}--}}
+                            {{--</div>--}}
+                            {{--@endif--}}
+                            {{--<div class="text-center" style="width: 126px; display:inline-block; background-color: {{ $client->getHealthColor() }}">--}}
+
+                            {{--{{ $client->getHealthStatus() }}</div>--}}
+                            <img src="{{$client->icon() }}" style="width:64px; height: 64px;"><br>
+                            {{$client->snmp_sysName or $client->mac_address}}</a><br>
+
+                    </div>
+                    @endif
+
                 @endif
             @endforeach
         </div>
@@ -140,6 +174,11 @@
 
 </script>
 <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDYYYa-Ux3bra8o_52tzUXd2rd_Bvlz4cQ&v=3.exp&libraries=places"></script>
+<script src="http://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&v=3.exp&libraries=places"></script>
+
+<script>
+    var targetLat = {{ $site->latitude }};
+    var targetLon = {{ $site->longitude }};
+</script>
 <script src="/js/map.js"></script>
 

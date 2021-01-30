@@ -995,6 +995,7 @@ function QualityControl(controlDiv, map) {
     // Set CSS for the control interior.
     var controlText = document.createElement('select');
     var vals = "";
+        vals += '<option value="none">None</option>';
         vals += '<option value="geo">GeoJSON</option>';
         vals += '<option value="topo">TopoJSON</option>';
         vals += '<option value="VA7STV">GeoJSON (VA7STV)</option>';
@@ -1050,20 +1051,31 @@ function initialize() {
 
     var sites = {};
 
-    var mapOptions = {
-        center: new google.maps.LatLng(49.8924,-119.4153), // Capitol Parkish
-        zoom:  11,
+    console.log(mapOptions);
 
-        scrollwheel: true,
-        mapTypeId: google.maps.MapTypeId.TERRAIN,
-        mapTypeControl: true,
-        scaleControl: true,
+    var lat = 49.8924;
+    if ( typeof targetLat !== 'undefined' ) {
+        lat = targetLat;
+    }
+    var lon = -119.4153;
+    if ( typeof targetLon !== 'undefined' ) {
+        lon = targetLon;
+    }
+        var mapOptions = {
+            center: new google.maps.LatLng( lat, lon),
+            zoom: 11,
 
-        mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-        },
-        fullscreenControl: true
-    };
+            scrollwheel: true,
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            mapTypeControl: true,
+            scaleControl: true,
+
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            fullscreenControl: true
+        };
+
 
     if (typeof zoom !== 'undefined') {
         mapOptions['zoom'] = zoom;

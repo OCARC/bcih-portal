@@ -6302,9 +6302,22 @@ table.sortable thead {
   position: relative;
   margin: .5em;
   width: 100px; overflow:hidden; display:inline-block; border-radius: 1em;
+  height: 100px;
   float:left;
   border: 2px solid #e8e8e8;
   background: rgba(255,255,255,1);
+
+}
+.row .map-block{
+  position: relative;
+overflow: hidden;
+  display: inline-block;
+  border-radius: 1em 0px;
+  /* height: 100px; */
+  float: right;
+  border: 2px solid #e8e8e8;
+  background: rgba(255,255,255,1);
+  border-width: 2px 0px 0px 2px;
 
 }
 .site-container .row .equipment-graph {
@@ -6321,8 +6334,20 @@ table.sortable thead {
   margin-top: .5em
 }
 .site-connections {
-  font-size: 11px;
-  margin-top: .5em
+  font-size: 12px;
+  margin-top: 0px;
+  background: #e8e8e8;
+  border-radius: 0px 0px 0px .75em;
+  margin-right: -15px;
+  color: black;
+  padding: .25em 0.5em .25em .5em;
+  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  display: inline-block;
+  /* right: 0px; */
+  /* position: relative; */
+  float: right;
+
 }
 
 

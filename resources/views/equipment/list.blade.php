@@ -1,9 +1,10 @@
+
 <div class="table-responsive">
 
     <table class="table sortable table-responsive table-condensed table-striped table-bordered table-hover">
         <thead>
         <tr>
-            <th style="width: 25px"><span class="glyphicon glyphicon-info-sign"></span></th>
+            <th style="width: 50px">Ping</th>
             <th style="width: 50px"></th>
             <th>Hostname</th>
 

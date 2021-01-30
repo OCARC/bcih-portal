@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Client;
 use App\Console\Commands\pollClients;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use JJG\Ping;
 use League\Flysystem\Exception;
 use Nelisys\Snmp;
-use App\Client;
 use App\Site;
 use App\IP;
 use Spatie\Permission\Traits\HasRoles;
@@ -39,6 +40,8 @@ class Equipment extends Model
     CONST OID_FREQUENCY = ".1.3.6.1.4.1.14988.1.1.1.3.1.7.2";
     const OID_SSID = ".1.3.6.1.4.1.14988.1.1.1.3.1.4.2";
     const OID_UPTIME = ".1.3.6.1.2.1.1.3.0";
+
+    const OID_VERSION = '.1.3.6.1.4.1.14988.1.1.4.4.0';
     //
 
     CONST OID_mtxrWlRtabSignalToNoise = ".1.3.6.1.4.1.14988.1.1.1.2.1.12";
@@ -56,11 +59,19 @@ class Equipment extends Model
     use \App\Traits\DeviceIcon;
     use \App\Traits\DAEnetIP4;
 
+    use \App\Traits\HealthCheck;
+
     protected $hidden = [
         'snmp_community',
         'comments'
     ];
 
+
+    public function getManagemnetIP() {
+        return $this->management_ip;
+
+
+    }
 
     /**
      * Returns permission appropriate version of serial number for equipment
@@ -68,34 +79,48 @@ class Equipment extends Model
     public function get_serial_number() {
         $user = auth()->user();
 
-
-        $serial = "";
-
-        if ( $this->librenms_mapping ) {
-            $serial = $this->libre_device['serial'];
-        } else {
-            $serial = $this->snmp_serial;
-        }
+        $serial = $this->snmp_serial;
 
 
+if ( $serial ) {
         if (!$user) {
             // Not logged in
-            return substr_replace($serial, 'xxxx', -6, 4);
+            return substr_replace($serial, '****', -6, 4);
         } else {
             if ($user->can('equipment.view_serial_numbers') ) {
                 return $serial;
             } else {
-                return substr_replace($serial, 'xxxx', -6, 4);
+                return substr_replace($serial, '****', -6, 4);
             }
         }
-
+}
+return "n/a";
     }
 
 
     protected $guard_name = 'web'; // or whatever guard you want to use
 
-    public function graphs(  ) {
+    public function pingCheck() {
 
+
+        $ping = new Ping($this->management_ip);
+        $ping->setTimeout(1);
+        $latency = $ping->ping();
+
+
+        if ($latency !== false) {
+            $this->last_ping = $latency;
+            $this->last_ping_timestamp = \DB::raw('now()');
+
+        } else {
+
+        }
+
+        $this->save();
+        return $latency;
+    }
+
+    public function graphs(  ) {
         $results = array();
 
 
@@ -123,39 +148,43 @@ class Equipment extends Model
         }
     }
 
-    public function getHealthColor()
-    {
-
-
-        if ($this->librenms_mapping) {
-            if ($this->libre_alerts(1)->count() >= 1) {
-                return "#d9534f";
-            } elseif ($this->libre_alerts(2)->count() >= 1) {
-                return "#f0ad4e";
+    public function getHealthColor( $opacity = '1', $transparentUnlessAlarm = false) {
+        if ( $this->health_from == '' ) {
+            if ($transparentUnlessAlarm == true ) {
+                return "transparent";
             } else {
-                return "#5cb85c";
+                return "rgba(222,222,222,$opacity)";
             }
-
-        } else {
-            if ($this->status == "Planning" || $this->status == "Potential" || $this->status == "No Install") {
-                return "inherit";
-            }
-
-            if ($this::getHealthStatus() == "Error") {
-                return '#ffad2f'; // Error
-            } else if ($this::getHealthStatus() == "High Temp") {
-                return '#ffad2f'; // Error
-            } else if ($this::getHealthStatus() == "Offline") {
-                return '#ffaaaa';
-            } else if ($this::getHealthStatus() == "OK") {
-                return '#aaffaa'; // OK
-            } else {
-                return '#cccccc'; // Unknown
-
-            }
-
-
         }
+
+        if ( $this->health_from == 'snmp' ) {
+            if( $this->last_heard_snmp_ago() >= 60) {
+                return "rgba(217,83,79,$opacity)";
+            } elseif( $this->last_heard_snmp_ago() >= 11 ) {
+                return "rgba(240,173,78,$opacity)";
+            } else {
+                if ($transparentUnlessAlarm == true ) {
+                    return "transparent";
+                } else {
+                    return "rgba(92, 184, 92,$opacity)";
+                }
+            }
+        }
+
+        if ( $this->health_from == 'icmp' ) {
+            if( $this->last_heard_icmp_ago() >= 60) {
+                return "rgba(217,83,79,$opacity)";
+            } elseif( $this->last_heard_icmp_ago() >= 11 ) {
+                return "rgba(240,173,78,$opacity)";
+            } else {
+                if ($transparentUnlessAlarm == true ) {
+                    return "transparent";
+                } else {
+                    return "rgba(92, 184, 92,$opacity)";
+                }
+            }
+        }
+
     }
 
 
@@ -166,11 +195,21 @@ if ( ! $this->ant_gain && ! $this->radio_power ) { return null;}
 
     }
 
-    public function clients() {
+    public function clients( ) {
         return $this->hasMany(Client::class);
     }
+    public function getClients( $pingOK = false ) {
+
+        return $this->hasMany(Client::class)->where('hc_ping_result', '>', -1)->getResults();
+
+    }
+
     public function ips() {
         return \App\IP::all()->where("equipment_id", $this->id);
+    }
+
+    public function DHCPLeases() {
+        return \App\IP::all()->where("dhcp_server", $this->management_ip);
     }
     public function user() {
         $user = $this->belongsTo(User::class);
@@ -679,7 +718,7 @@ $hosts = array();
 
     }
 
-    public function sshFetchConfig() {
+    public function sshFetchConfig( ) {
 
 
         if ( $this->os != 'RouterOS' ) {
@@ -690,8 +729,14 @@ $hosts = array();
         $key = \App\User::where('callsign','manage')->first()->rsa_keys->where('publish',1)->first();
 
 
+        $strip = false;
 
-    $result = $this->executeSSH( 'manage', $key, "/export") ;
+        if( isset($_REQUEST['strip'])) {
+            if ($_REQUEST['strip'] == 1) {
+                $strip = true;
+            }
+        }
+        $result = $this->executeSSH('manage', $key, "/export", $strip);
 
 
 
@@ -755,7 +800,7 @@ $hosts = array();
                 $this::OID_SSID,
                 $this::OID_BAND,
                 $this::OID_SNR,
-
+                $this::OID_VERSION
             )
         );
 
@@ -771,7 +816,9 @@ $hosts = array();
         if ( isset($r[$this::OID_SNR]) ) {
             $this->snmp_snr = $r[$this::OID_SNR];
         }
-
+        if ( isset($r[$this::OID_VERSION]) ) {
+            $this->snmp_version = $r[$this::OID_VERSION];
+        }
         if ( isset($r[$this::OID_VOLTAGE]) ) {
             $this->snmp_voltage = (int)$r[$this::OID_VOLTAGE]/10;
         }
@@ -831,6 +878,7 @@ $hosts = array();
     {
 
         if ( $key == 'librenms_mapping') {
+
             return $this->getLibreNMSMapping(false); // too slow to search
         }
         return $this->getAttribute($key);
@@ -893,9 +941,9 @@ $hosts = array();
      */
 
     public function last_heard_class() {
-        if( $this->last_heard_ago() >= 60) {
+        if( $this->last_heard_snmp_ago() >= 60) {
             return "danger";
-        } elseif( $this->last_heard_ago() >= 6 ) {
+        } elseif( $this->last_heard_snmp_ago() >= 6 ) {
             return "warning";
         } else {
             return "";
@@ -903,7 +951,20 @@ $hosts = array();
 
     }
 
+
+
     public function last_heard_ago() {
+        //TODO: Fix timezone cludge
+        return ((strtotime("now")-strtotime($this->snmp_timestamp))/60) -420;
+    }
+
+
+    public function last_heard_icmp_ago() {
+        //TODO: Fix timezone cludge
+        return ((strtotime("now")-strtotime($this->last_ping_timestamp))/60) ;
+    }
+
+    public function last_heard_snmp_ago() {
         //TODO: Fix timezone cludge
         return ((strtotime("now")-strtotime($this->snmp_timestamp))/60) -420;
     }

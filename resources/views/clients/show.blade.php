@@ -85,7 +85,21 @@
                                         ({{$client->site['sitecode'] }})</a>
                                 </p>
                             </div>
+                            <div class="form-group col-xs-4">
 
+                                <label for="name">Owner</label>
+                                <p class="form-control-static">
+                                    <a href="{{url("users/" . $client->user_id )}}">{{ $client->user->callsign }}</a>
+                                </p>
+                            </div>
+
+{{--                            <div class="form-group col-xs-4">--}}
+
+{{--                                <label for="name">Last Seen</label>--}}
+{{--                                <p class="form-control-static">--}}
+{{--                                    {{ $client->last_ping_timestamp }} ({{$client->last_ping}}ms)--}}
+{{--                                </p>--}}
+{{--                            </div>--}}
 
 
                             {{--<div class="form-group col-xs-4">--}}
@@ -98,8 +112,14 @@
 
                         </div>
                         <div class="panel-footer text-right">
-
-                            <a href="{{ url("/client/" . $client->id . "/edit") }}"><button type="button" class="btn btn-xs btn-success">Edit Client</button></a>
+                            @if( $client->canBeClaimed() == true )
+                            <a class="btn btn-xs btn-info" href="{{ url("/clients/" . $client->id . "/claim") }}">Claim Client</a>
+                            @endif
+                                @if( $client->canBeReleased() ==true )
+                            <a class="btn btn-xs btn-warning" href="{{ url("/clients/" . $client->id . "/release") }}">Release Client</a>
+                                @endif
+|
+                            <a href="{{ url("/clients/" . $client->id . "/edit") }}"><button type="button" class="btn btn-xs btn-success">Edit Client</button></a>
                             <button type="submit" class="btn btn-xs btn-danger">Delete Client</button>
                         </div>
                     </div>

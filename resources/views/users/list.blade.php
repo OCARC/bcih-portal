@@ -7,6 +7,7 @@
         <tr>
             <th>Callsign</th>
             <th>User Name</th>
+            <th>Realm</th>
             <th>Organization</th>
             <th>Role</th>
             <th>Equipment</th>
@@ -21,6 +22,15 @@
             <tr>
                 <td><a href="{{url("users/" . $user->id )}}">{{ $user->callsign }}</a></td>
                 <td>{{ $user->name }}</td>
+                <td>
+                    @if( $user->realm == 'local')
+                        Local
+                    @elseif( $user->realm == 'ldap')
+                        LDAP
+                    @else
+                        {{ $user->realm }}
+                    @endif
+                </td>
                 <td>
                         @foreach( $user->roles as $role )
                                 @if($role->category == "Organizations")
@@ -40,7 +50,7 @@
                 <td><a href="{{url("users/" . $user->id ) . "#equipment"}}">{{ count($user->equipment) }}</a></td>
                 <td><a href="{{url("users/" . $user->id ) . "#sites"}}">{{ count($user->sites) }}</a></td>
                 <td><a href="{{url("users/" . $user->id ) . "#clients"}}">{{ count($user->clients) }}</a></td>
-                {{--<td><a href="{{url("users/" . $user->id ) . "#ips"}}">{{ count($user->ips) }}</a></td>--}}
+                <td><a href="{{url("users/" . $user->id ) . "#ips"}}">{{ count($user->ips) }}</a></td>
             </tr>
         @endforeach
         </tbody>

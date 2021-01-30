@@ -44,25 +44,36 @@ class pollEquipment extends Command
         foreach( $equipment as $e) {
             print "Start Polling " . $e->hostname . " (" . $e->management_ip . ")\n";
 
+            print "\t Perform Health Check...\t";
+            $hc_result =      $e->performHealthCheck();
 
-            print "\t Retrieving SNMP Data...\t";
-            $result =      $e->pollSNMP();
-            print $result['status'] . "\n";
+            if ( $hc_result === true ) {
+                print "OK!" . "\n";
 
-
-            if ($e->discover_clients ==1 && $e->os == 'RouterOS') {
-                print "\t Discovering Clients...\t";
-                $result = $e->discoverClients();
+                print "\t Retrieving SNMP Data...\t";
+                $result = $e->pollSNMP();
                 print $result['status'] . "\n";
+                print "\t Pinging Management IP...\t";
+                print $e->pingCheck() . "\n";
+
+
+
+                if ($e->discover_clients ==1 && $e->os == 'RouterOS') {
+                    print "\t Discovering Clients...\t";
+                    $result = $e->discoverClients();
+                    print $result['status'] . "\n";
+
+                }
+            } else {
+                print "Failed - Skipping other polling actions!!!" . "\n";
 
             }
-
-            if ($e->dhcp_server == 1 && $e->os == 'RouterOS') {
-                print "\t Polling DHCP Leases...\t";
-                $result = $e->pollDHCP();
-                print $result['status'] . "\n";
-
-            }
+//            if ($e->dhcp_server == 1 && $e->os == 'RouterOS') {
+//                print "\t Polling DHCP Leases...\t";
+//                $result = $e->pollDHCP();
+//                print $result['status'] . "\n";
+//
+//            }
 
             print "\n\n";
         }

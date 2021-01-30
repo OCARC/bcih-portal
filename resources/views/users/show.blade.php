@@ -27,13 +27,26 @@
 
                 <Table class="table table-responsive table-condensed table-striped table-bordered">
                     <tr>
-                        <th>Name</th>
-                        <td>{{$user->name}}</td>
-                    </tr>
-                    <tr>
                         <th>Callsign</th>
                         <td>{{$user->callsign}}</td>
                     </tr>
+                    <tr>
+                        <th>Realm</th>
+                        <td>
+                            @if( $user->realm == 'local')
+                                Local
+                            @elseif( $user->realm == 'ldap')
+                                LDAP
+                            @else
+                                {{ $user->realm }}
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{$user->name}}</td>
+                    </tr>
+
 
                     <tr>
                         <th>Comment</th>
@@ -42,11 +55,17 @@
                 </table>
 
                 <form method="POST" action="{{ url("/site/" . $user->id . "") }}" accept-charset="UTF-8">
+                    @if( $user->realm == 'ldap')
+                        <div class="alert alert-info">
+                            Some attributes of this user account cannot be managed through this portal and must be managed through LDAP.
+                        </div>
+                    @else
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="_method" value="DELETE"/>
                     <a href="{{ url("/user/" . $user->id . "/edit") }}"><button type="button" class="btn btn-sm btn-success">Edit User</button></a>
 
                     <button type="submit" class="btn btn-sm btn-danger" disabled="true">Delete User</button>
+                    @endif
                 </form>
             </div>
             <div role="tabpanel" class="tab-pane " id="ips">

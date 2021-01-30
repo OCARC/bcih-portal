@@ -43,6 +43,38 @@
                 </select>
             </div>
 
+
+
+
+            <div class="form-group col-md-4">
+                <lable for="name">Line Style</lable>
+                <select name="line_style" class="form-control" >
+                    <option value="solid"  @if( $link->line_style == "solid") selected="true" @endif style="">
+                        Solid
+                    </option>
+                    <option value="dotted"  @if( $link->line_style == "dotted") selected="true" @endif>
+                        Dotted
+                    </option>
+{{--                    <option @if( $link->status == "dashed") selected="true" @endif>--}}
+{{--                        Dashed--}}
+{{--                    </option>--}}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <lable for="name">Line Color</lable>
+                <select name="link_color" class="form-control" >
+                    <option>Auto</option>
+                    <option style="background-color: rgba(255,0,0,0.51);" @if( $link->link_color =='red' )selected="true" @endif value="red">Red</option>
+                    <option style="background-color: rgba(255,165,0,0.51);" @if( $link->link_color =='orange' )selected="true" @endif value="orange">Orange</option>
+                    <option style="background-color: rgba(255,255,0,0.51);" @if( $link->link_color =='yellow' )selected="true" @endif value="yellow">Yellow</option>
+                    <option style="background-color: rgba(0,128,0,0.51);" @if( $link->link_color =='green' )selected="true" @endif value="green">Green</option>
+                    <option style="background-color: rgba(0,0,255,0.51);" @if( $link->link_color =='blue' )selected="true" @endif value="blue">Blue</option>
+                    <option style="background-color: rgba(75,0,130,0.51);" @if( $link->link_color =='indigo' )selected="true" @endif value="indigo">Indigo</option>
+                    <option style="background-color: rgba(238,130,238,0.51);" @if( $link->link_color == 'violet' )selected="true" @endif value="violet">Violet</option>
+                    <option style="background-color: rgba(128,128,128,0.51);" @if( $link->link_color == 'grey' )selected="true" @endif value="grey">Grey</option>
+                    <option style="background-color: rgba(0,0,0,0.51); color: white" @if( $link->link_color == 'black' )selected="true" @endif value="black">Black</option>
+                </select>
+            </div>
         </div>
     </div>
 

@@ -5,7 +5,7 @@
 @section('content')
 
 
-    <h2>Reserved IP Addresses    </h2>
+    <h2>IP Addresses</h2>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active">IP Addresses</li>

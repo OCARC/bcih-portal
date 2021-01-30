@@ -10,20 +10,28 @@
     <h3>Equipment</h3>
     <table class="table sortable table-responsive table-condensed table-striped table-bordered table-hover">
         <thead>
-
+            <th>Device</th>
+        <th>Installed</th>
+        <th>Latest</th>
+        <th>Channel</th>
+        <th>Result</th>
+        <th>Actions</th>
         </thead>
         <tbody>
         @foreach ($equipment as $row)
 
             <tr id="equipment-{{ $row->id }}" class="ajaxAction">
                 <td>
-                    <a href="{{url("equipment/" . $row->id ) }}">{{ ($row->librenms_mapping) ? $row->libre_device['hostname'] : $row->hostname }}</a><br>
-                    {{ ($row->librenms_mapping) ? $row->libre_device['sysName'] : $row->snmp_sysName }}
-
+                    <a href="{{url("equipment/" . $row->id ) }}">{{ $row->hostname  }}</a><br>
                 </td>
                 <td class="version">
-                    {{ ($row->librenms_mapping) ? $row->libre_device['version'] : '-' }}
-
+                    -
+                </td>
+                <td class="latestVersion">
+                    -
+                </td>
+                <td class="channel">
+                    -
                 </td>
                 <td class="output ajaxResult" style="">
 
@@ -32,15 +40,15 @@
                     <div class="ajaxButtons">
                         <button class="btn btn-default btn-checkForUpdates"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/checkForUpdates")}}', updateCheckCallback )">
-                            Check For Updates
+                            Check
                         </button>
                         <button class="btn btn-default btn-warning"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/downloadUpdates")}}', updateCheckCallback)">
-                            Download Updates
+                            Download
                         </button>
                         <button class="btn btn-default btn-danger"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/installUpdates")}}'), updateCheckCallback">
-                            Install Updates
+                            Install
                         </button>
                     </div>
                 </td>
@@ -53,20 +61,29 @@
     <div class="alert alert-danger">DO NOT USE THIS TOOL YET</div>
     <table class="table sortable table-responsive table-condensed table-striped table-bordered table-hover">
         <thead>
-
+        <th>Device</th>
+        <th>Installed</th>
+        <th>Latest</th>
+        <th>Channel</th>
+        <th>Result</th>
+        <th>Actions</th>
         </thead>
         <tbody>
         @foreach ($clients as $row)
 
-            <tr id="equipment-{{ $row->id }}" class="ajaxAction">
+            <tr id="client-{{ $row->id }}" class="ajaxAction">
                 <td>
                     <a href="{{url("client/" . $row->id ) }}">{{ ($row->librenms_mapping) ? $row->libre_device['hostname'] : $row->hostname }}</a><br>
                     {{ ($row->librenms_mapping) ? $row->libre_device['sysName'] : $row->snmp_sysName }}
-
                 </td>
                 <td class="version">
-                    {{ ($row->librenms_mapping) ? $row->libre_device['version'] : '-' }}
-
+                    -
+                </td>
+                <td class="latestVersion">
+                    -
+                </td>
+                <td class="channel">
+                    -
                 </td>
                 <td class="output ajaxResult" style="">
 
@@ -75,15 +92,15 @@
                     <div class="ajaxButtons">
                         <button class="btn btn-default btn-checkForUpdates"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/checkForUpdates")}}', updateCheckCallback )">
-                            Check For Updates
+                            Check
                         </button>
                         <button class="btn btn-default btn-warning"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/downloadUpdates")}}', updateCheckCallback)">
-                            Download Updates
+                            Download
                         </button>
                         <button class="btn btn-default btn-danger"
                                 onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/installUpdates")}}'), updateCheckCallback">
-                            Install Updates
+                            Install
                         </button>
                     </div>
                 </td>
@@ -110,13 +127,6 @@
                     $(target).closest('tr').addClass('success');
                     $(target).closest('tr').find('.ajaxButtons').hide();
 
-                    var rx = /channel:\s(.+)\n/g;
-                    var arr = rx.exec($(target).closest('tr').find('.ajaxResult pre').html());
-                    if (arr) {
-                        $(target).closest('tr').find('.ajaxResult pre').hide();
-                        $(target).closest('tr').find('.ajaxResult').append("<strong>" + arr[1] + "</strong> - System is already up to date");
-                    } else {
-                    }
 
                 } else {
                     $(target).closest('tr').removeClass('success');
@@ -128,17 +138,33 @@
                     $(target).closest('tr').removeClass('warning');
                 }
 
-                var rx = /current-version:\s(.+)\n/g;
+                // Find installed Version
+                var rx = /installed-version:\s(.+)\n/g;
                 var arr = rx.exec($(target).closest('tr').find('.ajaxResult pre').html());
-
                 if (arr) {
                     $(target).closest('tr').find('.version').html(arr[1]);
-
                 } else {
                     $(target).closest('tr').find('.version').html('???');
                 }
 
+                // Find Latest Version
+                var rx = /latest-version:\s(.+)\n/g;
+                var arr = rx.exec($(target).closest('tr').find('.ajaxResult pre').html());
+                if (arr) {
+                    $(target).closest('tr').find('.latestVersion').html(arr[1]);
+                } else {
+                    $(target).closest('tr').find('.latestVersion').html('???');
+                }
 
+                // Find Channel
+                var rx = /channel:\s(.+)\n/g;
+                var arr = rx.exec($(target).closest('tr').find('.ajaxResult pre').html());
+                console.log(data.data);
+                if (arr) {
+                    $(target).closest('tr').find('.channel').html(arr[1]);
+                } else {
+                    $(target).closest('tr').find('.channel').html('???');
+                }
             }
             if (data.status == 'failed') {
                 $(target).closest('tr').addClass('danger');

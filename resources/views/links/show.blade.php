@@ -142,7 +142,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     {{--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>--}}
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDYYYa-Ux3bra8o_52tzUXd2rd_Bvlz4cQ&v=3.exp&libraries=places"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&v=3.exp&libraries=places"></script>
     <link rel="stylesheet" href="style.css" />
     <script src="/js/elevationanalysis.js"></script>
 <script>

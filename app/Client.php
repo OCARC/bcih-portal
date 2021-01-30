@@ -23,6 +23,18 @@ class Client extends Model
     protected $guarded = [];
     use \App\Traits\SSHConnection;
     use \App\Traits\DeviceIcon;
+    use \App\Traits\HealthCheck;
+
+    public function getFriendlyName() {
+        if ( $this->snmp_sysName ) {
+            return $this->snmp_sysName;
+        }
+        if ( $this->mac_address ) {
+            return strtoupper($this->mac_address);
+        }
+
+        return "Unknown " . $this->id;
+    }
 
     public function getHealthColor() {
 
@@ -107,18 +119,9 @@ class Client extends Model
 	if ( $this->snmp_strength == -90 ) { return "rgba( 255, 001, 000, $opacity)"; }
     }
 
-    public function sshResetGain() {
-// Temp function to reset gain
-        // Load management Key
-        $key = \App\User::where('callsign','manage')->first()->rsa_keys->where('publish',1)->first();
 
 
-        $result = $this->executeSSH( 'manage', $key, "/interface wireless set antenna-gain=0 numbers=0") ;
-        return $result;
-
-        }
-
-    /**
+    /**last_heard_class
      * Remotely Update Radio Location Information
      * @return array
      */
@@ -314,6 +317,39 @@ class Client extends Model
 
     }
 
+    /**
+     * return true if this device can be claimed
+     */
+    public function canBeClaimed() {
+
+        if ( $this->user_id == 0 || $this->user_id == 6 ) {
+            return true;
+        }
+        return false;
+    }
+    public function canBeReleased() {
+
+        if ( $this->user_id != 0 && $this->user_id != 6 ) {
+            return true;
+        }
+        return false;
+    }
+    public function user() {
+        // Catch Unowned
+        if ( ! $this->user_id ) {
+            $this->user_id = 0;
+        }
+
+        $user = $this->belongsTo(User::class);
+        if ( $user ) {
+            return $user;
+        } else {
+            return new \App\User();
+        }
+
+
+
+    }
     public function getSNMP( $community = 'hamwan') {
         if ( ! $this->management_ip ) {
             $dhcp = $this->dhcp_lease();
@@ -441,7 +477,7 @@ class Client extends Model
 //        }
     }
 
-    public function get_management_ip() {
+    public function getManagemnetIP() {
         if ( ! $this->management_ip ) {
             $dhcp = $this->dhcp_lease();
             if (!$dhcp) {
@@ -457,7 +493,7 @@ class Client extends Model
 
     public function pollSNMP( $community = 'hamwan') {
 
-        $ip = $this->get_management_ip();
+        $ip = $this->getManagemnetIP();
 
         if ( !$ip ) {
             $result = array();
@@ -576,7 +612,7 @@ public function friendly_name() {
     public function last_heard_class() {
             if( $this->last_heard_ago() >= 60) {
                 return "danger";
-            } elseif( $this->last_heard_ago() >= 6 ) {
+            } elseif( $this->last_heard_ago() >= 11 ) {
                 return "warning";
             } else {
                 return "";

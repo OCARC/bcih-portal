@@ -5,8 +5,8 @@
     <thead>
     <tr>
         <th colspan="2">IP</th>
+        <th>Allocated</th>
         <th>Count</th>
-        <th>Name</th>
         <th>Status</th>
         <th>Group</th>
         <th>Gateway</th>
@@ -22,13 +22,15 @@
 
     @foreach ($subnets as $row)
 <tr>
-<td class="text-right" style="font-family: courier"><a href="{{url("subnets/" . $row->id )}}">{{ $row->ip  }}</a></td><td style="font-family: courier">/{{ $row->CIDR()  }}</td>
+<td class="text-right" style="font-family: courier">
+
+    <a href="{{url("subnets/" . $row->id )}}">{{ $row->ip  }}</a><br>
+    {{ $row->name  }}</td>
+
+    <td style="font-family: courier">/{{ $row->CIDR()  }}</td>
+            <td class="text-right">({{  ceil(($row->countUsed()/$row->count())*100)  }}%) {{ $row->countUsed()  }}</td>
             <td class="text-right">{{ $row->count()  }}</td>
 
-            <td>
-
-    <strong>{{ $row->name  }}</strong><br>
-{{ $row->description  }}&nbsp;</td>
             @if ($row->status == "Subdivided")
                 <td style="vertical-align:middle;background-color: #e1e1e1" sorttable_customkey="{{ $row->status }}">{{ $row->status }}</td>
             @elseif( $row->status == "Planning")

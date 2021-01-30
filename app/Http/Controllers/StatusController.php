@@ -59,7 +59,7 @@ class StatusController extends Controller {
 //                            "STRENGTH" => $client->snmp_strength,
                         "LINK_COLOR" => $link->link_color,
                         "COMMENT" => $link->comments,
-                        "LINESTYLE" => $link->line_style
+                        "LINESTYLE" => $link->line_style,
                     );
                     if ($link->cl_site) {
                         $result['SITES'][$site->id]['COMMENT'] .= "<br>Link to " . $link->cl_site->name;
@@ -226,6 +226,7 @@ class StatusController extends Controller {
                         $icon['client']['fill'] = $client->strengthColor(1);
 
                     }
+
                     $icon['client']['sysName'] = $client->snmp_sysName;
                 }
             }
@@ -256,7 +257,7 @@ class StatusController extends Controller {
 //                                $icon['site']['fill'] = "rgba(255,255,255,1)";
 //
 //                            }
-                                if ($equip->ant_azimuth) {
+                                //if ($equip->ant_azimuth) {
 
                                 if ( strtoupper(substr($equip->hostname, 0, 4)) !== 'RADI' && isset($equip->ant_azimuth)) {
                                     if ($equip->status == 'Installed' || $equip->status == 'Equip Failed' || $equip->status == 'Problems') {
@@ -291,7 +292,7 @@ class StatusController extends Controller {
                                     }
 
                                 }
-                            }
+                            //}
                         }
                     }
 

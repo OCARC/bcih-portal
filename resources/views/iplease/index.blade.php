@@ -4,6 +4,7 @@
 @endsection
 @section('content')
 
+    <span class="alert alert-danger">This page is being depreciated as DHCP leases are now shown in the IP Management pages. It will go away soon.</span>
                     <h2>@yield('title')</h2>
                     <div class="table-responsive">
 

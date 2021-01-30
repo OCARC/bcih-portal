@@ -13,6 +13,7 @@ trait LibreNMS
 
         // create curl resource
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1); //timeout in seconds
 
         // set url
         curl_setopt($ch, CURLOPT_URL, $url . $path);
@@ -44,6 +45,15 @@ trait LibreNMS
 
     public function libreGetHealthList()
     {
+        $r = json_decode($this->api_call("devices/" . $this->librenms_mapping . "/health"), true);
+        if ($r['status'] == 'ok') {
+            return $r['graphs'];
+        } else {
+            return array();
+        }
+    }
+
+    public function libreGetWireless() {
         $r = json_decode($this->api_call("devices/" . $this->librenms_mapping . "/health"), true);
         if ($r['status'] == 'ok') {
             return $r['graphs'];

@@ -29,6 +29,9 @@
             @if ($equipment->os == "RouterOS" or $equipment->os == "EdgeRouter")
             <li role="presentation"><a href="#ospf" aria-controls="tools" role="tab" data-toggle="tab" onClick="$('#ospf .defaultButton').click();">OSPF</a></li>
             @endif
+            @if ($equipment->os == "RouterOS" )
+                <li role="presentation"><a href="#dhcp" aria-controls="tools" role="tab" data-toggle="tab" onClick="$('#dhcp .defaultButton').click();">DHCP</a></li>
+            @endif
             @if ($equipment->os == "RouterOS" or $equipment->os == "Cisco IOS" or $equipment->os == "EdgeRouter")
 
             <li role="presentation"><a href="#ports" aria-controls="ports" role="tab" data-toggle="tab">Ports</a></li>
@@ -108,6 +111,14 @@
                             <label for="name">Owner</label>
                             <p class="form-control-static">
                                 <a href="{{url("users/" . $equipment->user_id )}}">{{ $equipment->user->callsign }}</a>
+                            </p>
+                        </div>
+
+                        <div class="form-group col-xs-4">
+
+                            <label for="name">Last Seen</label>
+                            <p class="form-control-static">
+                                {{ $equipment->last_ping_timestamp }} ({{$equipment->last_ping}}ms)</a>
                             </p>
                         </div>
 
@@ -253,10 +264,10 @@
                 @if( $equipment->librenms_mapping )
                     <?php $wireless = $equipment->libre_query('devices/' . $equipment->librenms_mapping . "/wireless"); ?>
 
-                @if( count($wireless['graphs']))
+                @if( count($wireless['graphs'] ?? [] ))
 
                     <h3>Wireless</h3>
-                    @foreach( $wireless['graphs'] as $graph )
+                    @foreach( $wireless['graphs'] ?? [] as $graph )
                         @if( $graph['name'] == "device_wireless_clients"  )
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -270,10 +281,10 @@
 @endif
 
                 <?php $health = $equipment->libre_query('devices/' . $equipment->librenms_mapping . "/health"); ?>
-                @if( count($health['graphs']))
+                @if( count($health['graphs'] ?? []))
                         <h3>Health</h3>
 
-                    @foreach( $health['graphs'] as $graph )
+                    @foreach( $health['graphs'] ?? [] as $graph )
                     @if( $graph['name'] == 'device_temperature'  )
                                     <?php $temperature = $equipment->libre_query('devices/' . $equipment->librenms_mapping . "/health/" . $graph['name']); ?>
 
@@ -299,10 +310,10 @@
                     @endif
 
                 <?php $ports = $equipment->libre_query('devices/' . $equipment->librenms_mapping . "/ports?columns=ifName,ifType,port_id,ifVlan,ifPhysAddress,ifOperStatus"); ?>
-                    @if( count($ports['ports']))
+                    @if( count($ports['ports'] ?? [] ))
                         <h3>Network Ports</h3>
 
-                @foreach( $ports['ports'] as $port )
+                @foreach( $ports['ports'] ?? [] as $port )
                     @if( $port['ifType'] == 'ethernetCsmacd' or $port['ifType'] == "ieee80211")
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -337,6 +348,9 @@
                 {{--@endforeach--}}
             </div>
             @include('equipment.parts.tabTools')
+            @if ($equipment->os == "RouterOS" )
+                @include('equipment.parts.tabDHCP')
+            @endif
             @if ($equipment->os == "RouterOS" or $equipment->os == "EdgeRouter")
                 @include('equipment.parts.tabOSPF')
             @endif

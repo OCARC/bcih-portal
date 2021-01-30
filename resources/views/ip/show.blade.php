@@ -13,36 +13,134 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#ipInfo" aria-controls="ipInfo" role="tab" data-toggle="tab">ip Info</a></li>
-            <li role="presentation"><a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab">IP Addresses</a></li>
+            <li role="presentation" class="active"><a href="#ipInfo" aria-controls="ipInfo" role="tab" data-toggle="tab">IP Info</a></li>
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="ipInfo">
 
-                <Table class="table table-responsive table-condensed table-striped table-bordered">
-                    <tr>
-                        <th>Name</th>
-                        <td>{{$ip->name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td>{{$ip->description}}</td>
-                    </tr>
-                    <tr>
-                        <th>Address</th>
-                        <td>{{$ip->ip}}</td>
-                    </tr>
-                    <tr>
-                        <th>Netmask</th>
-                        <td>{{$ip->netmask}}</td>
-                    </tr>
-                    <tr>
-                        <th>Routed To</th>
-                        <td>{{$ip->netmask}}</td>
-                    </tr>
-                </table>
+
+                <form method="POST" action="{{ url("/equipment/" . $ip->id . "") }}" accept-charset="UTF-8">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            IP Address Information
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="form-group col-xs-4">
+                                    <label for="name">Name</label>
+                                    <p class="form-control-static">{{ $ip->name }}</p>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label for="name">IP</label>
+                                    <p class="form-control-static">{{ $ip->ip }}</p>
+
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label for="name">MAC Address</label>
+                                    <p class="form-control-static">{{ implode(":",str_split(strtoupper($ip->mac_address),2)) }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group col-xs-4">
+                                    <label for="name">Equipment</label>
+                                    @if ( $ip->equipment )
+                                    <a href="{{url("equipment/" . $ip->equipment_id )}}">{{ $ip->equipment->name }}</a>
+                                        @else
+                                        <p class="form-control-static">not assigned</p>
+                                    @endif
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label for="name">Subnet Mask</label>
+                                    <p class="form-control-static">{{$ip->netmask or 'not set'}}</p>
+                                </div>
+                                <div class="form-group col-xs-4">
+                                    <label for="name">Gateway</label>
+                                    <p class="form-control-static">{{$ip->gateway or 'not set'}}</p>
+                                </div>
+                                </div>
+                            <div class="row">
+
+                                <div class="form-group col-xs-4">
+                                    <label for="name">Status</label>
+                                    <p  class="form-control-static">
+                                        @if ($ip->status == "Subdivided")
+                                            <span style="vertical-align:middle;background-color: #e1e1e1">{{ $ip->status }}</span>
+                                        @elseif( $ip->status == "Planning")
+                                            <span style="vertical-align:middle;background-color: #fff6a6">{{ $ip->status }}</span>
+                                        @elseif( $ip->status == "In Use")
+                                            <span style="vertical-align:middle;background-color: #aaffaa">{{ $ip->status }}</span>
+                                        @elseif( $ip->status == "Do Not Use")
+                                            <span style="vertical-align:middle;background-color: #ff6666">{{ $ip->status }}</span>
+                                        @elseif( $ip->status == "Routing Problem")
+                                            <span style="vertical-align:middle;background-color: #ffd355">{{ $ip->status }}</span>
+                                        @elseif( $ip->status == "NOT ASSIGNED")
+                                            <span style="vertical-align:middle;background-color: #979797">{{ $ip->status }}</span>
+                                        @else
+                                            <span style="vertical-align:middle;">{{ $ip->status }}</span>
+                                        @endif
+
+                                    </p>
+                                </div>
+
+
+                            <div class="form-group col-xs-4">
+
+                                <label for="name">Site</label>
+                                <p class="form-control-static">
+                                    <a href="{{url("/site/" . $ip->site_id ) }}">{{$ip->site['name'] }}
+                                        ({{$ip->site['sitecode'] }})</a>
+                                </p>
+                            </div>
+                            <div class="form-group col-xs-4">
+
+                                <label for="name">Owner</label>
+                                <p class="form-control-static">
+                                    <a href="{{url("users/" . $ip->user_id )}}">{{ $ip->user->callsign }}</a>
+                                </p>
+                            </div>
+                            </div>
+
+                            <div class="row">
+                            <div class="form-group col-xs-6">
+
+                                <label for="name">Description (public)</label>
+                                <p class="form-control-static">
+                                    {{ $ip->description or "nil" }}
+                                </p>
+                            </div>
+                            <div class="form-group col-xs-6">
+
+                                <label for="name">Comments</label>
+                                <p class="form-control-static">
+                                    {{ $ip->comment or "nil" }}
+                                </p>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+
+                            <a href="{{ url("/ips/" . $ip->id . "/edit") }}"><button type="button" class="btn btn-xs btn-success">Edit IP</button></a>
+                            <button type="submit" class="btn btn-xs btn-danger">Delete IP</button>
+                        </div>
+                    </div>
+
+                    {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+                    {{--<input type="hidden" name="_method" value="DELETE"/>--}}
+                    {{--<a href="{{ url("/equipment/" . $equipment->id . "/edit") }}">--}}
+                    {{--<button type="button" class="btn btn-sm btn-success">Edit Equipment</button>--}}
+                    {{--</a>--}}
+
+                    {{--<button type="submit" class="btn btn-sm btn-danger">Delete Equipment</button>--}}
+                </form>
+
+
+
 
                 <form method="POST" action="{{ url("/ips/" . $ip->id . "") }}" accept-charset="UTF-8">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -54,33 +152,7 @@
                     <button type="button" class="btn btn-sm btn-danger">Delete ip</button>
                 </form>
             </div>
-            <div role="tabpanel" class="tab-pane" id="addresses">
 
-                {{--@include('equipment.list', ['equipment' => $user->equipment ])--}}
-
-            </div>
-
-            <div role="tabpanel" class="tab-pane" id="clients">
-
-                {{--@include('clients.list', ['clients' => $user->clients ])--}}
-
-            </div>
-            {{--<div role="tabpanel" class="tab-pane" id="sites">--}}
-
-                {{--@include('site.list', ['sites' => $user->sites ])--}}
-
-            {{--</div>--}}
-
-            {{--<div role="tabpanel" class="tab-pane" id="graphs">--}}
-                {{--@foreach( $user->equipment as $equipment )--}}
-                    {{--<h3>{{$equipment->hostname}} Graphs</h3>--}}
-                    {{--@foreach( $equipment->graphs as $graph )--}}
-                        {{--<img src="{{$graph->url(2)}}" style="width: 48%; min-width: 300px;">--}}
-                    {{--@endforeach--}}
-                {{--@endforeach--}}
-            {{--</div>--}}
-
-            {{--<div role="tabpanel" class="tab-pane" id="tools">...</div>--}}
         </div>
 
     </div>

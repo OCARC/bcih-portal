@@ -70,7 +70,7 @@
 
             <div class="form-group col-md-6">
                 <lable for="mac_address">MAC Address</lable>
-                <input type="text" name="mac_address" class="form-control" value="{{ $ip->mac_address }}">
+                <input type="text" name="mac_address" class="form-control" value="{{ implode(":",str_split(strtoupper($ip->mac_address),2)) }}">
 
             </div>
 
@@ -163,6 +163,12 @@
                     </option>
                     <option @if( $ip->dns_zone == "cl.hamwan.ca.") selected="true" @endif value="cl.hamwan.ca." >
                         .cl.hamwan.ca.
+                    </option>
+                    <option @if( $ip->dns_zone == "if.ocarc.ca.") selected="true" @endif value="if.ocarc.ca." >
+                        .if.ocarc.ca.
+                    </option>
+                    <option @if( $ip->dns_zone == "cl.ocarc.ca.") selected="true" @endif value="cl.ocarc.ca." >
+                        .cl.ocarc.ca.
                     </option>
                 </select></div>
             </div>

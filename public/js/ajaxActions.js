@@ -45,6 +45,8 @@ function ajaxAction( target, url, callback ) {
 
         $(target).closest('.ajaxButtons').show();
 
-        callback(target,data);
+        if ( callback ) {
+            callback(target,data);
+        }
     });
 }

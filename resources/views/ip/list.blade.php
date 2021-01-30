@@ -33,22 +33,22 @@
     <table class="table sortable table-responsive table-condensed table-striped table-bordered table-hover">
 
         <thead>
-        <tr>
+        <tr >
             <th>IP</th>
             <th>Hostname</th>
             <th class="text-center"><a href="#" onclick="pingAll();" class="btn btn-xs btn-default">Ping</a></th>
             <th class="text-center">DNS</th>
-            <th>MAC</th>
+            <th style="    width: 128px;">MAC</th>
 
             {{--<th>Gateway</th>--}}
             {{--<th>Netmask</th>--}}
             <th>Descriptive Name</th>
             <th class="text-center">Group</th>
             <th class="text-center">DHCP</th>
-            <th>Client</th>
-            <th>Equipment</th>
+            <th>Expires</th>
+            <th>-</th>
             <th class="text-center">Site</th>
-            <th class="text-center">User</th>
+{{--            <th class="text-center">User</th>--}}
 
             {{--<th>Uptime</th>--}}
             {{--<th>Last Queried</th>--}}
@@ -56,16 +56,38 @@
         </thead>
         <tbody>
         @foreach ($ips as $row)
-            <tr>
+            <tr class="@if($row->type =='dhcp')info @endif ">
                 <td sorttable_customkey="{{ ip2long($row->ip) }}">
-                    @if ($row->id)
-                        <a href="{{url("ips/" . $row->id )}}">{{ $row->ip  }}</a>
+
+                    @if( $row->type =='dhcp')
+                        <span class="mdi mdi-ip">&nbsp;</span>{{ $row->ip  }}
                     @else
-                        {{ $row->ip  }}
+                    @if ($row->id)
+                        <span class="mdi mdi-ip">&nbsp;</span><a href="{{url("ips/" . $row->id )}}">{{ $row->ip  }}</a>
+                    @else
+                        <span class="mdi mdi-ip">&nbsp;</span>{{ $row->ip  }}
+                    @endif
                     @endif
 
                 </td>
-                <td><span style="font-weight: bold;">{{$row->hostname}}</span>.{{$row->dns_zone}}</td>
+                <td><span style="font-weight: bold;">{{$row->hostname}}</span>.{{$row->dns_zone}}
+
+                    @if ( $row->equipment )
+                        <a href="{{url("equipment/" . $row->equipment->id )}}">(E)</a>
+                    @else
+
+                    @endif
+
+                    @if ( $row->dhcp_lease() )
+                        @if ( $row->dhcp_lease()->client() )
+                            <a href="{{url("clients/" . $row->dhcp_lease()->client()->id )}}">(C)</a>
+                        @else
+
+                        @endif
+                    @else
+
+                    @endif
+                </td>
                 <td  class="text-center">
                     <a href="#" class="pingButton" host="{{ $row->ip  }}" onClick="pingHost(this,'{{ $row->ip  }}')" class="btn btn-xs btn-default">Ping</a>
                 </td>
@@ -81,7 +103,7 @@
                         <span class="label label-default">{{ $row->dns }}</span>
                     @endif
                 </td>
-                <td>{{ implode(":",str_split(strtoupper($row->mac_address),2)) }}</td>
+                <td class="font-family: monospace">{{ implode(":",str_split(strtoupper($row->mac_address),2)) }}</td>
 
                 {{--<td sorttable_customkey="{{ ip2long($row->gateway) }}">{{$row->gateway}}</td>--}}
                 {{--<td sorttable_customkey="{{ ip2long($row->netmask) }}">{{$row->netmask}}</td>--}}
@@ -117,39 +139,33 @@
                 </td>
 
                 <td style="text-align: center; vertical-align:middle">
-                    @if ( $row->dhcp )
-                        @if ( $row->dhcp_lease() )
-                            <span class="label label-info">In Use</span><br>
-                        @else
-                            <span class="label label-success">Yes</span><br>
-                        @endif
-                    @elseif ( $row->dhcp == "No" )
+{{--                    @if ( $row->dhcp )--}}
+{{--                        @if ( $row->dhcp_lease() )--}}
+{{--                            <span class="label label-info">In Use</span><br>--}}
+{{--                        @else--}}
+{{--                            <span class="label label-success">Yes</span><br>--}}
+{{--                        @endif--}}
+{{--                    @elseif ( $row->dhcp == "No" )--}}
 
-                        <span class="label label-danger">No</span>
+{{--                        <span class="label label-danger">No</span>--}}
+{{--                    @endif--}}
+                    @if ( $row->type == 'dhcp')
+                                                <span class="label label-info">Yes</span>
                     @endif
                 </td>
 
-                <td>
-
-                    @if ( $row->dhcp_lease() )
-                        @if ( $row->dhcp_lease()->client() )
-                            <a href="{{url("clients/" . $row->dhcp_lease()->client()->id )}}">{{$row->dhcp_lease()->client()->snmp_sysName}}</a>
-                        @else
-                            -
-                        @endif
+                <td class="text-right">
+                    @if ( $row->type == 'dhcp')
+                    @if( $row->dhcp_expires === -1 )
+                        Reserved
                     @else
-                        -
+                    {{ $row->dhcp_expires - time() }} s
                     @endif
-
+                        @endif
                 </td>
                 <td>
 
-                    @if ( $row->equipment )
-                        <a href="{{url("equipment/" . $row->equipment->id )}}">{{$row->equipment->hostname}}</a>
-                    @else
-                        -
 
-                    @endif
 
                 </td>
                 <td class="text-center" style="vertical-align:middle;">
@@ -159,13 +175,13 @@
                         -
                     @endif
                 </td>
-                <td class="text-center" style="vertical-align:middle;">
-                    @if ($row->user)
-                        <a href="{{url("users/" . $row->user_id )}}">{{ $row->user->callsign }}</a>
-                    @else
-                        -
-                    @endif
-                </td>
+{{--                <td class="text-center" style="vertical-align:middle;">--}}
+{{--                    @if ($row->user)--}}
+{{--                        <a href="{{url("users/" . $row->user_id )}}">{{ $row->user->callsign }}</a>--}}
+{{--                    @else--}}
+{{--                        ---}}
+{{--                    @endif--}}
+{{--                </td>--}}
 
             </tr>
         @endforeach

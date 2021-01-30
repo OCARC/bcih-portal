@@ -16,6 +16,9 @@
 //    return view('welcome');
 //});
 
+
+
+
 Route::get('/', 'HomeController@index');
 //
 Route::post('site', 'SiteController@store');
@@ -49,6 +52,7 @@ Route::post('ips', 'IPController@store')->middleware('auth');
 
 Route::get('ips', 'IPController@index')->middleware('auth');
 Route::get('ips/create', 'IPController@create')->middleware('auth');
+Route::get('ips/rebuild-dns', 'IPController@rebuildDNS')->middleware('auth');;
 
 Route::get('ips/{ip}', 'IPController@show')->middleware('auth');
 Route::get('ips/{ip}/edit', 'IPController@edit')->middleware('auth');;
@@ -62,6 +66,22 @@ Route::get('links/{link}/edit', 'PtpLinkController@edit')->middleware('auth');
 
 Route::get('graphs', 'GraphController@index')->middleware('auth');
 Route::get('graphs/create', 'GraphController@create')->middleware('auth');
+
+
+
+Route::post('dns-zones', 'DNSZoneController@store')->middleware('auth');
+Route::get('dns-zones', 'DNSZoneController@index')->middleware('auth');
+Route::get('dns-zones/create', 'DNSZoneController@create')->middleware('auth');
+
+Route::get('dns-zones/{dnszone}', 'DNSZoneController@show')->middleware('auth');
+Route::get('dns-zones/{dnszone}/edit', 'DNSZoneController@edit')->middleware('auth');
+
+Route::post('dns-records', 'DNSRecordController@store')->middleware('auth');
+Route::get('dns-records', 'DNSRecordController@index')->middleware('auth');
+Route::get('dns-records/create', 'DNSRecordController@create')->middleware('auth');
+
+Route::get('dns-records/{dnsrecord}', 'DNSRecordController@show')->middleware('auth');
+Route::get('dns-records/{dnsrecord}/edit', 'DNSRecordController@edit')->middleware('auth');
 
 
 //
@@ -90,6 +110,10 @@ Route::get('equipment/{equipment}/denkovi/current_state.json', 'EquipmentControl
 Route::get('equipment/{equipment}/{method}', 'EquipmentController@showAjax')->middleware('auth');
 //
 
+
+Route::get('ldap', 'LDAPController@index');
+
+
 Route::get('users', 'UserController@index');
 
 Route::get('users/{user}', 'UserController@show');
@@ -107,11 +131,16 @@ Route::get('clients', 'ClientController@index');
 Route::get('clients/refresh', 'ClientController@refresh');
 
 Route::get('clients/{client}', 'ClientController@show');
+Route::group(['middleware' => ['role:user']], function () {
+
+    Route::get('clients/{client}/claim', 'ClientController@claim');
+    Route::get('clients/{client}/release', 'ClientController@release');
+});
 
 Route::group(['middleware' => ['role:network_operator']], function () {
 
     Route::get('clients/{client}/snmp', 'ClientController@showSNMP');
-    Route::get('client/{client}/edit', 'ClientController@edit')->middleware('auth');;
+    Route::get('clients/{client}/edit', 'ClientController@edit')->middleware('auth');;
 });
 Route::get('clients/{client}/{method}', 'ClientController@showAjax')->middleware('auth');
 //
@@ -130,6 +159,9 @@ Route::get('static-ip', 'StaticLeaseController@index');
 Route::get('static-ip/refresh', 'StaticLeaseController@refresh');
 //
 //
+
+
+
 Route::get('coverages/{site}-{direction}-{clientGain}.png', 'CoverageController@getImage');
 Route::get('coverages/{site}-{direction}-{clientGain}.json', 'CoverageController@getGeoJSON');
 Route::get('coverages/{site}-{direction}-{clientGain}.topo.json', 'CoverageController@getTopoJSON');
@@ -144,6 +176,7 @@ Route::get('keys/{key}', 'RsaKeyController@show');
 
 Route::get('status.json', 'StatusController@index');
 Route::get('status/icon/{type}.svg', 'StatusController@icon');
+Route::get('status/coverage/{type}.svg', 'StatusController@icon');
 
 Route::get('utilities/recache-coverages', 'UtilitiesController@recacheCoverages');
 Route::get('utilities/routeros-upgrade-manager', 'UtilitiesController@routerOSUpgradeManager');

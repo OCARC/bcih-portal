@@ -39,6 +39,28 @@
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
+
+                        <div class="form-group{{ $errors->has('callsign') ? ' has-error' : '' }}">
+                            <label for="callsign" class="col-md-4 control-label">Realm</label>
+
+                            <div class="col-md-6">
+                                <select id="realm" type="text" class="form-control" name="realm" required>
+                                    @if( env('APP_LOCAL_AUTH_ENABLED','false') === true )
+                                    <option value="local">Local Authentication</option>
+                                    @endif
+                                    @if( env('APP_LDAP_AUTH_ENABLED','false') === true )
+                                    <option @if( env('APP_LDAP_DEFAULT_REALM',true) === true ) selected="yes" @endif value="ldap">LDAP Authentication</option>
+                                    @endif
+                                </select>
+
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('realm') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('callsign') ? ' has-error' : '' }}">
                             <label for="callsign" class="col-md-4 control-label">Callsign</label>
 
@@ -56,7 +78,7 @@
 
 
 
-                        <div class="useKey form-group{{ $errors->has('file') ? ' has-error' : '' }}">
+                        <div class="useKey form-group{{ $errors->has('file') ? ' has-error' : '' }}" style="display: none">
                             <label for="password" class="col-md-4 control-label">Private Key File</label>
 
                             <div class="col-md-6">
@@ -71,7 +93,7 @@
                             </div>
                         </div>
 
-                        <div class="usePassword form-group{{ $errors->has('password') ? ' has-error' : '' }}" style="display: none">
+                        <div class="usePassword form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
@@ -85,28 +107,7 @@
                                 @endif
                             </div>
                         </div>
-                        {{--<div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">--}}
-                            {{--<label for="password" class="col-md-4 control-label">Key</label>--}}
 
-                            {{--<div class="col-md-6">--}}
-                                {{--<input id="key" type="file" class="form-control" name="password" required>--}}
-
-                                {{--@if ($errors->has('key'))--}}
-                                    {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('key') }}</strong>--}}
-                                    {{--</span>--}}
-                                {{--@endif--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<div class="col-md-6 col-md-offset-4">--}}
-                                {{--<div class="checkbox">--}}
-                                    {{--<label>--}}
-                                        {{--<input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
 
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
@@ -116,15 +117,15 @@
 
 
 
-                                <a class="useKey btn btn-link" href="#" onclick="jQuery('.usePassword').show();jQuery('.useKey').hide();">
+                                <a class="useKey btn btn-link" href="#" onclick="jQuery('.usePassword').show();jQuery('.useKey').hide();"  style="display: none">
                                     Use password to login
                                 </a>
 
-                                <a class="usePassword btn btn-link" href="#" onClick="jQuery('.usePassword').hide();jQuery('.useKey').show();" style="display: none">
+                                <a class="usePassword btn btn-link" href="#" onClick="jQuery('.usePassword').hide();jQuery('.useKey').show();">
                                     Use key to login
                                 </a>
 
-                                <a class="usePassword btn btn-link" href="{{ route('password.request') }}"  style="display: none">
+                                <a class="usePassword btn btn-link" href="{{ route('password.request') }}" >
                                     Forgot Your Password?
                                 </a>
                             </div>

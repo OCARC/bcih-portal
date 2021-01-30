@@ -27,7 +27,9 @@ class EquipmentController extends Controller
 
         //
         //
-        $equipment = Equipment::all();
+        $equipment = Equipment::all()->sortByDesc(function($eq) {
+            return [$eq->site_id, $eq->hostname];
+        });
         if ( request('json') ) {
             return $equipment;
         } else {
@@ -174,7 +176,9 @@ class EquipmentController extends Controller
         if ($method == "discoverClients") {
             $r =$equipment->discoverClients();
         }
-
+        if ($method == "fetchDHCPLeases") {
+            $r =$equipment->pollDHCP();
+        }
         if ($method == "pollSNMP") {
             $r =$equipment->pollSNMP();
             $r =  array('status' => 'complete', 'method'=> 'pollSNMP', 'reason' => '', 'data' => $r);

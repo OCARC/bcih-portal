@@ -23,7 +23,7 @@
 
             </td>
 
-            <td style="height: 50px; background-repeat: no-repeat; background-position:center; background-size: auto 38px; background-image: url('http://portal.hamwan.ca/status/icon/site.svg?siteID={{$row->id}}')">
+            <td style="height: 50px; background-repeat: no-repeat; background-position:center; background-size: contain; background-image: url('http://portal.hamwan.ca/status/icon/site.svg?siteID={{$row->id}}')">
 
             <td><a href="{{ url("site/" . $row->id ) }}">{{ $row->name }}</td>
             <td>{{ $row->sitecode }}</td>

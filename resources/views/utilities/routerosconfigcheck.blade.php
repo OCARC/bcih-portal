@@ -66,7 +66,7 @@
                 "name": "SNMP",
                 "description": "SNMP Config",
                 "require-regex": [
-                    /\/snmp community\nset (\[ find default=yes \] )*addresses=\d+.0.0.0\/0 name=hamwan/gm,
+                    /\/snmp community\r\nset (\[ find default=yes \] )*addresses=\d+.0.0.0\/0 name=hamwan/gm,
                 ],
                 "disallow-regex": [],
                 "failResult" : '&#9888;',
@@ -74,7 +74,30 @@
                 "passResult" : '&#10004;',
                 "passResultClass" : 'success',
             },
-
+            'radius': {
+                "name": "Radius",
+                "description": "Radius Config",
+                "require-regex": [
+                    /add address=44.135.217.99 secret=AmprNET service=login/gm,
+                ],
+                "disallow-regex": [],
+                "failResult" : '&#9888;',
+                "failResultClass" : 'warning',
+                "passResult" : '&#10004;',
+                "passResultClass" : 'success',
+            },
+            'boot-device' : {
+                "name": "Netboot",
+                "description": "Network Boot Enabled",
+                "require-regex": [
+                    /set boot-device=try-ethernet-once-then-nand/gm,
+                ],
+                "disallow-regex": [],
+                "failResult" : '&#128293;',
+                "failResultClass" : 'danger',
+                "passResult" : '&#10004;',
+                "passResultClass" : 'success',
+            }
         }
 
 
@@ -112,7 +135,7 @@
             <td  style="">
                 <div class="ajaxButtons">
                 <button class="btn btn-default btn-checkConfig"
-                        onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/fetchConfig")}}', checkConfigCallback )">
+                        onClick="ajaxAction(this,'{{url('equipment/' . $row->id . "/fetchConfig")}}?strip=1', checkConfigCallback )">
                     Check Config
                 </button>
                 </div>
@@ -168,7 +191,7 @@ var re;
 
                     var config = $(target).closest('tr').find('td.ajaxResult pre').text();
 
-                    var r = re.exec(config);
+                    var r = re.exec(data.data);
                     if ( r ) {
                         requireCount++;
                     }

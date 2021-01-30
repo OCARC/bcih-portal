@@ -8,6 +8,7 @@ trait DeviceIcon
     public function icon() {
 
         $model = ( $this->radio_model != "" ) ? $this->radio_model : $this->snmp_sysDesc;
+        $ant_model = $this->ant_model;
 
         $model = str_replace("RouterOS ", "" ,$model);
 
@@ -34,6 +35,10 @@ trait DeviceIcon
 
         if ( file_exists( public_path("/images/device-icons/" . $model. ".svg"))) {
             return url("/images/device-icons/" .  $model . ".svg");
+
+        }
+        if ( file_exists( public_path("/images/device-icons/" . $model. "-" . $ant_model . "-200x200.png"))) {
+            return url("/images/device-icons/" .  $model . "-" . $ant_model . "-200x200.png");
 
         }
         if ( file_exists( public_path("/images/device-icons/" . $model. "-200x200.png"))) {

@@ -27,7 +27,7 @@
 
                                 <div class="input-group col-md-4" style="max-width:250px">
                                     <input type="text" class="form-control" id="authSerialIP"
-                                           value="{{ ( $_SERVER['HTTP_X_FORWARDED_FOR'] )  ?  $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] }}">
+                                           value="{{ ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )  ?  $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'] }}">
                                     <div class="input-group-btn">
                                         <button class="btn btn-default btn-success"
                                                 onClick="ajaxAction(this,'{{url('equipment/' . $equipment->id . "/authorizeSerialIP")}}?ip=' + jQuery('#authSerialIP').val() )">

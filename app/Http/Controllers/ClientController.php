@@ -22,7 +22,7 @@ class ClientController extends Controller
     public function index()
     {
 
-        $clients = Client::all()->where("type", "client")->sortBy("site_id");
+        $clients = Client::all()->where("type", "client")->sortBy("hc_ping_result",SORT_REGULAR,true);
 //        if ( $request->json ) {
 //            return $users;
 //        } else {
@@ -159,6 +159,23 @@ class ClientController extends Controller
 
     }
 
+    /**
+     * Provide interface to claim device with serial number
+     * @param Client $client
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function claim(Client $client)
+    {
+
+        if ( $client->canBeClaimed() != true ) {
+            session()->flash('msg', 'This client has already been claimed. It must be released by the current owner before you can claim it.');
+            return redirect("/clients/" . $client->id);
+
+        }
+
+        return view('clients.claim', ['client' => $client]);
+
+    }
     public function showSNMP(Client $client)
     {
         //

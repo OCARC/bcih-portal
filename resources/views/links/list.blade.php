@@ -14,12 +14,12 @@
             <th>AP Equipment</th>
             <th style="text-align: center;">Client<br>Site</th>
             <th>Client Equipment</th>
-            <th>Signal</th>
-            <th>SNR</th>
-            <th></th>
-            <th>Rates</th>
-            <th>CH0</th>
-            <th>CH1</th>
+{{--            <th>Signal</th>--}}
+{{--            <th>SNR</th>--}}
+{{--            <th></th>--}}
+{{--            <th>Rates</th>--}}
+{{--            <th>CH0</th>--}}
+{{--            <th>CH1</th>--}}
         </tr>
         </thead>
         <tbody>
@@ -27,6 +27,10 @@
             <tr>
 
                 <td>
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="height: 1em; width: 1em">
+                        <line x1="0" y1="20" x2="20" y2="0" style=";stroke-width:3" stroke="{{$row->link_color or 'black'}}" @if ( $row->line_style == 'dotted')stroke-dasharray="3, 4" @endif ></line>
+
+                    </svg>
                     <a href="/links/{{$row->id}}">{{ $row->name }}</a><br>
                     {{ $row->comments }}
                 </td>
@@ -82,30 +86,30 @@
                         <div class="text-muted small">{{ $row->cl_equipment->radio_model }}</div>
                         @endif
                 </td>
-                <td>
-                    @if( $row->cl_equipment )
-                        {{ $row->cl_equipment->snmp_signal_to_noise }}
-                    @endif
-                </td>
-                <td>
-                    -
-                </td>
-                <td class="text-right" style="font-weight: bold;">
-                    TX<br>
-                    RX
-                </td>
-                <td>
-                    {{ number_format($row->tx_speed()/1000000,1) }} Mbps<br>
-                    {{ number_format($row->rx_speed()/1000000,1) }} Mbps<br>
-                </td>
-                <td>
-                    @if( $row->cl_equipment )
-                        {{ $row->cl_equipment->snmp_signal_to_noise }}
-                    @endif
-                </td>
-                <td>
-                    -
-                </td>
+{{--                <td>--}}
+{{--                    @if( $row->cl_equipment )--}}
+{{--                        {{ $row->cl_equipment->snmp_signal_to_noise }}--}}
+{{--                    @endif--}}
+{{--                </td>--}}
+{{--                <td>--}}
+{{--                    ---}}
+{{--                </td>--}}
+{{--                <td class="text-right" style="font-weight: bold;">--}}
+{{--                    TX<br>--}}
+{{--                    RX--}}
+{{--                </td>--}}
+{{--                <td>--}}
+{{--                    {{ number_format($row->tx_speed()/1000000,1) }} Mbps<br>--}}
+{{--                    {{ number_format($row->rx_speed()/1000000,1) }} Mbps<br>--}}
+{{--                </td>--}}
+{{--                <td>--}}
+{{--                    @if( $row->cl_equipment )--}}
+{{--                        {{ $row->cl_equipment->snmp_signal_to_noise }}--}}
+{{--                    @endif--}}
+{{--                </td>--}}
+{{--                <td>--}}
+{{--                    ---}}
+{{--                </td>--}}
 
             </tr>
         @endforeach

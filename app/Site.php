@@ -15,7 +15,7 @@ class Site extends Model
         'comments'
     ];
     public function clients() {
-        return $this->hasMany(Client::class)->orderBy('radio_name');
+        return $this->hasMany(Client::class)->orderByDesc("hc_ping_result");;
     }
 
     public function ptplinks() {

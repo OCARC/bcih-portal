@@ -33,7 +33,7 @@ class Subnet extends Model
 
 
     }
-    public function ips() {
+    public function ips( $onlyAssigned = false) {
         //$records = $this->hasMany(IP::class)->orderBy('ip');
 
 
@@ -49,7 +49,7 @@ class Subnet extends Model
         foreach( $ips as $ip_address ) {
 
             $ip = $db_ips->where('ip', $ip_address)->first();
-            $lease = $db_leases->where('ip', $ip_address)->first();
+           // $lease = $db_leases->where('ip', $ip_address)->first();
 
             if ( $ip ) {
                 if ( !  $ip->category  ) {
@@ -58,37 +58,38 @@ class Subnet extends Model
 
             } else {
 
-                if ( count( $ips) <= 256 || $lease ) {
+                //if ( count( $ips) <= 256 || $lease ) {
+                if ( count( $ips) <= 256 && $onlyAssigned === false ) {
                     $ip = new IP();
                     $ip->ip = $ip_address;
 
                 }
             }
 
-            if ( count( $ips) <= 256 || $lease ) {
-
-                if ($lease) {
-                    if ($lease->ttl() >= 0) {
-                        $ip->mac_address = $lease->mac_address;
-                        $ip->dhcp = "Yes";
-                        if (!$ip->category) {
-                            $ip->category = "Leased";
-                        }
-
-                        if (!$ip->hostname) {
-                            $ip->hostname = $lease->mac_address;
-
-                            if ( $lease->client() ) {
-                                if ($lease->client()->snmp_sysName) {
-                                    $ip->hostname = preg_replace("/[^A-Za-z0-9\.\-\_]/", '-', $lease->client()->snmp_sysName);
-                                }
-                            }
-                            $ip->dns_zone = "cl.hamwan.ca.";
-                        }
-
-                    }
-                }
-            }
+//            if ( count( $ips) <= 256 || $lease ) {
+//
+//                if ($lease) {
+//                    if ($lease->ttl() >= 0) {
+//                        $ip->mac_address = $lease->mac_address;
+//                        $ip->dhcp = "Yes";
+//                        if (!$ip->category) {
+//                            $ip->category = "Leased";
+//                        }
+//
+//                        if (!$ip->hostname) {
+//                            $ip->hostname = $lease->mac_address;
+//
+//                            if ( $lease->client() ) {
+//                                if ($lease->client()->snmp_sysName) {
+//                                    $ip->hostname = preg_replace("/[^A-Za-z0-9\.\-\_]/", '-', $lease->client()->snmp_sysName);
+//                                }
+//                            }
+//                            $ip->dns_zone = "cl.hamwan.ca.";
+//                        }
+//
+//                    }
+//                }
+//            }
             if ( $ip ) {
 
                 $result->add($ip);
@@ -147,6 +148,10 @@ return  $this->mask2cidr( $this->netmask );
     }
 
     public function count() {
+
            return count($this->getEachIpInRange( $this->ip . "/" . $this->CIDR() ));
+    }
+    public function countUsed() {
+        return count($this->ips( true ) );
     }
 }

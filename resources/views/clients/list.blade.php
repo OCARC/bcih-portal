@@ -4,7 +4,7 @@
 
     <thead>
     <tr>
-        <th style="width: 25px"><span class="glyphicon glyphicon-info-sign"></span></th>
+        <th style="width: 50px">Ping</th>
         <th style="width: 50px"></th>
         <th>Radio Name</th>
         <th>Address</th>

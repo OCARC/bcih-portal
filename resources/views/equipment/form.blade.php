@@ -89,6 +89,16 @@
                     not be able to access the device anymore.</p>
 
             </div>
+
+            <div class="form-group col-md-6">
+                <label for="name">Health Indicator Type</label>
+                <select name="health_from" class="form-control">
+                    <option value="">Disabled</option>
+                    <option @if ($equipment->health_from == "snmp") selected="true" @endif v value="snmp">from SNMP timestamp</option>
+                    <option @if ($equipment->health_from == "icmp") selected="true" @endif v value="icmp">from Ping timestamp</option>
+
+                </select>
+            </div>
         </div>
     </div>
 
@@ -159,9 +169,10 @@
                         <input type="number" step="0.01" name="ant_tilt" class="form-control"
                                value="{{ $equipment->ant_tilt }}">
                         <div class="input-group-addon">&deg;</div>
-                        <p class="help-block">Positive valeus reflect downwards tilt.</p>
 
                     </div>
+                    <p class="help-block">Positive values reflect downwards tilt.</p>
+
                 </div>
 
 
@@ -215,6 +226,27 @@
                     <option @if ($equipment->dhcp_server == "1") selected="true" @endif value="1">Yes</option>
                 </select>
                 <p class="help-block">Does this device run a DHCP Server?</p>
+            </div>
+{{--            <div class="form-group col-md-4">--}}
+{{--                <label for="dhcp_server_dns">DHCP Server DNS Updates</label>--}}
+{{--                <select name="dhcp_server_dns" class="form-control" required>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns == "0") selected="true" @endif value="0">No</option>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns == "1") selected="true" @endif value="1">Yes</option>--}}
+{{--                </select>--}}
+{{--                <p class="help-block">Update DNS records for DHCP addresses assigned by this server?</p>--}}
+{{--            </div>--}}
+{{--            <div class="form-group col-md-4">--}}
+{{--                <label for="dhcp_server_dns_ttl">DHCP Server DNS TTL</label>--}}
+{{--                <select name="dhcp_server_dns_ttl" class="form-control" required>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns_ttl == "60") selected="true" @endif value="60">60 seconds</option>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns_ttl == "600") selected="true" @endif value="600">600 seconds</option>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns_ttl == "3600") selected="true" @endif value="3600">3600 seconds</option>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns_ttl == "7200") selected="true" @endif value="7200">7200 seconds</option>--}}
+{{--                    <option @if ($equipment->dhcp_server_dns_ttl == "14400") selected="true" @endif value="14400">14400 seconds</option>--}}
+{{--                </select>--}}
+{{--                <p class="help-block">Time to live for DHCP DNS records</p>--}}
+{{--            </div>--}}
+            <div class="panel-body">
             </div>
             <div class="form-group col-md-4">
                 <label for="bwtest_server">Bandwidth Test Server</label>

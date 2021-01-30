@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\DhcpLease;
+use App\IP;
 use App\Equipment;
 use App\LogEntry;
 use Illuminate\Http\Request;
@@ -86,7 +88,6 @@ class DhcpLeaseController extends Controller
 
 
         // New Way
-    $servers = array('10.246.1.1','10.246.2.1','10.246.3.1','10.246.4.1','10.246.5.1');
         $hosts = array();
 
         $equipment = Equipment::where('dhcp_server',true)->get();
@@ -109,6 +110,7 @@ class DhcpLeaseController extends Controller
                             $hosts[$server . "-" . $parts[3]]['ip'] = $parts[3];
                             $hosts[$server . "-" . $parts[3]]['server'] = $server;
                             $hosts[$server . "-" . $parts[3]]['equipment_id'] = $e->id;
+                            $hosts[$server . "-" . $parts[3]]['site_id'] = $e->site_id;
                         }
 
                         if ($parts[2] == 8) {
@@ -116,6 +118,7 @@ class DhcpLeaseController extends Controller
                             $hosts[$server . "-" . $parts[3]]['ip'] = $parts[3];
                             $hosts[$server . "-" . $parts[3]]['server'] = $server;
                             $hosts[$server . "-" . $parts[3]]['equipment_id'] = $e->id;
+                            $hosts[$server . "-" . $parts[3]]['site_id'] = $e->site_id;
 
 
                         }
@@ -128,6 +131,70 @@ class DhcpLeaseController extends Controller
 
         // Update
         foreach ($hosts as $host) {
+            // New Way
+            //TODO: Find any IP entity where mac matches and is type=dhcp
+            $ip = IP::where('type','dhcp')->where('mac_address', $host['mac'])->first();
+
+            print $host['ttl'] . "<hr>";
+
+            $ttl = $host['ttl'];
+            if ( $ttl >= 1000000 ) {
+                $ttl = -1;
+            } elseif ( $ttl <= -1000000 ) {
+                $ttl = -1;
+            } else {
+                $ttl = time() + $host['ttl'];
+            }
+
+            // Try to find a client record
+            $client = Client::where('mac_address', $host['mac'])->first();
+            if( $client ) {
+                $hostname = $client->friendly_name();
+            } else {
+                $hostname = $host['mac'];
+            }
+
+
+            if ( $ip ) {
+                // We have a record to update
+                $ip->fill([
+                    'site_id' => $host['site_id'],
+                    'hostname' => $hostname,
+                    'ip' => $host['ip'],
+                    'mac_address' => $host['mac'],
+                    'dhcp_server' => $host['server'],
+                    'dhcp_expires' =>  $ttl,
+                    'dns_zone' => 'cl.ocarc.ca.',
+                    'dns' => 'Yes'
+
+                ]);
+                $ip->save();
+                $ip->updateDNS();
+
+
+            } else {
+                // Need to create a new record
+                $ip = \App\IP::create([
+                    'user_id' => 0,
+                    'hostname' => $hostname,
+                    'site_id' => $host['site_id'],
+                    'ip' => $host['ip'],
+                    'hostname' => '',
+//                    'mac_oui_vendor' => 'unk',
+                    'mac_address' => $host['mac'],
+                    'dhcp_server' => $host['server'],
+                    'dhcp_expires' =>  $ttl,
+                    'type' => 'dhcp',
+                    'dns_zone' => 'cl.ocarc.ca.',
+                    'dns' => 'Yes'
+
+                ]);
+                $ip->updateDNS();
+
+            }
+
+
+            // Old way
             $l = DhcpLease::where('mac_address', $host['mac'])->where('dhcp_server', $host['server'])->first();
 
             if ($l) {
@@ -173,7 +240,19 @@ class DhcpLeaseController extends Controller
                 $l->updateDNS();
             }
         }
-        return redirect('lease-ip');
+
+
+
+
+        // Handle expired
+        $expired_ips = IP::where('type','dhcp')->where('type','dhcp')->where('dhcp_expires', "<=",  time()-(24*60*60) )->get();
+
+        foreach( $expired_ips as $ip ) {
+            $ip->delete();
+        }
+      //  and dhcp_expires >= unix_timestamp()
+
+       // return redirect('lease-ip');
 
     }
 

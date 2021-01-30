@@ -42,12 +42,18 @@ class pollClients extends Command
         //
         $Clients = Client::all();
         foreach( $Clients as $e) {
-            print "Start Polling " . $e->snmp_sysName . " (" . $e->get_management_ip() . ")\n";
+            print "Start Polling " . $e->snmp_sysName . " (" . $e->getManagemnetIP() . ")\n";
 
 
             print "\t Retrieving SNMP Data...\t";
             $result =      $e->pollSNMP();
-            print $result['status'] . "\n";        }
+            print $result['status'] . "\n";
+
+
+        print "\t Perform Health Check...\t";
+        $result =      $e->performHealthCheck();
+        print $result['status'] . "\n";
+        }
 
     }
 }
