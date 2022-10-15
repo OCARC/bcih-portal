@@ -56,7 +56,7 @@ Route::get('ips/rebuild-dns', 'IPController@rebuildDNS')->middleware('auth');;
 
 Route::get('ips/{ip}', 'IPController@show')->middleware('auth');
 Route::get('ips/{ip}/edit', 'IPController@edit')->middleware('auth');;
-
+Route::delete('ips/{ip}', 'IPController@destroy')->middleware('auth');
 //
 Route::post('links', 'PtpLinkController@store')->middleware('auth');
 Route::get('links', 'PtpLinkController@index')->middleware('auth');
@@ -101,11 +101,31 @@ Route::group(['middleware' => ['role:network_operator']], function () {
 Route::get('equipment', 'EquipmentController@index');
 Route::get('equipment/{equipment}', 'EquipmentController@show');
 
+
+
+//Route::group(['middleware' => ['role:network_operator']], function () {
+
+    Route::post('cameras', 'CameraController@store')->middleware('auth');
+    Route::get('cameras/create', 'CameraController@create')->middleware('auth');
+    Route::get('cameras/{camera}/edit', 'CameraController@edit')->middleware('auth');;
+    Route::delete('cameras/{camera}', 'CameraController@destroy')->middleware('auth');
+
+//});
+Route::get('cameras', 'CameraController@index');
+Route::get('cameras/list', 'CameraController@list');
+Route::get('cameras/{camera}', 'CameraController@show');
+Route::get('cameras/{camera}/image.jpg', 'CameraController@doCameraImage');
+Route::get('cameras/{camera}/mjpeg.jpg', 'CameraController@doMJPEGProxy');
+Route::get('cameras/{camera}/embed', 'CameraController@embed');
+
+
 //http://portal.hamwan.ca/librenms/api/v0/devices/hex1.lmk.in.hamwan.ca/health/device_voltage/1
 //Route::get('equipment/{equipment}/graph/{type}', 'EquipmentController@libreGetGraph');
 Route::get('equipment/{equipment}/graph/{type}/{url?}', 'EquipmentController@getGraph')->where('url', '.*');
 
 Route::get('equipment/{equipment}/denkovi/current_state.json', 'EquipmentController@doDenkoviCurrentState');
+Route::get('equipment/{equipment}/cyberpower/current_state.json', 'EquipmentController@doCyberPowerPDUCurrentState');
+Route::get('equipment/{equipment}/stardot/camera{camera}.jpg', 'EquipmentController@doStardotCameraImage');
 
 Route::get('equipment/{equipment}/{method}', 'EquipmentController@showAjax')->middleware('auth');
 //
@@ -188,6 +208,7 @@ Route::get('utilities/equipment-snmp', 'UtilitiesController@equipmentSNMP');
 Route::group(['middleware' => ['role:network_operator']], function () {
 
     Route::get('ping', 'UtilitiesController@ping');
+    Route::get('dnsCheck', 'UtilitiesController@dnsCheck');
 });
 
 

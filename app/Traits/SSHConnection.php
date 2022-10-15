@@ -20,7 +20,9 @@ trait SSHConnection
             } else {
                 $ssh = new SSH2($this->dhcp_lease()->ip);
             }
-            $ssh->setTimeout(30);
+            $ssh->setTimeout(65);
+
+
 
             $ssh->encryption_algorithms_server_to_client = array('none');
             $ssh->encryption_algorithms_client_to_server = array('none');

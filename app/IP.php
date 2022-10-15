@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class IP extends Model
 {
     protected $table = 'ips';
+    protected $primaryKey = 'id';
+
     protected $guarded = [];
     //
 
@@ -126,6 +128,13 @@ class IP extends Model
 
         return $block_info;
     }
+
+    public function setHostnameAttribute($value)
+    {
+
+        $this->attributes['hostname'] = strtolower($value);
+    }
+
 
 function removeDNS() {
     if (( $this->dns == "Yes" ) || ( $this->dns == "" )) {

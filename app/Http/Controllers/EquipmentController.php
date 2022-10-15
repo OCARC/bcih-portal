@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Camera;
+use App\User;
 use Illuminate\Http\Response;
 
 use App\Equipment;
@@ -25,11 +27,9 @@ class EquipmentController extends Controller
     public function index()
     {
 
-        //
-        //
-        $equipment = Equipment::all()->sortByDesc(function($eq) {
-            return [$eq->site_id, $eq->hostname];
-        });
+        $equipment =  User::current()->getEntities(Equipment::class, true );
+
+
         if ( request('json') ) {
             return $equipment;
         } else {
@@ -100,7 +100,96 @@ class EquipmentController extends Controller
     {
         //
 
-        return view('equipment.show', ['equipment' =>$equipment , 'bwtest_servers' => \App\Equipment::all()->where('bwtest_server','!=','')]);
+        $tabs = array(
+            'info' => array(
+                'title' => "Equipment Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'equipment.parts.tabInfo'
+            ),
+            'clients' => array(
+                'title' => "Clients",
+                'active' => false,
+                'visible' => ( $equipment->os == 'RouterOS' ) && ( $equipment->hasRadio() ),
+                'template' => 'equipment.parts.tabClients'
+
+            ),
+            'ips' => array(
+                'title' => "IP Addresses",
+                'active' => false,
+                'visible' => true,
+                'template' => 'equipment.parts.tabIPs'
+            ),
+            'graphs' => array(
+                'title' => "Graphs",
+                'active' => false,
+                'visible' => true,
+                'template' => 'equipment.parts.tabGraphs'
+            ),
+            'tools' => array(
+                'title' => "Tools",
+                'active' => false,
+                'visible' => (( $equipment->os == "RouterOS") || ( $equipment->os == "EdgeRouter")),
+                'template' => 'equipment.parts.tabTools'
+            ),
+            'ospf' => array(
+                'title' => "OSPF",
+                'active' => false,
+                'visible' => true,
+                'template' => 'equipment.parts.tabOSPF'
+            ),
+            'dhcp' => array(
+                'title' => "DHCP",
+                'active' => false,
+                'visible' => ($equipment->os == "RouterOS" ),
+                'template' => 'equipment.parts.tabDHCP'
+            ),
+            'ports' => array(
+                'title' => "Ports",
+                'active' => false,
+                'visible' => (($equipment->os == "RouterOS" ) || ( $equipment->os == "Cisco IOS" ) || ( $equipment->os == "EdgeRouter")),
+                'template' => 'equipment.parts.tabPorts'
+
+
+            ),
+            'sitemon' => array(
+                'title' => "Site Monitor",
+                'active' => false,
+                'visible' => ($equipment->os == "DAEnetIP4" ),
+                'template' => 'equipment.parts.tabSiteMonitor'
+            ),
+            'pdu' => array(
+                'title' => "PDU",
+                'active' => false,
+                'visible' => ($equipment->os == "CyberPower" ),
+                'template' => 'equipment.parts.tabPDU'
+            ),
+            'stardot' => array(
+                'title' => "Cameras",
+                'active' => false,
+                'visible' => ($equipment->os == "Stardot" ),
+                'template' => 'equipment.parts.tabStardot'
+            ),
+            'health' => array(
+                'title' => "Health",
+                'active' => false,
+                'visible' => ($equipment->librenms_mapping >= 1 ),
+                'template' => 'equipment.parts.tabHealth'
+            ),
+            'libreNMS' => array(
+                'title' => 'LibreNMS',
+                'type' => 'link',
+                'align' => 'right',
+                'active' => false,
+                'visible' => ($equipment->librenms_mapping),
+                'href' => env('LIBRENMS_URL') . "/device/device=" . $equipment->librenms_mapping,
+                'target' => '_blank',
+                'class' => 'ms-auto'
+            )
+        );
+
+
+        return view('equipment.show', ['tabs' => $tabs, 'equipment' =>$equipment , 'bwtest_servers' => \App\Equipment::all()->where('bwtest_server','!=','')]);
 
     }
 
@@ -200,8 +289,31 @@ class EquipmentController extends Controller
 
         return $equipment->doDenkoviCurrentState();
     }
+    /**
+     *
+     * @param  \App\Equipment  $equipment
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function doCyberPowerPDUCurrentState( Equipment $equipment, Request $request ) {
+
+        return $equipment->doCyberPowerPDUCurrentState( $request );
+    }
+
 
     /**
+     *
+     * @param  \App\Equipment  $equipment
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function doStardotCameraImage( Equipment $equipment, Request $request ) {
+
+        return $equipment->doStardotCameraImage( $request );
+    }
+
+
+     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Equipment  $equipment
@@ -241,9 +353,10 @@ class EquipmentController extends Controller
     }
 
 
+
     public function libreGetGraph(Equipment $equipment, $type)
     {
-        return (new Response($equipment->libreGetGraph($type), 200));
+
         return (new Response($equipment->libreGetGraph($type), 200))
             ->header('Content-Type','image/png');
     }

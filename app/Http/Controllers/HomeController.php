@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Site;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,8 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sites = \App\Site::all();
-        return view('home')->with( compact('sites'));
+        $sites =  User::current()->getEntities(Site::class, true );
+  
+
+        return view('home')->with( ['sites' => $sites] );
 
     }
 }

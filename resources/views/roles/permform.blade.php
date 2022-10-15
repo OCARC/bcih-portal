@@ -21,13 +21,13 @@
         @php($cur_cat = $row->category)
 
         <div class="col-md-3">
-            <h4>{{ $cur_cat or "Uncategorized" }}</h4>
+            <h4>{{ $cur_cat ?? "Uncategorized" }}</h4>
             <div>
                 @endif
                 <div class="checkbox">
                     <label for="permission-{{$row->id}}" >
                         <input name="permissions[]" id="permission-{{$row->id}}" value="{{$row->name}}" @if( ! Auth::user()->can('permissions.user_change') )disabled="true"@endif @if( $role->hasPermissionTo($row->name) )checked="true"@endif type="checkbox">
-                        {{ $row->friendly_name or $row->name }}<br>
+                        {{ $row->friendly_name ?? $row->name }}<br>
                         <span class="text-muted">{{$row->description }}</span>
                     </label>
                 </div>

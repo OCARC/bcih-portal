@@ -4,10 +4,10 @@ function ajaxAction( target, url, callback ) {
     $(target).closest('.ajaxAction').find('.ajaxResult').html("Please Wait...");
 
     $.getJSON( url, function( data ) {
+
         var display = "blank";
         if (typeof data['data'] === 'string' || data.data instanceof String) {
             // no processing needed
-
         } else {
 
             data['data'] = "<pre>" + JSON.stringify( data['data'], null, 2  ) + "</pre>";
@@ -23,6 +23,9 @@ function ajaxAction( target, url, callback ) {
             $(target).closest('.ajaxAction').find('.ajaxResult').html(data.data);
             $(target).closest('.ajaxAction').find('.ajaxResult').removeClass('text-danger');
 
+        } else if ( data.error ) {
+                $(target).closest('.ajaxAction').find('.ajaxResult').html(data.error);
+                $(target).closest('.ajaxAction').find('.ajaxResult').addClass('text-danger');
 
 
         } else {

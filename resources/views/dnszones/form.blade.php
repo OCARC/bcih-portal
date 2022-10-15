@@ -4,21 +4,21 @@
     <input type="hidden" name="id" value="{{ $record->id }}">
 
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             Address Information
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="form-group col-md-6">
-                <lable for="name">Descriptive Name</lable>
+                <label for="name">Descriptive Name</label>
                 <input type="text" name="name" class="form-control" value="{{ $record->name }}">
             </div>
 
 
             <div class="form-group col-md-6">
-                <lable for="name">Status</lable>
-                <select name="status" class="form-control">
+                <label for="name">Status</label>
+                <select name="status" class="form-select">
                     <option value=""></option>
                     <option @if( $record->status == "Subdivided") selected="true" @endif style="background-color: #e1e1e1">
                         Subdivided
@@ -45,7 +45,7 @@
 
 
             <div class="form-group col-md-12">
-                <lable for="name">Description</lable>
+                <label for="name">Description</label>
                 <textarea rows=5 name="description" class="form-control">{{ $record->description }}</textarea>
             </div>
 
@@ -53,26 +53,26 @@
     </div>
 
 
-    <div class="panel panel-default">
+    <div class="card card-default">
 
-        <div class="panel-heading">
+        <div class="card-header">
             Zone Information
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="form-group col-md-6">
-                <lable for="name">Domain</lable>
+                <label for="name">Domain</label>
                 <input type="text" name="domain" class="form-control" value="{{ $record->domain }}">
             </div>
 
 
             <div class="form-group col-md-6">
-                <lable for="name">Server</lable>
+                <label for="name">Server</label>
                 <input type="text" name="server" class="form-control" value="{{ $record->server }}">
             </div>
 
 
             <div class="form-group col-md-12">
-                <lable for="name">DNS Key</lable>
+                <label for="name">DNS Key</label>
                 <textarea rows=5 name="dns_key" class="form-control">{{ $record->dns_key }}</textarea>
             </div>
         </div>

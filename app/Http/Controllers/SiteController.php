@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Equipment;
 use App\Site;
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 use App\Role;
@@ -27,8 +29,9 @@ class SiteController extends Controller
 
 
 
-        $sites = Site::all();
-        return view('site.index', compact('sites'));
+        $sites =  User::current()->getEntities(Site::class, true );
+
+        return view('site.index', ['sites' => $sites]);
     }
 
     public function indexJSON() {
@@ -107,23 +110,60 @@ class SiteController extends Controller
      */
     public function show(Site $site)
     {
-//        $user = Auth::user();
-//        $authOK = false;
-//
-//        if ( $user->can('view all sites') ) {
-//            $authOK = true;
-//        }elseif ( $user->can('view own sites') && $site->user_id == $user->id ) {
-//            $authOK = true;
-//        }
-//
-//        if ( $authOK ) {
-//        } else {
-//            return view('common.denied');
-//        }
+        $tabs = array(
+            'info' => array(
+                'title' => "Site Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'site.parts.tabInfo'
+            ),
+            'equipment' => array(
+                'title' => "Equipment",
+                'active' => false,
+                'visible' => true,
+                'template' => 'site.parts.tabEquipment'
+            ),
+            'clients' => array(
+                'title' => "Clients",
+                'active' => false,
+                'visible' => true,
+                'template' => 'site.parts.tabClients'
+            ),
+            'graphs' => array(
+                'title' => "Graphs",
+                'active' => false,
+                'visible' => true,
+                'template' => 'site.parts.tabGraphs'
+            ),
+            'tools' => array(
+                'title' => "Tools",
+                'active' => false,
+                'visible' => true,
+                'template' => 'site.parts.tabTools'
+            ),
+            'IPs' => array(
+                'title' => "IP Addresses",
+                'active' => false,
+                'visible' => true,
+                'template' => 'site.parts.tabIPs'
+            ),
+            'Traffic' => array(
+                'title' => "Traffic",
+                'active' => false,
+                'visible' => true,
+                'template' => 'site.parts.tabTraffic'
+            ),
+//            'rf' => array(
+//                'title' => "RF",
+//                'active' => false,
+//                'visible' => true,
+//                'template' => 'site.parts.tabRF'
+//            ),
+        );
 
 
 //        return view('site.show', [ 'site' => $site, 'freq_track' => \App\FreqTrack::all()->where('site_code', $site->sitecode) ] );
-        return view('site.show', [ 'site' => $site ] );
+        return view('site.show', [ 'tabs' => $tabs, 'site' => $site ] );
 
     }
     public function showJSON(Site $site)

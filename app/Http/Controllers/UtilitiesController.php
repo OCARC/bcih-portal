@@ -106,7 +106,59 @@ class UtilitiesController
 
 
     }
+public function getHostByName() {
+    $host = $_GET['host'];
+    return json_encode( array( 'ip' => gethostbyname( $host ) ) );
 
+}
+
+    public function dnsCheck()
+    {
+        $hostname = $_GET['hostname'];
+        $zone = $_GET['zone'];
+        $target = $_GET['target'];
+        $type = $_GET['type'];
+
+        $result = array('status' => '');
+
+        if (
+            ( ! $hostname ) ||
+            ( ! $zone ) ||
+            ( ! $target ) ||
+            ( ! $type )
+        ) {
+                $result['status'] = 'Error';
+            return json_encode($result);
+
+        }
+
+        if ( $type == 'A' ) {
+            $result['records'] = dns_get_record($hostname . "." . $zone, DNS_A,$result['auth_ns'],$result['additional']);
+
+            foreach( $result['records'] as $record ) {
+                if ( $record['ip'] == $target ) {
+                    $result['status'] = "OK";
+                }
+            }
+
+            if ( count($result['records'] ) == 0 ) {
+                $result['status'] = 'Missing';
+            } else {
+                if ( $result['status'] == '' ) {
+
+                    $result['status'] = 'Different';
+                }
+            }
+
+        }
+
+
+if ( $result['status'] == '' ) {
+    $result['status'] = 'Not Supported';
+}
+
+        return json_encode($result);
+    }
     public function ping() {
 
         $host = $_GET['host'];

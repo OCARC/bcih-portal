@@ -5,20 +5,20 @@
 
     <div class=" col-md-12">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             Link Information
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="form-group col-md-4">
-                <lable for="name">Link Name</lable>
+                <label for="name">Link Name</label>
                 <input type="text" name="name" class="form-control" value="{{ $link->name }}">
             </div>
 
             <div class="form-group col-md-4">
-                <lable for="name">Link Status</lable>
-                <select name="status" class="form-control" >
+                <label for="name">Link Status</label>
+                <select name="status" class="form-select" >
                     <option value=""></option>
                     <option @if( $link->status == "Potential") selected="true" @endif style="background-color: #e1e1e1">
                         Potential
@@ -47,8 +47,8 @@
 
 
             <div class="form-group col-md-4">
-                <lable for="name">Line Style</lable>
-                <select name="line_style" class="form-control" >
+                <label for="name">Line Style</label>
+                <select name="line_style" class="form-select" >
                     <option value="solid"  @if( $link->line_style == "solid") selected="true" @endif style="">
                         Solid
                     </option>
@@ -61,8 +61,8 @@
                 </select>
             </div>
             <div class="form-group col-md-4">
-                <lable for="name">Line Color</lable>
-                <select name="link_color" class="form-control" >
+                <label for="name">Line Color</label>
+                <select name="link_color" class="form-select" >
                     <option>Auto</option>
                     <option style="background-color: rgba(255,0,0,0.51);" @if( $link->link_color =='red' )selected="true" @endif value="red">Red</option>
                     <option style="background-color: rgba(255,165,0,0.51);" @if( $link->link_color =='orange' )selected="true" @endif value="orange">Orange</option>
@@ -78,15 +78,15 @@
         </div>
     </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card card-default">
+            <div class="card-header">
                 Access Point
             </div>
-            <div class="panel-body">
+            <div class="card-body">
 
                 <div class="form-group col-md-4">
-                    <lable for="name">AP Site</lable>
-                    <select name="ap_site_id" class="form-control"  style="font-family: courier">
+                    <label for="name">AP Site</label>
+                    <select name="ap_site_id" class="form-select"  style="font-family: courier">
                         <option value="">- not set -</option>
 
                     @foreach( $sites as $site)
@@ -97,8 +97,8 @@
                     </select></div>
 
                 <div class="form-group col-md-4">
-                    <lable for="name">AP Equipment</lable>
-                    <select name="ap_equipment_id" class="form-control" >
+                    <label for="name">AP Equipment</label>
+                    <select name="ap_equipment_id" class="form-select" >
                         <option value="">- not set -</option>
                         @foreach( $equipments as $equipment)
                             <option @if ($link->ap_equipment_id == $equipment->id) selected="true"
@@ -109,16 +109,16 @@
                     </select></div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card card-default">
+            <div class="card-header">
                 Client Point
             </div>
-            <div class="panel-body">
+            <div class="card-body">
 
 
                 <div class="form-group col-md-4">
-                    <lable for="name">AP Site</lable>
-                    <select name="cl_site_id" class="form-control" style="font-family: courier">
+                    <label for="name">AP Site</label>
+                    <select name="cl_site_id" class="form-select" style="font-family: courier">
                         <option value="">- not set -</option>
 
                         @foreach( $sites as $site)
@@ -128,8 +128,8 @@
                         @endforeach
                     </select></div>
                 <div class="form-group col-md-4">
-                    <lable for="name">Client Equipment</lable>
-                        <select name="cl_equipment_id" class="form-control" >
+                    <label for="name">Client Equipment</label>
+                        <select name="cl_equipment_id" class="form-select" >
                             <option value="">- not set -</option>
                             @foreach( $equipments as $equipment)
                                 <option @if ($link->cl_equipment_id == $equipment->id) selected="true"

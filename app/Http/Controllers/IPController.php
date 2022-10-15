@@ -72,7 +72,7 @@ class IPController extends Controller
         $ip = new \App\IP();
         $ip->user_id = $user->id;
 
-        return view('ip.create', ['ip' => $ip ,'equipments' => \App\Equipment::all()->sortBy('hostname') , 'sites' => \App\Site::all(), 'users' => \App\User::all() ]);
+        return view('ip.create', ['ip' => $ip ,'equipments' => \App\Equipment::orderBy('site_id')->orderBy('hostname')->get() , 'sites' => \App\Site::all(), 'users' => \App\User::all() ]);
 
     }
 
@@ -134,8 +134,11 @@ class IPController extends Controller
      */
     public function show(IP $ip)
     {
+
+$tabs = array();
+
         //
-        return view('ip.show', compact('ip'));
+        return view('ip.show', array('tabs' => $tabs, 'ip' => $ip ));
 
     }
 
@@ -148,7 +151,7 @@ class IPController extends Controller
     public function edit(IP $ip)
     {
         //
-        return view('ip.edit', ['ip' => $ip ,'equipments' => \App\Equipment::all(), 'sites' => \App\Site::all(), 'users' => \App\User::all() ]);
+        return view('ip.edit', ['ip' => $ip ,'equipments' => \App\Equipment::all()->sortBy( array('site_id', 'hostname') ), 'sites' => \App\Site::all(), 'users' => \App\User::all() ]);
 
     }
 
@@ -170,8 +173,12 @@ class IPController extends Controller
      * @param  \App\IP  $IP
      * @return \Illuminate\Http\Response
      */
-    public function destroy(IP $IP)
+    public function destroy(IP $ip)
     {
-        //
+
+
+
+        $ip->delete();
+        return redirect("/ips");
     }
 }

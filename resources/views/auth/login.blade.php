@@ -1,5 +1,8 @@
 @extends('common.master')
 
+
+
+
 @section('content')
     <script src="{{ url('/js/jsrsasign-all-min.js') }}"></script>
 
@@ -29,13 +32,15 @@
         };
     </script>
 
+
+
     <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
+        <div class="col-8 col-offset-2">
+            <div class="card card-default">
+                <div class="card-header">Login</div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
@@ -44,9 +49,11 @@
                             <label for="callsign" class="col-md-4 control-label">Realm</label>
 
                             <div class="col-md-6">
-                                <select id="realm" type="text" class="form-control" name="realm" required>
-                                    @if( env('APP_LOCAL_AUTH_ENABLED','false') === true )
-                                    <option value="local">Local Authentication</option>
+                                <select id="realm" type="text" class="form-select" name="realm" required>
+                                    <option @if( env('APP_AUTO_DEFAULT_REALM',true) === true ) selected="yes" @endif value="auto">Automatic (LDAP First)</option>
+
+                                @if( env('APP_LOCAL_AUTH_ENABLED','false') === true )
+                                    <option @if( env('APP_LOCAL_DEFAULT_REALM',true) === true ) selected="yes" @endif value="local">Local Authentication</option>
                                     @endif
                                     @if( env('APP_LDAP_AUTH_ENABLED','false') === true )
                                     <option @if( env('APP_LDAP_DEFAULT_REALM',true) === true ) selected="yes" @endif value="ldap">LDAP Authentication</option>
@@ -54,7 +61,7 @@
                                 </select>
 
                                 @if ($errors->has('email'))
-                                    <span class="help-block">
+                                    <span class="form-text">
                                         <strong>{{ $errors->first('realm') }}</strong>
                                     </span>
                                 @endif
@@ -68,10 +75,14 @@
                                 <input id="callsign" type="text" class="form-control" name="callsign" value="{{ old('callsign') }}" required autofocus>
 
                                 @if ($errors->has('email'))
-                                    <span class="help-block">
+                                    <span class="form-text">
                                         <strong>{{ $errors->first('callsign') }}</strong>
                                     </span>
                                 @endif
+
+                                <a class="usePassword btn btn-link" href="#" onClick="jQuery('.usePassword').hide();jQuery('.useKey').show();">
+                                    Use key to login
+                                </a>
                             </div>
                         </div>
 
@@ -83,10 +94,10 @@
 
                             <div class="col-md-6">
                                 <input type="file" class="form-control" onchange='openFile(event)'>
-                                <p class="help-block">Your private key is used to generate a one time password and is not transmitted to the server.</p>
+                                <p class="form-text">Your private key is used to generate a one time password and is not transmitted to the server.</p>
 
                                 @if ($errors->has('file'))
-                                    <span class="help-block">
+                                    <span class="form-text">
                                         <strong>{{ $errors->first('file') }}</strong>
                                     </span>
                                 @endif
@@ -98,10 +109,10 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" >
-                                <p class="help-block">Passwords are transmitted in plaintext. It is recommended to use a key file to login.</p>
+                                <p class="form-text">Passwords are transmitted in plaintext. It is recommended to use a key file to login.</p>
 
                                 @if ($errors->has('password'))
-                                    <span class="help-block">
+                                    <span class="form-text">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif

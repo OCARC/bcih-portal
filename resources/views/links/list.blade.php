@@ -28,7 +28,7 @@
 
                 <td>
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="height: 1em; width: 1em">
-                        <line x1="0" y1="20" x2="20" y2="0" style=";stroke-width:3" stroke="{{$row->link_color or 'black'}}" @if ( $row->line_style == 'dotted')stroke-dasharray="3, 4" @endif ></line>
+                        <line x1="0" y1="20" x2="20" y2="0" style=";stroke-width:3" stroke="{{$row->link_color ?? 'black'}}" @if ( $row->line_style == 'dotted')stroke-dasharray="3, 4" @endif ></line>
 
                     </svg>
                     <a href="/links/{{$row->id}}">{{ $row->name }}</a><br>
@@ -57,7 +57,7 @@
                         {{ $row->ap_equipment->snmp_band }}
                     @endif
                 </td>
-                <td class="text-right">
+                <td class="text-end">
                     {{$row->distance() }} KM
                 </td>
                 <td style="text-align: center; font-family: monospace; vertical-align: middle">
@@ -94,7 +94,7 @@
 {{--                <td>--}}
 {{--                    ---}}
 {{--                </td>--}}
-{{--                <td class="text-right" style="font-weight: bold;">--}}
+{{--                <td class="text-end" style="font-weight: bold;">--}}
 {{--                    TX<br>--}}
 {{--                    RX--}}
 {{--                </td>--}}

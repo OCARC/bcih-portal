@@ -33,6 +33,7 @@ class CreateIps extends Migration
             $table->string('dns')->nullable(true);
             $table->string('dns_zone')->nullable(true);
             $table->string('dhcp')->nullable(true);
+            $table->string('type',32)->default('static');
 
 
             $table->timestamps();

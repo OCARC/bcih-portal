@@ -10,28 +10,28 @@
                     <form class="" method="POST" action="/sites">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
-                            <lable for="name">Key Pair Name</lable>
+                            <label for="name">Key Pair Name</label>
                             <div class="input-group">
                                 <span class="input-group-addon">VA7STV_</span>
                                 <input type="text" name="name" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <lable for="name">Owner</lable>
+                            <label for="name">Owner</label>
                             <input type="text" name="owner" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <lable for="name">Public Key</lable>
+                            <label for="name">Public Key</label>
                             <textarea rows=6 class="form-control" name="publicKey" id="publicKey">
                             </textarea>
-                            <span id="helpBlock" class="help-block">Either click <a href="javascript:generate()">Generate Keys</a> to generate a new set of keys in the browser or paste the keys you wish to use.</span>
+                            <span id="helpBlock" class="form-text">Either click <a href="javascript:generate()">Generate Keys</a> to generate a new set of keys in the browser or paste the keys you wish to use.</span>
                         </div>
 
                         <div class="form-group">
-                            <lable for="name">Private Key</lable>
+                            <label for="name">Private Key</label>
                             <textarea rows=15 class="form-control" name="privateKey" id="privateKey">
                             </textarea>
-                            <span id="helpBlock" class="help-block">Click <a href="javascript:download( 'RSAPrivateKey.key', $( '#privateKey' ).text() );">here</a> to download this private key.</span>
+                            <span id="helpBlock" class="form-text">Click <a href="javascript:download( 'RSAPrivateKey.key', $( '#privateKey' ).text() );">here</a> to download this private key.</span>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" checked="true"> Do NOT send my private key to the server (recomended)

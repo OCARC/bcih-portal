@@ -50,6 +50,14 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+
+            if ( strpos( $request->headers->get('accept'), "application/json" ) >= 0 ) {
+                $response = new \Illuminate\Http\Response();
+                $response->header("Content-Type",  "application/json");
+                print json_encode( array('error' => 'You are not authorized to perform that function - ' . $exception->getMessage() ));
+                return $response;
+            }
+
             session()->flash('msg', 'You are not authorized to perform that function - ' . $exception->getMessage() );
             return back()->withInput();
 

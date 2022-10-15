@@ -40,6 +40,7 @@ class pollDhcp extends Command
     {
         //
         $dhcp = new DhcpLeaseController();
+
         $dhcp->refresh();
 
 

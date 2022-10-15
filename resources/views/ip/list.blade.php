@@ -19,9 +19,9 @@
             $(result).show();
 
             if ( data.online == true ) {
-                $( result ).replaceWith('<span class="label label-success">' + data.average + " ms</span>");
+                $( result ).replaceWith('<span class="badge bg-success">' + data.average + " ms</span>");
             } else {
-                $( result ).replaceWith('<span class="label label-danger">DOWN</span>');
+                $( result ).replaceWith('<span class="badge bg-danger">DOWN</span>');
             }
             callback();
         });
@@ -56,17 +56,17 @@
         </thead>
         <tbody>
         @foreach ($ips as $row)
-            <tr class="@if($row->type =='dhcp')info @endif ">
+            <tr class="@if($row->type =='dhcp')table-info @endif ">
                 <td sorttable_customkey="{{ ip2long($row->ip) }}">
 
                     @if( $row->type =='dhcp')
-                        <span class="mdi mdi-ip">&nbsp;</span>{{ $row->ip  }}
+                        {{ $row->ip  }}
                     @else
-                    @if ($row->id)
-                        <span class="mdi mdi-ip">&nbsp;</span><a href="{{url("ips/" . $row->id )}}">{{ $row->ip  }}</a>
-                    @else
-                        <span class="mdi mdi-ip">&nbsp;</span>{{ $row->ip  }}
-                    @endif
+                        @if ($row->id)
+                            <a href="{{url("ips/" . $row->id )}}">{{ $row->ip  }}</a>
+                        @else
+                            {{ $row->ip  }}
+                        @endif
                     @endif
 
                 </td>
@@ -94,13 +94,13 @@
 
                 <td style="text-align: center; vertical-align:middle" sorttable_customkey="{{$row->dns}}">
                     @if ( $row->dns == 'Yes' )
-                        <span class="label label-success">Yes</span><br>
+                        <span class="badge bg-success">Yes</span><br>
                     @elseif ( $row->dns == 'ReverseOnly' )
-                        <span class="label label-warning">Rev</span><br>
+                        <span class="badge bg-warning">Rev</span><br>
                     @elseif ( $row->dns == 'No' )
-                        <span class="label label-danger">No</span><br>
+                        <span class="badge bg-danger">No</span><br>
                     @else
-                        <span class="label label-default">{{ $row->dns }}</span>
+                        <span class="badge bg-default">{{ $row->dns }}</span>
                     @endif
                 </td>
                 <td class="font-family: monospace">{{ implode(":",str_split(strtoupper($row->mac_address),2)) }}</td>
@@ -119,21 +119,21 @@
                 <td style="text-align: center; vertical-align:middle" sorttable_customkey="{{$row->category}}">
                     @if ($row->category == "DHCP Reserved")
 
-                        <span class="label label-info">{{ $row->category }}</span>
+                        <span class="badge bg-info">{{ $row->category }}</span>
 
                     @elseif( $row->category == "Static")
-                        <span class="label label-warning">{{ $row->category }}</span>
+                        <span class="badge bg-warning">{{ $row->category }}</span>
                     @elseif( $row->category == "Infrastructure")
-                        <span class="label label-warning">{{ $row->category }}</span>
+                        <span class="badge bg-warning">{{ $row->category }}</span>
                     @elseif( $row->category == "Leased")
-                        <span class="label label-info">{{ $row->category }}</span>
+                        <span class="badge bg-info">{{ $row->category }}</span>
                     @elseif( $row->category == "Reserved")
-                        <span class="label label-primary">{{ $row->category }}</span>
+                        <span class="badge bg-primary">{{ $row->category }}</span>
                     @elseif( $row->category == "OSPF Routing")
-                        <span class="label label-danger">{{ $row->category }}</span>
+                        <span class="badge bg-danger">{{ $row->category }}</span>
 
                     @else
-                        <span class="label label-default">{{ $row->category }}</span>
+                        <span class="badge bg-default">{{ $row->category }}</span>
 
                     @endif
                 </td>
@@ -141,20 +141,20 @@
                 <td style="text-align: center; vertical-align:middle">
 {{--                    @if ( $row->dhcp )--}}
 {{--                        @if ( $row->dhcp_lease() )--}}
-{{--                            <span class="label label-info">In Use</span><br>--}}
+{{--                            <span class="badge bg-info">In Use</span><br>--}}
 {{--                        @else--}}
-{{--                            <span class="label label-success">Yes</span><br>--}}
+{{--                            <span class="badge bg-success">Yes</span><br>--}}
 {{--                        @endif--}}
 {{--                    @elseif ( $row->dhcp == "No" )--}}
 
-{{--                        <span class="label label-danger">No</span>--}}
+{{--                        <span class="badge bg-danger">No</span>--}}
 {{--                    @endif--}}
                     @if ( $row->type == 'dhcp')
-                                                <span class="label label-info">Yes</span>
+                                                <span class="badge bg-info">Yes</span>
                     @endif
                 </td>
 
-                <td class="text-right">
+                <td class="text-end">
                     @if ( $row->type == 'dhcp')
                     @if( $row->dhcp_expires === -1 )
                         Reserved

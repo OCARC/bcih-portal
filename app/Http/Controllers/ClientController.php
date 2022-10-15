@@ -17,6 +17,7 @@ class ClientController extends Controller
     {
         $this->middleware(['auth', 'role:network_operator'])->except('index', 'show');
 
+
     }
 
     public function index()
@@ -59,6 +60,35 @@ class ClientController extends Controller
         if ($method == "bwTest") {
             $r = $client->sshBWTest();
         }
+        if ($method == "traceroute") {
+            $r = $client->sshTraceroute();
+        }
+        if ($method == "healthCheck") {
+
+            if ( $client->performHealthCheck() ) {
+                $client->refresh();
+                $r['data'] = "<pre>\n";
+                $r['data'] .= "Ping To: " . $client->getManagementIP() . "\n";
+                $r['data'] .= "Ping Response: " . $client->hc_ping_result . "ms\n";
+                $r['data'] .= "Timestamp: " . $client->hc_last_ping_success . "\n";
+                $r['data'] .= "</pre>\n";
+
+                $r['status'] = "complete";
+                $r['reason'] = "";
+            } else {
+                $r['data'] = "<pre>\n";
+                $r['data'] .= "Client Did Not Respond\n";
+                $r['data'] .= "Ping To: " . $client->getManagementIP() . "\n";
+                $r['data'] .= "Last Ping Response: " . $client->hc_ping_result . "ms\n";
+                $r['data'] .= "Last Response: " . $client->hc_last_ping_success . "\n";
+                $r['data'] .= "</pre>\n";
+
+                $r['status'] = "complete";
+                $r['reason'] = "";
+            }
+
+        }
+
         if ($method == "checkForUpdates") {
             $r =$client->sshCheckForUpdates();
         }
@@ -153,8 +183,36 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+
+        $tabs = array(
+            'info' => array(
+                'title' => "Client Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'clients.parts.tabInfo'
+            ),
+            'tools' => array(
+                'title' => "Tools",
+                'active' => false,
+                'visible' => true,
+                'template' => 'clients.parts.tabTools'
+            ),
+            'snmp' => array(
+                'title' => "SNMP",
+                'active' => false,
+                'visible' => true,
+                'template' => 'clients.parts.tabSNMP'
+            ),
+            'IPs' => array(
+                'title' => "IP Addresses",
+                'active' => false,
+                'visible' => true,
+                'template' => 'clients.parts.tabIPs'
+            ),
+        );
+
         //
-        return view('clients.show', ['client' => $client, 'bwtest_servers' => \App\Equipment::all()->where('bwtest_server','!=','')]);
+        return view('clients.show', [ 'tabs' => $tabs,'client' => $client, 'bwtest_servers' => \App\Equipment::all()->where('bwtest_server','!=','')]);
      //   return view('equipment.create', ['equipment' => new \App\Equipment() , 'sites' => \App\Site::all(), 'users' => \App\User::all(), 'cactiHosts' => \App\CactiHost::all() ]);
 
     }
@@ -192,6 +250,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
+
         //
         return view('clients.edit', ['client' => $client , 'sites' => \App\Site::all(), 'users' => \App\User::all() ]);
 

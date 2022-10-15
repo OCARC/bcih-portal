@@ -32,7 +32,7 @@
                     @endif
                 </td>
 
-               <td class="text-right">
+               <td class="text-end">
                    {{ count($row->dnsrecords)}}
                </td>
 

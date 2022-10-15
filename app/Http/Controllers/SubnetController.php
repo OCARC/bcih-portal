@@ -65,8 +65,22 @@ class SubnetController extends Controller
      */
     public function show(Subnet $subnet)
     {
+        $tabs = array(
+            'info' => array(
+                'title' => "Subnet Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'subnet.parts.tabInfo'
+            ),
+            'IPs' => array(
+                'title' => "IP Addresses",
+                'active' => false,
+                'visible' => true,
+                'template' => 'subnet.parts.tabIPs'
+            ),
+        );
         //
-        return view('subnet.show', compact('subnet'));
+        return view('subnet.show', array('tabs' => $tabs, 'subnet' => $subnet ));
 
     }
 

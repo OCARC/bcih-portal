@@ -4,21 +4,21 @@
     <input type="hidden" name="id" value="{{ $ip->id }}">
 
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             Address Information
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="form-group col-md-6">
-                <lable for="name">Descriptive Name</lable>
+                <label for="name">Descriptive Name</label>
                 <input type="text" name="name" class="form-control" value="{{ $ip->name }}">
             </div>
 
 
             <div class="form-group col-md-6">
-                <lable for="name">Status</lable>
-                <select name="status" class="form-control">
+                <label for="name">Status</label>
+                <select name="status" class="form-select">
                     <option value=""></option>
                     <option @if( $ip->status == "Subdivided") selected="true" @endif style="background-color: #e1e1e1">
                         Subdivided
@@ -43,8 +43,8 @@
 
             <div class="form-group col-md-6">
 
-                    <lable for="name">Site</lable>
-                    <select name="site_id" class="form-control" required>
+                    <label for="name">Site</label>
+                    <select name="site_id" class="form-select" required>
                         @foreach( $sites as $site)
                             <option @if ($ip->site_id == $site->id) selected="true"
                                     @endif value="{{ $site->id }}">{{$site->name}} ({{$site->sitecode}})
@@ -54,8 +54,8 @@
             </div>
 
             <div class="form-group col-md-6">
-                    <lable for="name">Owner</lable>
-                    <select name="user_id" class="form-control" required>
+                    <label for="name">Owner</label>
+                    <select name="user_id" class="form-select" required>
                         <option value="0"></option>
                         @foreach( $users as $user)
                             <option @if ($ip->user_id == $user->id) selected="true"
@@ -63,21 +63,21 @@
                             </option>
                         @endforeach
                     </select>
-                    <p class="help-block">Be careful when assigning ownership. If you assign ownership to someone else you may
+                    <p class="form-text">Be careful when assigning ownership. If you assign ownership to someone else you may
                         not be able to access the ip anymore.</p>
 
             </div>
 
             <div class="form-group col-md-6">
-                <lable for="mac_address">MAC Address</lable>
+                <label for="mac_address">MAC Address</label>
                 <input type="text" name="mac_address" class="form-control" value="{{ $ip->mac_address }}">
 
             </div>
 
             <div class="form-group col-md-6">
 
-                <lable for="name">Equipment</lable>
-                <select name="equipment_id" class="form-control">
+                <label for="name">Equipment</label>
+                <select name="equipment_id" class="form-select">
                     <option value=""></option>
                     @foreach( $equipments as $equipment)
                         <option @if ($ip->equipment_id == $equipment->id) selected="true"
@@ -89,59 +89,59 @@
 
 
             <div class="form-group col-md-6">
-                <lable for="name">Comments</lable>
+                <label for="name">Comments</label>
                 <textarea rows=5  name="comment" class="form-control">{{ $ip->comment }}</textarea>
             </div>
             <div class="form-group col-md-6">
-                <lable for="name">Description</lable>
+                <label for="name">Description</label>
                 <textarea rows=5 name="description" class="form-control">{{ $ip->description }}</textarea>
-                <p class="help-block">This content may be used to describe the site publicly</p>
+                <p class="form-text">This content may be used to describe the site publicly</p>
             </div>
 
         </div>
     </div>
 
 
-    <div class="panel panel-default">
+    <div class="card card-default">
 
-        <div class="panel-heading">
+        <div class="card-header">
             Network Information
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="form-group col-md-6">
-                <lable for="name">IP Address</lable>
+                <label for="name">IP Address</label>
                 <input type="text" name="ip" class="form-control" value="{{ $ip->ip }}">
             </div>
 
 
         <div class="form-group col-md-6">
-            <lable for="name">Gateway</lable>
+            <label for="name">Gateway</label>
             <input type="text" name="gateway" class="form-control" value="{{ $ip->gateway }}">
         </div>
 
         <div class="form-group col-md-6">
-            <lable for="name">Netmask</lable>
+            <label for="name">Netmask</label>
             <input type="text" name="netmask" class="form-control" value="{{ $ip->netmask }}">
         </div>
 
         <div class="form-group col-md-6">
-            <lable for="name">DHCP Server</lable>
+            <label for="name">DHCP Server</label>
             <input type="text" name="dhcp" class="form-control" value="{{ $ip->dhcp }}">
         </div>
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="card card-default">
 
-        <div class="panel-heading">
+        <div class="card-header">
             DNS
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
 
             <div class="form-group col-md-6">
-                <lable for="name">Maintain Record</lable>
-                <select name="dns" class="form-control">
+                <label for="name">Maintain Record</label>
+                <select name="dns" class="form-select">
                     <option value="">No</option>
                     <option @if( $ip->dns == "Yes") selected="true" @endif>
                         Yes
@@ -151,12 +151,12 @@
                     </option>
                 </select></div>
             <div class="form-group col-md-3">
-                <lable for="name">Hostname</lable>
+                <label for="name">Hostname</label>
                 <input type="text" name="hostname" class="form-control" value="{{ $ip->hostname }}">
             </div>
             <div class="form-group col-md-3">
-                <lable for="name">DNS Zone</lable>
-                <select name="dns_zone" class="form-control">
+                <label for="name">DNS Zone</label>
+                <select name="dns_zone" class="form-select">
                     <option value=""></option>
                     <option @if( $ip->dns_zone == "if.hamwan.ca.") selected="true" @endif value="if.hamwan.ca." >
                         .if.hamwan.ca.
@@ -180,8 +180,8 @@
 
 
     <div class="form-group col-md-6">
-        <lable for="name">Category</lable>
-        <select name="category" class="form-control">
+        <label for="name">Category</label>
+        <select name="category" class="form-select">
             <option value=""></option>
             <option @if( $ip->category == "OSPF Routing") selected="true" @endif
                 value="OSPF Routing">OSPF Routing

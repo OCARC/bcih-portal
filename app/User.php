@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
@@ -31,6 +32,13 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    static function current() {
+        $user = auth()->user();
+        if ( ! $user ) {
+            $user = User::where('name','guest') -> first();
+        }
+        return $user;
+    }
     public function rsa_keys() {
         return $this->hasMany('App\RsaKey');
     }
@@ -49,5 +57,30 @@ class User extends Authenticatable
     }
     public function keys() {
         return $this->hasMany(RsaKey::class);
+    }
+    public function cameras( ) {
+        return $this->hasMany(Camera::class);
+    }
+
+    public function getEntities( $class, $includeRoles = false ) {
+        if ( class_exists( $class ) ) {
+
+            if ( $includeRoles ) {
+
+                $roles = $this->getRoleNames();
+                $roles->add('guest');
+
+                $entities = $class::role( $roles )->get();
+                $entities = $entities->merge(
+                    $this->hasMany($class)
+                );
+            } else {
+                $entities = $this->hasMany($class)->get();
+            }
+
+            return $entities;
+        }
+
+        return new Collection();
     }
 }

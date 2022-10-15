@@ -2,8 +2,10 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role as baseRole;
 
@@ -31,6 +33,27 @@ class Role extends baseRole
         'password', 'remember_token',
     ];
 
+    public function equipment() {
+
+
+        return Equipment::role( $this->id )->get();
+    }
+    public function sites() {
+
+
+        return Site::role( $this->id )->get();
+    }
+
+    public function getFriendlyName() {
+        if( $this->friendly_name ) {
+            return $this->friendly_name;
+        }
+        if( $this->name ) {
+            return $this->name;
+        }
+
+        return "Role:" . $this->id;
+    }
 
 //    public function rsa_keys() {
 //        return $this->hasMany('App\RsaKey');

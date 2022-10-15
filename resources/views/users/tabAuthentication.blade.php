@@ -2,11 +2,11 @@
 
 <br>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             Password
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             @if( $user->realm == 'ldap')
                 <div class="alert alert-info">
@@ -22,8 +22,8 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             Keys
         </div>
     @include('keys.list', ['keys' => $user->keys ])

@@ -118,7 +118,7 @@
 
         <tr id="equipment-{{ $row->id }}" class="ajaxAction">
             <td>
-                <a href="{{url("equipment/" . $row->id ) }}">{{ ($row->librenms_mapping) ? $row->libre_device['hostname'] : $row->hostname }}</a><br>
+                <a href="{{url("equipment/" . $row->id ) }}">{{ $row->hostname }}</a><br>
                 {{ ($row->librenms_mapping) ? $row->libre_device['sysName'] : $row->snmp_sysName }}
 
             </td>

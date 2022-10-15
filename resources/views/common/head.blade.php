@@ -1,3 +1,4 @@
+<!-- start common/head.blade.php -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6,8 +7,8 @@
 <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 
 <!-- Fonts -->
-<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="//cdn.materialdesignicons.com/3.7.95/css/materialdesignicons.min.css">
+{{--<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>--}}
+<link rel="stylesheet" href="/css/materialdesignicons.min.css">
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -17,5 +18,9 @@
 
 
 <![endif]-->
+<link href="/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+<script src="/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
 
 <script src="{{url('js/ajaxActions.js')}}"></script>
+
+<!-- end common/head.blade.php -->

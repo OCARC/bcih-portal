@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \Spatie\Permission\Models\Role;
-
+//use \Spatie\Permission\Models\Role;
+use \App\Role;
 class RoleController extends Controller
 {
     /**
@@ -67,8 +67,48 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
-        return view('roles.show', ['role' => $role, 'permissions' => \App\Permission::all() ]);
+
+        $tabs = array(
+            'info' => array(
+                'title' => "Role Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'roles.parts.tabInfo'
+            ),
+            'permissions' => array(
+                'title' => "Permissions",
+                'active' => false,
+                'visible' => true,
+                'template' => 'roles.parts.tabPermissions'
+            ),
+            'users' => array(
+                'title' => "Users",
+                'active' => false,
+                'visible' => true,
+                'template' => 'roles.parts.tabUsers'
+            ),
+            'equipment' => array(
+                'title' => "Equipment",
+                'active' => false,
+                'visible' => true,
+                'template' => 'roles.parts.tabEquipment'
+            ),
+            'Sites' => array(
+                'title' => "Sites",
+                'active' => false,
+                'visible' => true,
+                'template' => 'roles.parts.tabSites'
+            ),
+        );
+
+        return view('roles.show', [
+            'tabs' => $tabs,
+            'role' => $role,
+            'permissions' => \App\Permission::all(),
+            'users' => $role->users()->get(),
+            'sites' => $role->sites(),
+            'equipment' => $role->equipment()
+        ] );
 
 
     }

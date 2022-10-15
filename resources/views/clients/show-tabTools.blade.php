@@ -16,6 +16,16 @@
                 onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/quickScan")}}')">Run Quick Scan
         </button>
     </div>
+
+    <h3>Perform Health Check</h3>
+
+    <div class="ajaxAction">
+        <div class="ajaxResult"></div>
+        <button class="btn btn-default"
+                onClick="ajaxAction(this,'{{url('clients/' . $client->id . "/healthCheck")}}')">Perform Health Check
+        </button>
+    </div>
+
     <h3>Retrieve Wireless Stats</h3>
 
     <div class="ajaxAction">
@@ -68,4 +78,5 @@
     </div>
 
     @include('common.tools.bandwidth_test', ['bwtest_servers' => $bwtest_servers])
+    @include('common.tools.traceroute', ['traceroute_servers' => $bwtest_servers])
 </div>

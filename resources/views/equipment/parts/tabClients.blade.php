@@ -7,9 +7,9 @@
 @if ($equipment->os == 'RouterOS' and $equipment->discover_clients == true )
     @if (! Auth::guest())
 
-        <div class="panel panel-default">
-            <div class="panel-heading">Discover Clients</div>
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-header">Discover Clients</div>
+            <div class="card-body">
                 <p>The portal periodically scans for new clients on configured devices. But this tool allows you to force a scan in realtime.</p>
 
                 <div class="ajaxAction">

@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+RewriteRule ^(librenms) - [L]
+RewriteRule ^(librenms/login) - [L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

@@ -26,7 +26,7 @@
 {{--<td>{{ $row->event_type }}</td>--}}
 {{--<td>--}}
     {{--@if($row->event_level == 0 )--}}
-        {{--<span class="label label-info">Info</span>--}}
+        {{--<span class="badge bg-info">Info</span>--}}
         {{--@else--}}
     {{--{{ $row->event_level }}--}}
     {{--@endif--}}

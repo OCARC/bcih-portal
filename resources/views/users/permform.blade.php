@@ -10,7 +10,7 @@
 
     @php($cur_cat = "first run")
     <!-- Multiple Checkboxes -->
-        <div class="form-group">
+        <div class="form-group row">
 
             @foreach ($permissions->sortBy('category') as $row)
                 @if( $cur_cat != $row->category)
@@ -19,8 +19,8 @@
         @endif
         @php($cur_cat = $row->category)
 
-        <div class="col-md-3">
-            <h4>{{ $cur_cat or "Uncategorized" }}</h4>
+        <div class="col-3">
+            <h4>{{ $cur_cat ?? "Uncategorized" }}</h4>
             <div>
                 @endif
                 <div class="checkbox">
@@ -37,7 +37,7 @@
                                @if( $inherited )disabled="true" checked="true" @endif
                                @if( $user->can($row->name) )checked="true" @endif
                                type="checkbox">
-                        {{ $row->friendly_name or $row->name }} @if( $inherited )<span
+                        {{ $row->friendly_name ?? $row->name }} @if( $inherited )<span
                                 class="text-success">(✔ Inherited)</span>@endif<br>
                         <span class="text-muted">{{$row->description }}</span>
 
@@ -49,9 +49,9 @@
 
         </div>
 <div style="clear: both"></div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="singlebutton"></label>
-            <div class="col-md-4 text-center">
+        <div class="form-group row">
+            <label class="col-4 control-label" for="singlebutton"></label>
+            <div class="col-4 text-center">
                 @if( ! Auth::user()->can('permissions.user_change') )
                     <p class="text-center">You do not have the required permissions to change this users permissions</p>
                 @else
@@ -75,7 +75,7 @@
 
     @php($cur_cat = "first run")
     <!-- Multiple Checkboxes -->
-        <div class="form-group">
+        <div class="form-group row">
 
             @foreach ($roles->sortBy('category') as $row)
                 @if( $cur_cat != $row->category)
@@ -84,8 +84,8 @@
         @endif
         @php($cur_cat = $row->category)
 
-        <div class="col-md-3">
-            <h4>{{ $cur_cat or "Uncategorized" }}</h4>
+        <div class="col-3">
+            <h4>{{ $cur_cat ?? "Uncategorized" }}</h4>
             <div>
                 @endif
                 <div class="checkbox">
@@ -93,7 +93,7 @@
                         <input name="roles[]" id="roles-{{$row->id}}" value="{{$row->name}}"
                                @if( ! Auth::user()->can('roles.user_change') )disabled="true"
                                @endif  @if( $user->hasrole($row->name) )checked="true" @endif type="checkbox">
-                        {{ $row->friendly_name or $row->name }}<br>
+                        {{ $row->friendly_name ?? $row->name }}<br>
                         <span class="text-muted">{{$row->description }}</span>
                     </label>
                 </div>
@@ -104,9 +104,9 @@
         </div>
 
 
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="singlebutton"></label>
-            <div class="col-md-4">
+        <div class="form-group row">
+            <label class="col-4 control-label" for="singlebutton"></label>
+            <div class="col-4">
                 @if( ! Auth::user()->can('roles.user_change') )
                     <p class="text-center">You do not have the required permissions to change this users roles</p>
                 @else

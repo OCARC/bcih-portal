@@ -22,14 +22,14 @@
 
     @foreach ($subnets as $row)
 <tr>
-<td class="text-right" style="font-family: courier">
+<td class="text-end" style="font-family: courier">
 
     <a href="{{url("subnets/" . $row->id )}}">{{ $row->ip  }}</a><br>
     {{ $row->name  }}</td>
 
     <td style="font-family: courier">/{{ $row->CIDR()  }}</td>
-            <td class="text-right">({{  ceil(($row->countUsed()/$row->count())*100)  }}%) {{ $row->countUsed()  }}</td>
-            <td class="text-right">{{ $row->count()  }}</td>
+            <td class="text-end">({{  ceil(($row->countUsed()/$row->count())*100)  }}%) {{ $row->countUsed()  }}</td>
+            <td class="text-end">{{ $row->count()  }}</td>
 
             @if ($row->status == "Subdivided")
                 <td style="vertical-align:middle;background-color: #e1e1e1" sorttable_customkey="{{ $row->status }}">{{ $row->status }}</td>
@@ -48,22 +48,22 @@
             @endif
             <td style="text-align: center; vertical-align:middle">
                 @if ($row->category == "OSPF Routing")
-                    <span class="label label-success">{{ $row->category }}</span>
+                    <span class="badge bg-success">{{ $row->category }}</span>
             @elseif( $row->category == "Clients")
-                    <span class="label label-warning">{{ $row->category }}</span>
+                    <span class="badge bg-warning">{{ $row->category }}</span>
                 @elseif( $row->category == "Client Subnet")
-                    <span class="label label-primary">{{ $row->category }}</span>
+                    <span class="badge bg-primary">{{ $row->category }}</span>
             @else
-                    <span class="label label-default">{{ $row->category }}</span>
+                    <span class="badge bg-default">{{ $row->category }}</span>
                 @endif
 </td>
             <td style=" vertical-align:middle">
 {{ $row->gateway  }}</td>
             <td style="text-align: center; vertical-align:middle">
         @if ( $row->dhcp )
-                    <span class="label label-success">Yes</span><br>
+                    <span class="badge bg-success">Yes</span><br>
         @else
-                    <span class="label label-danger">No</span>
+                    <span class="badge bg-danger">No</span>
                 @endif
             </td>
             <td class="text-center" style="vertical-align:middle;" >

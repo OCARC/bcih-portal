@@ -3,7 +3,7 @@
 @section('content')
 
 
-    <h2>IP: {{$ip->ip}} ({{ $ip->name or $ip->description}})</h2>
+    <h2>IP: {{$ip->ip}} ({{ $ip->name ?? $ip->description}})</h2>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="{{url("/ips")}}">IP Addresses</a></li>
@@ -21,14 +21,14 @@
             <div role="tabpanel" class="tab-pane active" id="ipInfo">
 
 
-                <form method="POST" action="{{ url("/equipment/" . $ip->id . "") }}" accept-charset="UTF-8">
+                <form method="POST" action="{{ url("/ips/" . $ip->id . "") }}" accept-charset="UTF-8">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="_method" value="DELETE"/>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="card card-default">
+                        <div class="card-header">
                             IP Address Information
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <div class="row">
 
                                 <div class="form-group col-xs-4">
@@ -57,11 +57,11 @@
                                 </div>
                                 <div class="form-group col-xs-4">
                                     <label for="name">Subnet Mask</label>
-                                    <p class="form-control-static">{{$ip->netmask or 'not set'}}</p>
+                                    <p class="form-control-static">{{$ip->netmask ?? 'not set'}}</p>
                                 </div>
                                 <div class="form-group col-xs-4">
                                     <label for="name">Gateway</label>
-                                    <p class="form-control-static">{{$ip->gateway or 'not set'}}</p>
+                                    <p class="form-control-static">{{$ip->gateway ?? 'not set'}}</p>
                                 </div>
                                 </div>
                             <div class="row">
@@ -111,22 +111,22 @@
 
                                 <label for="name">Description (public)</label>
                                 <p class="form-control-static">
-                                    {{ $ip->description or "nil" }}
+                                    {{ $ip->description ?? "nil" }}
                                 </p>
                             </div>
                             <div class="form-group col-xs-6">
 
                                 <label for="name">Comments</label>
                                 <p class="form-control-static">
-                                    {{ $ip->comment or "nil" }}
+                                    {{ $ip->comment ?? "nil" }}
                                 </p>
                             </div>
                             </div>
                         </div>
-                        <div class="panel-footer text-right">
+                        <div class="card-footer text-end">
 
                             <a href="{{ url("/ips/" . $ip->id . "/edit") }}"><button type="button" class="btn btn-xs btn-success">Edit IP</button></a>
-                            <button type="submit" class="btn btn-xs btn-danger">Delete IP</button>
+                            <a href="{{ url("/ips/" . $ip->id . "/delete") }}"><button type="submit" class="btn btn-xs btn-danger">Delete IP</button></a>
                         </div>
                     </div>
 
@@ -142,15 +142,15 @@
 
 
 
-                <form method="POST" action="{{ url("/ips/" . $ip->id . "") }}" accept-charset="UTF-8">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="_method" value="DELETE"/>
-                    <a href="{{ url("/ips/" . $ip->id . "/edit") }}">
-                        <button type="button" class="btn btn-sm btn-success">Edit ip</button>
-                    </a>
+{{--                <form method="POST" action="{{ url("/ips/" . $ip->id . "") }}" accept-charset="UTF-8">--}}
+{{--                    <input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+{{--                    <input type="hidden" name="_method" value="DELETE"/>--}}
+{{--                    <a href="{{ url("/ips/" . $ip->id . "/edit") }}">--}}
+{{--                        <button type="button" class="btn btn-sm btn-success">Edit ip</button>--}}
+{{--                    </a>--}}
 
-                    <button type="button" class="btn btn-sm btn-danger">Delete ip</button>
-                </form>
+{{--                    <button type="button" class="btn btn-sm btn-danger">Delete ip</button>--}}
+{{--                </form>--}}
             </div>
 
         </div>

@@ -42,7 +42,7 @@
                         {{ $row->ifOperStatus  }}
                         @endif
                     </td>
-                    <td class="text-right">{{$row->ifSpeed}}</td>
+                    <td class="text-end">{{$row->ifSpeed}}</td>
                     <td>
                         @if( $row->ifType == 'l2vlan')
                             VLAN
@@ -59,7 +59,7 @@
                         @endif
                     </td>
                     <td class="">{{$row->ifPhysAddress}}</td>
-<td class="text-right">
+<td class="text-end">
     @foreach ($row->libre_ipv4Addresses as $ip)
 {{$ip->ipv4_address}} / {{$ip->ipv4_prefixlen}}<br>
     @endforeach
@@ -88,7 +88,7 @@
                     {{--@else--}}
                         {{--<td>n/a</td>--}}
                     {{--@endif--}}
-                    {{--<td class="text-right">{{ $row->altitude }}m</td>--}}
+                    {{--<td class="text-end">{{ $row->altitude }}m</td>--}}
                 </tr>
             @endforeach
             </tbody>

@@ -12,13 +12,19 @@ class DNSRecord extends Model
 //    public static function boot()
 //    {
 //
-//        parent::boot();
-//
-//        self::saving(function($model){
-//            // ... code here
-//            dd($model->dnszone);
-//        });
 //    }
+
+    public function setHostnameAttribute($value)
+    {
+
+        $this->attributes['hostname'] = strtolower($value);
+    }
+    public function setTargetAttribute($value)
+    {
+
+        $this->attributes['target'] = strtolower($value);
+
+    }
 public function recordTypes() {
 
     return array(
@@ -35,6 +41,7 @@ public function recordTypes() {
 
     );
 }
+
     public function site() {
         $site = $this->belongsTo(Site::class);
         if ( $site ) {
@@ -154,9 +161,9 @@ if (!$this->id ) {
         $server = $this->dnsZone->server;
         $key_file = $this->dnsZone->dns_key;
 
-        $subdomain = $this->hostname;
+        $subdomain = strtolower($this->hostname);
 
-        $zone = $this->dnsZone->domain;
+        $zone = strtolower($this->dnsZone->domain);
 
         if ( $this->record_type == "A") {
 

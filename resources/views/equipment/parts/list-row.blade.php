@@ -1,34 +1,31 @@
 @php ( $librenms_mapping = $row->librenms_mapping )
 
-<tr style="background-color: {{$row->getHealthColor(0.15,true) }}">
+<tr style="background-color: {{$row->getHealthColor(0.15,true) }}" class="small">
 {{--    <td class="status-col {{ $row->libre_status_class() }}">--}}
 
 {{--    </td>--}}
-    <td class="ping-col text-right @if( $row->hc_ping_result >= 0)success @else danger @endif">
+    <td class="ping-col text-end @if( $row->hc_ping_result >= 0)success @else danger @endif">
         @if( $row->hc_ping_result >= 0){{ $row->hc_ping_result }}ms @else Offline @endif
 
     </td>
-    <td style="height: 50px; background-repeat: no-repeat; background-position:center; background-size: contain; background-image: url('{{ $row->icon() }}'); border-left: 10px solid {{$row->getHealthColor(1)}}">
 
-    </td>
-    <td>
-{{--        <a href="{{url("equipment/" . $row->id ) }}">{{ ($librenms_mapping) ? $row->libre_device['hostname'] : $row->hostname }}</a><br>--}}
-{{--        {{ ($librenms_mapping) ? $row->libre_device['sysName'] : $row->snmp_sysName }}--}}
-        <a href="{{url("equipment/" . $row->id ) }}">{{  $row->hostname }}</a>
+    <td class="text-nowrap text-truncate">
+        <img class="" src="{{$row->icon()}}" style="max-height: 2.75em;max-width: 2.75em; float:left; margin-right: 0.5em">
+
+        <a href="{{url("equipment/" . $row->id )}}">{{$row->hostname }}</a>
         @if( $row->librenms_mapping )
-        <a href="//nms.if.hamwan.ca/device/{{$row->librenms_mapping}}" target="_blank"><img style="height: 1em; float:right" src="/images/librenmsicon.png"></a>
-            @endif
-            <br>
-        {{ ($librenms_mapping) ? $row->libre_device['sysName'] : $row->snmp_sysName }}
-
+            <a href="//nms.if.hamwan.ca/device/{{$row->librenms_mapping}}" target="_blank"><img style="height: 1em; float:right" src="/images/librenmsicon.png"></a>
+        @endif
+        <div class="text-muted small text-nowrap text-truncate" style="max-width: 120px;">{{ str_replace("RouterOS","",$row->snmp_sysDesc) }}</div>
     </td>
 
 
 
 
-    <td>
-        {{ ($librenms_mapping) ? $row->libre_device['hardware'] : 'No LNMS Mapping' }}<br>
-        S/N: {{ $row->get_serial_number() }}
+
+    <td class="text-nowrap text-truncate" style="position: relative;">
+        <div class="absoluteElipsis">{{ str_replace("RouterOS","",$row->snmp_sysDesc) }}</div><br>
+        <strong>S/N:</strong> {{ $row->get_serial_number() }}
 
     </td>
 
@@ -50,25 +47,23 @@
     </td>
 
 
-    <td class="text-right">
+    <td class="text-end">
 {{--        {{ ($librenms_mapping) ? number_format( $row->libre_sensor('voltage')->sensor_current,1) : 'n/a' }}--}}
         {{ $row->snmp_voltage }}
 
     </td>
-    <td class="text-right">
+    <td class="text-end">
 {{--        {{ ($librenms_mapping) ?  $row->libre_sensor('temperature')->sensor_current : 'n/a' }}--}}
         {{ $row->snmp_temperature }}
 
     </td>
-    <td class="text-right">
+    <td class="text-end">
 {{--        {{ ($librenms_mapping) ? $row->libre_wireless('frequency')->sensor_current : 'n/a' }}--}}
         {{ $row->snmp_frequency }}
 
     </td>
-    <td class="text-right">
-        {{ ($librenms_mapping) ? $row->libre_wireless('ccq')->sensor_current : 'n/a' }}
-    </td>
-    <td class="text-right">
+
+    <td class="text-end">
         {{ ($librenms_mapping) ? $row->libre_wireless('clients')->sensor_current : 'n/a' }}
     </td>
     <td class="text-left">

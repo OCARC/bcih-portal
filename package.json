@@ -11,11 +11,15 @@
     },
     "devDependencies": {
         "axios": "^0.16.2",
+        "bootstrap": "^4.6.0",
         "bootstrap-sass": "^3.3.7",
         "cross-env": "^5.0.1",
-        "jquery": "^3.1.1",
+        "jquery": "^3.6",
         "laravel-mix": "^1.0",
         "lodash": "^4.17.4",
+        "popper.js": "^1.16.1",
+        "sass": "^1.32.11",
+        "sass-loader": "^11.0.1",
         "vue": "^2.1.10"
     }
 }

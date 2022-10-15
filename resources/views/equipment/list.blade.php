@@ -5,7 +5,6 @@
         <thead>
         <tr>
             <th style="width: 50px">Ping</th>
-            <th style="width: 50px"></th>
             <th>Hostname</th>
 
             <th>Platform</th>
@@ -15,7 +14,6 @@
             <th class="sorttable_numeric">Volt</th>
             <th class="sorttable_numeric">Temp</th>
             <th class="sorttable_numeric">Freq</th>
-            <th>CCQ</th>
             <th>Clients</th>
             <th>SSID</th>
 
@@ -31,7 +29,6 @@
 
     </table>
 
-    <a href="{{ url("/equipment/create") }}"><button type="button" class="btn btn-sm btn-success">Create Equipment</button></a>
-    <a href="{{ url("/equipment/refresh") }}"><button type="button" class="btn btn-sm btn-info">Poll Equipment</button></a>
+
 
 </div>

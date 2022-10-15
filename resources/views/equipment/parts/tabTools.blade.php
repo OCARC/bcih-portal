@@ -6,9 +6,9 @@
     @if ($equipment->os == 'RouterOS')
         @if ($equipment->remote_serial_port != '')
             @if (! Auth::guest())
-                <div class="panel panel-default">
-                    <div class="panel-heading">Manage Remote Serial Port Access</div>
-                    <div class="panel-body">
+                <div class="card card-default">
+                    <div class="card-header">Manage Remote Serial Port Access</div>
+                    <div class="card-body">
                         <p>Using this tool you can add/remove IP addresses that are authroized to access the serial port
                             on this device remotely.</p>
 
@@ -49,38 +49,12 @@
         @endif
     @endif
 
-    @if ($equipment->os == 'RouterOS')
-        @if (! Auth::guest())
-
-            <div class="panel panel-default">
-                <div class="panel-heading">Get Configuration</div>
-                <div class="panel-body">
-                    <p>Retrieve the current configuration from the device.</p>
-
-                    <div class="ajaxAction">
-                        <div class="ajaxResult"></div>
-                        <div class="ajaxButtons">
-
-                            <button class="btn btn-default"
-                                    onClick="ajaxAction(this,'{{url('equipment/' . $equipment->id . "/fetchConfig")}}')">
-                                Fetch Configuration
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-    @endif
+    @include('common.tools.getConfig', ['target' => $equipment ])
 
 
-    @if ($equipment->os == 'RouterOS')
-        @if (! Auth::guest())
-
-            @include('common.tools.bandwidth_test', ['bwtest_servers' => $bwtest_servers])
+     @include('common.tools.bandwidth_test', ['target' => $equipment, 'bwtest_servers' => $bwtest_servers])
 
 
-        @endif
-    @endif
 
 
 @if ($equipment->os == 'RouterOS')

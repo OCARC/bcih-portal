@@ -28,21 +28,49 @@ class PtpLinkController extends Controller
     {
 
 
-        return view('links.create', ['link' => new \App\PtpLink(), 'equipments' => \App\Equipment::all()->sortBy('hostname') , 'sites' => \App\Site::all(), 'roles' => Role::all() ]);
+        return view('links.create', ['link' => new \App\PtpLink(), 'equipments' => \App\Equipment::all()->sortBy( array('site_id', 'hostname') ) , 'sites' => \App\Site::all(), 'roles' => Role::all() ]);
 
     }
     public function edit(PtpLink $link)
     {
         //
 
-        return view('links.edit',  ['link' => $link, 'equipments' => \App\Equipment::all()->sortBy('hostname') , 'sites' => \App\Site::all(), 'roles' => Role::all() ]);
+        return view('links.edit',  ['link' => $link, 'equipments' =>\App\Equipment::all()->sortBy( array('site_id', 'hostname') ) , 'sites' => \App\Site::all(), 'roles' => Role::all() ]);
 
     }
     public function show(PtpLink $link)
     {
-        //
+        $tabs = array(
+            'info' => array(
+                'title' => "Link Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'links.parts.tabInfo'
+            ),
+            'ips' => array(
+                'title' => "IP Addresses",
+                'active' => false,
+                'visible' => true,
+                'template' => 'links.parts.tabIPs'
 
-        return view('links.show',  ['link' => $link, 'equipments' => \App\Equipment::all()->sortBy('hostname') , 'sites' => \App\Site::all(), 'roles' => Role::all() ]);
+            ),
+            'graphs' => array(
+                'title' => "Graphs",
+                'active' => false,
+                'visible' => true,
+                'template' => 'links.parts.tabGraphs'
+
+            ),
+            'tools' => array(
+                'title' => "Tools",
+                'active' => false,
+                'visible' => true,
+                'template' => 'links.parts.tabTools'
+
+            ),
+        );
+
+        return view('links.show',  ['tabs' => $tabs, 'link' => $link, 'equipments' => \App\Equipment::all()->sortBy('hostname') , 'sites' => \App\Site::all(), 'roles' => Role::all() ]);
 
     }
     /**

@@ -5,7 +5,6 @@
     <thead>
     <tr>
         <th style="width: 20px"></th>
-        <th style="width: 50px"></th>
         <th>Site Name</th>
         <th>Code</th>
         <th>Status</th>
@@ -23,9 +22,16 @@
 
             </td>
 
-            <td style="height: 50px; background-repeat: no-repeat; background-position:center; background-size: contain; background-image: url('http://portal.hamwan.ca/status/icon/site.svg?siteID={{$row->id}}')">
+            <td class="text-nowrap text-truncate">
+                <img class="" src="{{$row->icon()}}" style="max-height: 2.75em;max-width: 2.75em; float:left; margin-right: 0.5em">
 
-            <td><a href="{{ url("site/" . $row->id ) }}">{{ $row->name }}</td>
+                <a href="{{url("site/" . $row->id )}}">{{$row->name }}</a>
+                @if( $row->librenms_mapping )
+                    <a href="//nms.if.hamwan.ca/device/{{$row->librenms_mapping}}" target="_blank"><img style="height: 1em; float:right" src="/images/librenmsicon.png"></a>
+                @endif
+                <div class="text-muted small text-nowrap text-truncate">{{$row->description}}</div>
+            </td>
+
             <td>{{ $row->sitecode }}</td>
             <td>{{ $row->status }}</td>
 
@@ -40,7 +46,7 @@
             @else
                 <td>n/a</td>
             @endif
-            <td class="text-right">{{ $row->altitude }}m</td>
+            <td class="text-end">{{ $row->altitude }}m</td>
         </tr>
     @endforeach
     </tbody>

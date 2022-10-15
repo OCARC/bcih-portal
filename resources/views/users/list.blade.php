@@ -34,7 +34,7 @@
                 <td>
                         @foreach( $user->roles as $role )
                                 @if($role->category == "Organizations")
-                            &bull; {{ $role->friendly_name or $role->name }}<br>
+                            &bull; {{ $role->friendly_name ?? $role->name }}<br>
                                 @endif
                         @endforeach
 
@@ -42,7 +42,7 @@
                 <td>
                         @foreach( $user->roles as $role )
                         @if($role->category != "Organizations")
-                        &bull; {{ $role->friendly_name or $role->name }}<br>
+                        &bull; {{ $role->friendly_name ?? $role->name }}<br>
                         @endif
                         @endforeach
 
@@ -53,6 +53,7 @@
                 <td><a href="{{url("users/" . $user->id ) . "#ips"}}">{{ count($user->ips) }}</a></td>
             </tr>
         @endforeach
+
         </tbody>
 
 

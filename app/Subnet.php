@@ -33,6 +33,7 @@ class Subnet extends Model
 
 
     }
+
     public function ips( $onlyAssigned = false) {
         //$records = $this->hasMany(IP::class)->orderBy('ip');
 
@@ -41,6 +42,7 @@ class Subnet extends Model
 
         $db_ips = IP::all();
         $db_leases = DhcpLease::all();
+
         $result = array();
 
 
@@ -49,7 +51,6 @@ class Subnet extends Model
         foreach( $ips as $ip_address ) {
 
             $ip = $db_ips->where('ip', $ip_address)->first();
-           // $lease = $db_leases->where('ip', $ip_address)->first();
 
             if ( $ip ) {
                 if ( !  $ip->category  ) {
@@ -149,9 +150,14 @@ return  $this->mask2cidr( $this->netmask );
 
     public function count() {
 
-           return count($this->getEachIpInRange( $this->ip . "/" . $this->CIDR() ));
+        $range = $this->getIpRange(
+            $this->ip . "/" .  $this->mask2cidr(  $this->netmask )
+        );
+        return ($range['lastIP'] - $range['firstIP'])+1;
+           //return count($this->getEachIpInRange( $this->ip . "/" . $this->CIDR() ));
     }
     public function countUsed() {
+
         return count($this->ips( true ) );
     }
 }

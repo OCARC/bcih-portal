@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\SupportedFeatures;
 use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\Object_;
 
@@ -20,11 +21,16 @@ class Client extends Model
     const OID_mtxrWlStatTxRate = ".1.3.6.1.4.1.14988.1.1.1.1.1.2.1";
     const OID_mtxrWlStatRxRate = ".1.3.6.1.4.1.14988.1.1.1.1.1.3.1";
 
+    protected $casts = [
+        'hc_last_run' => 'datetime',
+        'hc_last_ping_success' => 'datetime'
+    ];
+
     protected $guarded = [];
     use \App\Traits\SSHConnection;
     use \App\Traits\DeviceIcon;
     use \App\Traits\HealthCheck;
-
+    use \App\Traits\SupportedFeatures;
     public function getFriendlyName() {
         if ( $this->snmp_sysName ) {
             return $this->snmp_sysName;
@@ -34,6 +40,10 @@ class Client extends Model
         }
 
         return "Unknown " . $this->id;
+    }
+
+    public function ips() {
+        return \App\IP::all()->where('mac_address', 'like', strtoupper($this->mac_address) );
     }
 
     public function getHealthColor() {
@@ -162,7 +172,21 @@ class Client extends Model
         return $result;
 
     }
+    public function sshTraceroute() {
+        $target = escapeshellcmd($_GET['target']);
+        $useDNS = escapeshellcmd($_GET['use_dns']);
+//        $direction = escapeshellcmd($_GET['direction']);
 
+        // Load management Key
+        $key = \App\User::where('callsign','manage')->first()->rsa_keys->where('publish',1)->first();
+
+        $result = $this->executeSSH( 'manage', $key, "/tool traceroute count=1 use-dns=$useDNS address=" . $target, true) ;
+
+        $result['data'] = explode("\r\n\r\n", $result['data']);
+        $result['data'] = "<pre width=\"200\" style=\"color: white; background: black\">" . $result['data'][ count($result['data'] )-1 ] . "</pre>";
+        return $result;
+
+    }
     public function sshFetchSpectralHistory(){
 
 
@@ -477,7 +501,7 @@ class Client extends Model
 //        }
     }
 
-    public function getManagemnetIP() {
+    public function getManagementIP() {
         if ( ! $this->management_ip ) {
             $dhcp = $this->dhcp_lease();
             if (!$dhcp) {
@@ -493,7 +517,7 @@ class Client extends Model
 
     public function pollSNMP( $community = 'hamwan') {
 
-        $ip = $this->getManagemnetIP();
+        $ip = $this->getManagementIP();
 
         if ( !$ip ) {
             $result = array();

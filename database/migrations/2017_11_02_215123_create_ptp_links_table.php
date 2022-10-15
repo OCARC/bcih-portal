@@ -27,6 +27,7 @@ class CreatePtpLinksTable extends Migration
             $table->text('comments')->nullable(true);
             $table->string('link_color')->nullable(true);
             $table->string('status')->nullable(true);
+            $table->string('mapStyle')->nullable(true);
             $table->timestamps();
         });
     }

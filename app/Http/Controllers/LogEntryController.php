@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\LogEntry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LogEntryController extends Controller
 {
@@ -22,7 +23,8 @@ class LogEntryController extends Controller
     public function index()
     {
 
-        $logEvents = \App\LogEntry::all(); //->sortBy("site_id")->sortBy("type");
+                $logEvents = \App\LogEntry::orderBy('created_at', 'desc')->limit(100)->get(); //->sortBy("site_id")->sortBy("type");
+
 //        if ( $request->json ) {
 //            return $users;
 //        } else {
@@ -32,41 +34,6 @@ class LogEntryController extends Controller
         return view('log.index', compact('logEvents'));
     }
 
-    public function showAjax(Client $client, $method)
-    {
-
-
-        $result = array(
-            'method' => $method,
-            'status' => 'fail'
-        );
-
-        if ($method == "fetchConfig") {
-            $r = $client->sshFetchConfig();
-        }
-        if ($method == "resetGain") {
-            $r = $client->sshResetGain();
-        }
-        if ($method == "quickScan") {
-            $r = $client->sshQuickScan();
-        }
-        if ($method == "quickMonitor") {
-            $r = $client->sshQuickMonitor();
-        }
-        if ($method == "fetchSpectralHistory") {
-            $r = $client->sshFetchSpectralHistory();
-        }
-        if ($method == "bwTest") {
-            $r = $client->sshBWTest();
-        }
-        if ($r) {
-            $result['data'] = $r['data'];
-            $result['status'] = $r['status'];
-            $result['reason'] = $r['reason'];
-        }
-        return $result ;
-
-    }
     public function refresh() {
         $clients = Client::all();
         foreach( $clients as $i) {

@@ -4,9 +4,8 @@
 
     <thead>
     <tr>
-        <th style="width: 50px">Ping</th>
-        <th style="width: 50px"></th>
-        <th>Radio Name</th>
+        <th class="sorttable_numeric" style="width: 50px">Ping</th>
+        <th>Client</th>
         <th>Address</th>
         <th>Connected To</th>
         <th>Signal</th>

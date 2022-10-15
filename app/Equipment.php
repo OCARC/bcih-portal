@@ -4,6 +4,7 @@ namespace App;
 
 use App\Client;
 use App\Console\Commands\pollClients;
+use App\Traits\SupportedFeatures;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use JJG\Ping;
@@ -36,12 +37,15 @@ class Equipment extends Model
     CONST OID_SNR = ".1.3.6.1.4.1.14988.1.1.1.2.1.12";
     CONST OID_TEMPERATURE = ".1.3.6.1.4.1.14988.1.1.3.10.0";
     CONST OID_VOLTAGE = ".1.3.6.1.4.1.14988.1.1.3.8.0";
-    CONST OID_BAND = ".1.3.6.1.4.1.14988.1.1.1.3.1.8.2";
+    CONST OID_BAND1 = ".1.3.6.1.4.1.14988.1.1.1.3.1.8.1";
+    CONST OID_BAND2 = ".1.3.6.1.4.1.14988.1.1.1.3.1.8.2";
     CONST OID_FREQUENCY = ".1.3.6.1.4.1.14988.1.1.1.3.1.7.2";
     const OID_SSID = ".1.3.6.1.4.1.14988.1.1.1.3.1.4.2";
     const OID_UPTIME = ".1.3.6.1.2.1.1.3.0";
 
     const OID_VERSION = '.1.3.6.1.4.1.14988.1.1.4.4.0';
+
+    const OID_SYSNAME = ".1.3.6.1.2.1.1.5.0";
     //
 
     CONST OID_mtxrWlRtabSignalToNoise = ".1.3.6.1.4.1.14988.1.1.1.2.1.12";
@@ -53,25 +57,35 @@ class Equipment extends Model
     CONST OID_mtxrWlRtabTxStrengthCh2 = ".1.3.6.1.4.1.14988.1.1.1.2.1.17";
     CONST OID_mtxrWlRtabRxStrengthCh2 = ".1.3.6.1.4.1.14988.1.1.1.2.1.18";
 
+    const OID_mtxrWlApTxRate = ".1.3.6.1.4.1.14988.1.1.1.3.1.2";
+    const OID_mtxrWlApRxRate = ".1.3.6.1.4.1.14988.1.1.1.3.1.3";
+
     protected $guarded = [];
     use \App\Traits\SSHConnection;
     use \App\Traits\LibreNMS;
     use \App\Traits\DeviceIcon;
     use \App\Traits\DAEnetIP4;
+    use \App\Traits\CyberPowerPDU;
+    use \App\Traits\StardotCamera;
+    use \App\Traits\SupportedFeatures;
 
     use \App\Traits\HealthCheck;
 
     protected $hidden = [
         'snmp_community',
+        'snmp_community_rw',
         'comments'
     ];
 
 
-    public function getManagemnetIP() {
+
+    public function getManagementIP() {
         return $this->management_ip;
 
 
     }
+
+
 
     /**
      * Returns permission appropriate version of serial number for equipment
@@ -80,21 +94,20 @@ class Equipment extends Model
         $user = auth()->user();
 
         $serial = $this->snmp_serial;
-
-
-if ( $serial ) {
-        if (!$user) {
-            // Not logged in
-            return substr_replace($serial, '****', -6, 4);
-        } else {
-            if ($user->can('equipment.view_serial_numbers') ) {
-                return $serial;
-            } else {
-                return substr_replace($serial, '****', -6, 4);
-            }
+        
+        if ( $serial ) {
+                if (!$user) {
+                    // Not logged in
+                    return substr_replace($serial, '****', -6, 4);
+                } else {
+                    if ($user->can('equipment.view_serial_numbers') ) {
+                        return $serial;
+                    } else {
+                        return substr_replace($serial, '****', -6, 4);
+                    }
+                }
         }
-}
-return "n/a";
+        return "n/a";
     }
 
 
@@ -146,6 +159,9 @@ return "n/a";
         } else {
             return array();
         }
+    }
+    public function hasRadio() {
+        return ( $this->has_radio == 1 );
     }
 
     public function getHealthColor( $opacity = '1', $transparentUnlessAlarm = false) {
@@ -304,6 +320,9 @@ if ( ! $this->ant_gain && ! $this->radio_power ) { return null;}
             preg_match('/^(.+?).(\d+\.\d+\.\d+\.\d+\.\d+\.\d+\.\d+)$/', $key, $m);
 
             $client_mac = $this->convert_oidmac_to_hex( $m[2] );
+            if ( $client_mac == '013a8c01010102') {
+                continue;
+            }
             $oid = $m[1];
 
             if ( isset($clients[$client_mac]) === false ) {
@@ -790,7 +809,7 @@ $hosts = array();
                 $this::OID_TEMPERATURE,
                 $this::OID_UPTIME,
                 $this::OID_FREQUENCY,
-                $this::OID_BAND,
+                $this::OID_BAND1,
                 $this::OID_SERIAL,
                 $this::OID_SSID,
                 $this::OID_SNR,
@@ -798,9 +817,12 @@ $hosts = array();
                 $this::OID_SYSDESC,
                 $this::OID_FREQUENCY,
                 $this::OID_SSID,
-                $this::OID_BAND,
+                $this::OID_BAND2,
                 $this::OID_SNR,
-                $this::OID_VERSION
+                $this::OID_VERSION,
+                $this::OID_SYSNAME,
+                $this::OID_mtxrWlApTxRate,
+                $this::OID_mtxrWlApRxRate
             )
         );
 
@@ -810,11 +832,20 @@ $hosts = array();
         if ( isset($r[$this::OID_SSID]) ) {
             $this->snmp_ssid = $r[$this::OID_SSID];
         }
-        if ( isset($r[$this::OID_BAND]) ) {
-            $this->snmp_band = $r[$this::OID_BAND];
+        if ( isset($r[$this::OID_BAND1]) ) {
+            if ($r[$this::OID_BAND1] != "") {
+                $this->snmp_band = $r[$this::OID_BAND1];
+            }        }
+        if ( isset($r[$this::OID_BAND2]) ) {
+            if ($r[$this::OID_BAND2] != "") {
+                $this->snmp_band = $r[$this::OID_BAND2];
+            }
         }
         if ( isset($r[$this::OID_SNR]) ) {
             $this->snmp_snr = $r[$this::OID_SNR];
+        }
+        if ( isset($r[$this::OID_SYSNAME]) ) {
+            $this->snmp_sysName = $r[$this::OID_SYSNAME];
         }
         if ( isset($r[$this::OID_VERSION]) ) {
             $this->snmp_version = $r[$this::OID_VERSION];
@@ -827,6 +858,7 @@ $hosts = array();
         if ( isset($r[$this::OID_SYSDESC]) ) {
         if ( $r[$this::OID_SYSDESC] != "" ) {
             $this->radio_model = substr(str_replace("RouterOS ", "", $r[$this::OID_SYSDESC]),0,190);
+            $this->snmp_sysDesc = $r[$this::OID_SYSDESC];
         }
         }
         if ( isset($r[$this::OID_TEMPERATURE]) ) {
@@ -845,6 +877,20 @@ $hosts = array();
         if ( $this->snmp_uptime != 0) {
             $this->snmp_timestamp = \DB::raw('now()');
         }
+
+
+        $rw = $snmp->walk('-r 1 -t 1 .1.3.6.1.4.1.14988.1.1.1.3.1');
+
+        foreach( $rw as $k => $v) {
+
+            if ( strpos($k,$this::OID_mtxrWlApRxRate) === 0 ) {
+                $this->snmp_rx_rate = intval($v);
+            }
+            if ( strpos($k,$this::OID_mtxrWlApTxRate) === 0 ) {
+                $this->snmp_tx_rate = intval($v);
+            }
+        }
+
 
         // Do not update timestamps
         $this->timestamps = false;

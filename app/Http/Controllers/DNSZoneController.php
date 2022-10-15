@@ -83,8 +83,24 @@ class DNSZoneController extends Controller
      */
     public function show(DNSZone $dnszone)
     {
+
+        $tabs = array(
+            'info' => array(
+                'title' => "Zone Info",
+                'active' => true,
+                'visible' => true,
+                'template' => 'dnszones.parts.tabInfo'
+            ),
+            'records' => array(
+                'title' => "Records",
+                'active' => false,
+                'visible' => true,
+                'template' => 'dnszones.parts.tabRecords'
+            ),
+
+        );
         //
-        return view('dnszones.show', ['record' => $dnszone  ]);
+        return view('dnszones.show', ['tabs' => $tabs, 'record' => $dnszone  ]);
 
     }
 

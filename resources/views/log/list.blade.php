@@ -26,7 +26,7 @@
 <td>{{ $row->event_type }}</td>
 <td>
     @if($row->event_level == 0 )
-        <span class="label label-info">Info</span>
+        <span class="badge bg-info">Info</span>
         @else
     {{ $row->event_level }}
     @endif
@@ -38,7 +38,7 @@
 
         @endif
     </td>    <td>    @if ( $row->client )
-        <a href="{{url("client/" . $row->client->id )}}">{{$row->client->snmp_sysName}}</a>
+        <a href="{{url("clients/" . $row->client->id )}}">{{$row->client->snmp_sysName ?? $row->client->mac_address }}</a>
     @else
         -
 

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- app.blade.php -->
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">

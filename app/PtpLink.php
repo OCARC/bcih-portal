@@ -102,6 +102,7 @@ class PtpLink extends Model
         $sensor = $sensors->where('sensor_type','=','mikrotik-rx')->first();
 
         if ( ! $sensor ) {
+
             return null;
         }
         return $sensor->sensor_current;

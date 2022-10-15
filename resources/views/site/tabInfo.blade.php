@@ -124,7 +124,7 @@
 
                             {{--{{ $client->getHealthStatus() }}</div>--}}
                             <img src="{{$client->icon() }}" style="width:64px; height: 64px;"><br>
-                            {{$client->snmp_sysName or $client->mac_address}}</a><br>
+                            {{$client->getFriendlyName() }}</a><br>
 
                     </div>
                     @endif

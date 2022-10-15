@@ -32,12 +32,22 @@ class Site extends Model
 
 
     }
+    public function icon() {
+        return "/status/icon/site.svg?siteID=" . $this->id;
+    }
     public function subnets() {
         //TODO: add support for leases
         return $this->hasMany(Subnet::class)->orderBy('ip');
 
 
     }
+
+    public function getHTMLB64() {
+        return base64_encode($this->html);
+
+
+    }
+
     public function json() {
 
         $equipment = $this->equipment;

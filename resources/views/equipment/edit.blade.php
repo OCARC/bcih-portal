@@ -8,8 +8,9 @@
     </h2>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item"><a href="{{url("/subnets")}}">Equipment</a></li>
-        <li class="breadcrumb-item active">{{ $equipment->hostname }}</li>
+        <li class="breadcrumb-item"><a href="{{url("/equipment")}}">Equipment</a></li>
+        <li class="breadcrumb-item"><a href="{{url("/equipment/" . $equipment->id )}}">{{ $equipment->hostname }}</a></li>
+        <li class="breadcrumb-item active">Edit</li>
     </ol>
     <div>
 @include('equipment.form')

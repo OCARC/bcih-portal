@@ -24,10 +24,10 @@ trait HealthCheck
     public function performHealthCheck() {
 
 
-        $this->hc_last_run = \DB::raw('now()');
+        $this->hc_last_run = \Carbon\Carbon::now()->toDateTimeString();
         $this->hc_ping_result = $this->ping();
         if( $this->hc_ping_result >= 0) {
-            $this->hc_last_ping_success = \DB::raw('now()');
+            $this->hc_last_ping_success = \Carbon\Carbon::now()->toDateTimeString();
         }
         $this->save();
 
@@ -37,7 +37,7 @@ trait HealthCheck
 
     public function ping() {
 
-$ip = $this->getManagemnetIP();
+$ip = $this->getManagementIP();
 if ( ! $ip ) {
     return -1;
 }

@@ -26,10 +26,20 @@ trait DeviceIcon
 
         }
 
+        if ( $this->os == "Stardot") {
+
+            return url("/images/device-icons/Stardot.png");
+
+        }
 
         if ( $this->os == "Cisco IOS") {
 
             return url("/images/device-icons/cisco.svg");
+
+        }
+        if ( $this->os == "CyberPower") {
+
+            return url("/images/device-icons/cyberpower.svg");
 
         }
 

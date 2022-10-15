@@ -55,12 +55,19 @@ class StatusController extends Controller {
                         "NAME" => $link->name,
                         "SITE1_ID" => $link->ap_site_id,
                         "SITE2_ID" => $link->cl_site_id,
-                        "SPEED" => ($link->tx_speed() + $link->rx_speed()) / 2,
+//                        "SPEED" => ($link->tx_speed() + $link->rx_speed()) / 2,
 //                            "STRENGTH" => $client->snmp_strength,
                         "LINK_COLOR" => $link->link_color,
-                        "COMMENT" => $link->comments,
+                        "COMMENT" => $link->comments . "ddd",
                         "LINESTYLE" => $link->line_style,
                     );
+                    $cl = $link->cl_equipment()->first();;
+
+                    if  ( $cl ) {
+                            $result['SITES'][$site->id]['LINKS'][$link->id]["SPEED"] = ($cl->snmp_rx_rate + $cl->snmp_tx_rate) / 2;
+                            $result['SITES'][$site->id]['LINKS'][$link->id]["SPEED_RX"] = $cl->snmp_rx_rate ;
+                            $result['SITES'][$site->id]['LINKS'][$link->id]["SPEED_TX"] =  $cl->snmp_tx_rate;
+                        }
                     if ($link->cl_site) {
                         $result['SITES'][$site->id]['COMMENT'] .= "<br>Link to " . $link->cl_site->name;
                     }

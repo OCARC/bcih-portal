@@ -12,61 +12,17 @@
     <div>
 
         <!-- Nav tabs -->
+        @include('common.tabs')
+
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#ipInfo" aria-controls="ipInfo" role="tab" data-toggle="tab">Zone Info</a></li>
             <li role="presentation"><a href="#records" aria-controls="records" role="tab" data-toggle="tab">Records</a></li>
         </ul>
 
         <!-- Tab panes -->
+        @include('common.tabpanels')
+
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="ipInfo">
-
-                <Table class="table table-responsive table-condensed table-striped table-bordered">
-                    <tr>
-                        <th>Name</th>
-                        <td>{{$record->name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td>{{$record->description}}</td>
-                    </tr>
-                    <tr>
-                        <th>Server</th>
-                        <td>{{$record->server}}</td>
-                    </tr>
-                    <tr>
-                        <th>DNS Key</th>
-                        <td>{{$record->dns_key}}</td>
-                    </tr>
-                    <tr>
-                        <th>Domain</th>
-                        <td>{{$record->domain}}</td>
-                    </tr>
-                    <tr>
-                        <th>Created</th>
-                        <td>{{$record->created_at}}</td>
-                    </tr>
-                    <tr>
-                        <th>Updated</th>
-                        <td>{{$record->updated_at}}</td>
-                    </tr>
-                </table>
-
-                <form method="POST" action="{{ url("/dns-zones/" . $record->id . "") }}" accept-charset="UTF-8">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="_method" value="DELETE"/>
-                    <a href="{{ url("/dns-zones/" . $record->id . "/edit") }}">
-                        <button type="button" class="btn btn-sm btn-success">Edit DNS Zone</button>
-                    </a>
-
-                    <button type="button" class="btn btn-sm btn-danger">Delete DNS Zone</button>
-                </form>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="records">
-
-                @include('dnsrecords.list', ['records' => $record->dnsrecords ])
-
-            </div>
 
             <div role="tabpanel" class="tab-pane" id="clients">
 

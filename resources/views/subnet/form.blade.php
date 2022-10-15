@@ -5,12 +5,12 @@
 
 
     <div class="form-group col-md-6">
-        <lable for="name">Name</lable>
+        <label for="name">Name</label>
         <input type="text" name="name" class="form-control" value="{{ $subnet->name }}">
     </div>
     <div class="form-group col-md-6">
-        <lable for="name">Status</lable>
-        <select name="status" class="form-control">
+        <label for="name">Status</label>
+        <select name="status" class="form-select">
             <option value=""></option>
             <option @if( $subnet->status == "Subdivided") selected="true" @endif style="background-color: #e1e1e1">
                 Subdivided
@@ -34,8 +34,8 @@
         </select></div>
 
     <div class="form-group col-md-6">
-        <lable for="name">Group</lable>
-        <select name="category" class="form-control">
+        <label for="name">Group</label>
+        <select name="category" class="form-select">
             <option value=""></option>
             <option @if( $subnet->category == "OSPF Routing") selected="true" @endif
                 value="OSPF Routing">OSPF Routing
@@ -48,22 +48,22 @@
             </option>
         </select></div>
     <div class="form-group col-md-6">
-        <lable for="name">Network Address</lable>
+        <label for="name">Network Address</label>
         <input type="text" name="ip" class="form-control" value="{{ $subnet->ip }}">
     </div>
 
     <div class="form-group col-md-6">
-        <lable for="name">Gateway</lable>
+        <label for="name">Gateway</label>
         <input type="text" name="gateway" class="form-control" value="{{ $subnet->gateway }}">
     </div>
 
     <div class="form-group col-md-6">
-        <lable for="name">Netmask</lable>
+        <label for="name">Netmask</label>
         <input type="text" name="netmask" class="form-control" value="{{ $subnet->netmask }}">
     </div>
 
     <div class="form-group col-md-6">
-        <lable for="name">DHCP Server</lable>
+        <label for="name">DHCP Server</label>
         <input type="text" name="dhcp" class="form-control" value="{{ $subnet->dhcp }}">
     </div>
 
@@ -71,8 +71,8 @@
     <div class="col-md-6">
 
         <div class="form-group">
-            <lable for="name">Site</lable>
-            <select name="site_id" class="form-control">
+            <label for="name">Site</label>
+            <select name="site_id" class="form-select">
                 <option></option>
 
             @foreach( $sites as $site)
@@ -85,8 +85,8 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            <lable for="name">Owner</lable>
-            <select name="user_id" class="form-control" required>
+            <label for="name">Owner</label>
+            <select name="user_id" class="form-select" required>
                 <option value="0"></option>
                 @foreach( $users as $user)
                     <option @if ($subnet->user_id == $user->id) selected="true"
@@ -94,7 +94,7 @@
                     </option>
                 @endforeach
             </select>
-            <p class="help-block">Be careful when assigning ownership. If you assign ownership to someone else you may
+            <p class="form-text">Be careful when assigning ownership. If you assign ownership to someone else you may
                 not be able to access the subnet anymore.</p>
         </div>
     </div>
@@ -102,13 +102,13 @@
 
 
         <div class="form-group col-md-6">
-            <lable for="name">Comments</lable>
+            <label for="name">Comments</label>
             <textarea rows=5  name="comment" class="form-control">{{ $subnet->comment }}</textarea>
         </div>
         <div class="form-group col-md-6">
-            <lable for="name">Description</lable>
+            <label for="name">Description</label>
             <textarea rows=5 name="description" class="form-control">{{ $subnet->description }}</textarea>
-            <p class="help-block">This content may be used to describe the site publicly</p>
+            <p class="form-text">This content may be used to describe the site publicly</p>
         </div>
 
     <div class="col-md-12">

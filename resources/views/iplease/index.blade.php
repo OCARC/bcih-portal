@@ -29,7 +29,7 @@
                                 <td style="font-family: 'Courier New'">{{ $lease->ip }}</td>
                                 <td style="font-family: 'Courier New'"><a href="{{ url("/clients/" . $lease->client()->id ) }}">{{ implode(":",str_split(strtoupper($lease->mac_address),2)) }}</a></td>
                                 <td>{{ $lease->ends() }}</td>
-                                <td class="text-right">{{ $lease->ttl() }}</td>
+                                <td class="text-end">{{ $lease->ttl() }}</td>
 
                                 @if ( $lease->server() )
                                     <td><a href="{{ url("/equipment/" . $lease->server()->id ) }}">{{ $lease->server()->hostname  }}</a></td>
@@ -44,7 +44,7 @@
                                         <td style="font-family: 'Courier New'">{{ $lease->ip }}</td>
                                         <td style="font-family: 'Courier New'">{{ implode(":",str_split(strtoupper($lease->mac_address),2)) }}</td>
                                         <td>{{ $lease->ends() }}</td>
-                                        <td class="text-right">{{ $lease->ttl() }}</td>
+                                        <td class="text-end">{{ $lease->ttl() }}</td>
                                         @if ( $lease->server() )
                                         <td><a href="{{ url("/equipment/" . $lease->server()->id ) }}">{{ $lease->server()->hostname  }}</a></td>
                                         @else

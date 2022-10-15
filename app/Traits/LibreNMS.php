@@ -35,6 +35,7 @@ trait LibreNMS
 
     public function libreGetDeviceList()
     {
+
         $r = json_decode($this->api_call("devices?type=all"), true);
         if ($r['status'] == 'ok') {
             return $r['devices'];
@@ -64,10 +65,17 @@ trait LibreNMS
 
     public function libreGetGraph($type)
     {
+
         if ($type == 'voltage') {
             return $this->api_call("devices/" . $this->librenms_mapping . "/graphs/health/device_voltage/1?" . $_SERVER['QUERY_STRING']);
         } elseif ($type == 'temperature') {
             return $this->api_call("devices/" . $this->librenms_mapping . "/graphs/health/device_temperature/1?" . $_SERVER['QUERY_STRING']);
+        } elseif ($type == 'device_ping_perf') {
+            return $this->api_call("devices/" . $this->librenms_mapping . "/$type?" . $_SERVER['QUERY_STRING']);
+        } elseif ($type == 'device_poller_perf') {
+            return $this->api_call("devices/" . $this->librenms_mapping . "/$type?" . $_SERVER['QUERY_STRING']);
+        } elseif ($type == 'uptime') {
+            return $this->api_call("devices/" . $this->librenms_mapping . "/$type?" . $_SERVER['QUERY_STRING']);
         } else {
             return $this->api_call("devices/" . $this->librenms_mapping . "/graphs/health/" . $type . "/1?" . $_SERVER['QUERY_STRING']);
         }
